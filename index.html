@@ -1,1 +1,344 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NATO // YILDIRIM ORDUNARI - KOMUTA KONTROL MERKEZİ</title>
+    <style>
+        :root {
+            --bg-color: #050b08;
+            --panel-bg: rgba(8, 20, 14, 0.85);
+            --border-color: #00ff66;
+            --accent-green: #00ff66;
+            --accent-red: #ff3333;
+            --accent-yellow: #ffcc00;
+            --text-main: #c0d8c0;
+            --text-bright: #ffffff;
+            --shadow-glow: 0 0 15px rgba(0, 255, 102, 0.2);
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            background-image: 
+                linear-gradient(rgba(0, 255, 102, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 102, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            min-height: 100vh;
+            padding: 15px;
+            overflow-x: hidden;
+        }
+
+        header {
+            border: 2px solid var(--border-color);
+            background: var(--panel-bg);
+            padding: 15px;
+            text-align: center;
+            box-shadow: var(--shadow-glow);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        h1 {
+            color: var(--text-bright);
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--accent-green);
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            color: var(--accent-yellow);
+            margin-top: 5px;
+        }
+
+        .audio-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--accent-green);
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+
+        .audio-toggle:hover {
+            background: var(--accent-green);
+            color: var(--bg-color);
+        }
+
+        .hud-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .panel {
+            border: 1px solid var(--border-color);
+            background: var(--panel-bg);
+            padding: 15px;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .panel h2 {
+            font-size: 1rem;
+            color: var(--accent-green);
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .value-bright {
+            color: var(--text-bright);
+            font-weight: bold;
+        }
+
+        .defcon-1 { color: var(--accent-red); animation: blink 1s infinite; }
+        .defcon-2 { color: var(--accent-yellow); }
+        .defcon-3 { color: var(--accent-green); }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        .unit-card {
+            border: 1px solid rgba(0, 255, 102, 0.3);
+            padding: 10px;
+            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .unit-card h3 {
+            font-size: 0.95rem;
+            color: var(--text-bright);
+            margin-bottom: 5px;
+        }
+
+        .counter-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 8px;
+        }
+
+        button.tactical-btn {
+            background: rgba(0, 255, 102, 0.1);
+            border: 1px solid var(--border-color);
+            color: var(--accent-green);
+            padding: 4px 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button.tactical-btn:hover {
+            background: var(--accent-green);
+            color: var(--bg-color);
+        }
+
+        .terminal-panel {
+            grid-column: 1 / -1;
+        }
+
+        .terminal-screen {
+            background: #000;
+            border: 1px solid #004411;
+            height: 180px;
+            padding: 10px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            margin-bottom: 10px;
+        }
+
+        .terminal-input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .terminal-input-area input {
+            flex: 1;
+            background: #000;
+            border: 1px solid var(--border-color);
+            color: var(--text-bright);
+            padding: 8px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .terminal-input-area input:focus {
+            outline: none;
+            box-shadow: 0 0 5px var(--accent-green);
+        }
+
+        .actions-panel {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .alert-btn {
+            background: rgba(255, 51, 51, 0.1);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 10px;
+            flex: 1;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .alert-btn:hover {
+            background: var(--accent-red);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="audio-toggle" onclick="toggleAudio()">SES: <span id="audioStatus">KAPALI</span></button>
+        <h1>NATO // YILDIRIM ORDUNARI</h1>
+        <div class="subtitle">STRATEJİK KOMUTA KONTROL VE TAKTİK AĞI</div>
+    </header>
+
+    <div class="hud-grid">
+        <!-- Sistem Durumu -->
+        <div class="panel">
+            <h2>Sistem Durumu</h2>
+            <div class="status-row"><span>Ağ Durumu:</span> <span class="value-bright" style="color: var(--accent-green);">GÜVENLİ & BAĞLI</span></div>
+            <div class="status-row"><span>DEFCON Seviyesi:</span> <span id="defconLevel" class="value-bright defcon-2">DEFCON 2</span></div>
+            <div class="status-row"><span>Gecikme (Ping):</span> <span class="value-bright">14 ms</span></div>
+            <div class="status-row"><span>Aktif Operatör:</span> <span class="value-bright">PAŞAM</span></div>
+        </div>
+
+        <!-- Hızlı Eylemler -->
+        <div class="panel">
+            <h2>Taktik Komutlar</h2>
+            <div class="actions-panel" style="margin-top: 10px;">
+                <button class="alert-btn" onclick="triggerDefcon1()">DEFCON 1 ALARMI</button>
+                <button class="tactical-btn" style="flex:1;" onclick="clearLogs()">LOGLARI TEMİZLE</button>
+            </div>
+        </div>
+
+        <!-- Birim Matrisi -->
+        <div class="panel" style="grid-column: 1 / -1;">
+            <h2>Birim Kadro Yönetimi</h2>
+            
+            <div class="unit-card">
+                <h3>Yıldırım Orduları (Yüksek Komuta)</h3>
+                <div class="status-row">
+                    <span>Mevcut Personel:</span> 
+                    <span id="troop-1" class="value-bright">42</span>
+                </div>
+                <div class="counter-controls">
+                    <span style="font-size: 0.8rem; color: var(--accent-yellow);">Durum: TEYAKKUZDA</span>
+                    <div>
+                        <button class="tactical-btn" onclick="updateTroops(1, -1)">-</button>
+                        <button class="tactical-btn" onclick="updateTroops(1, 1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="unit-card">
+                <h3>Kızıl Sağ El (Taktik Taarruz)</h3>
+                <div class="status-row">
+                    <span>Mevcut Personel:</span> 
+                    <span id="troop-2" class="value-bright">28</span>
+                </div>
+                <div class="counter-controls">
+                    <span style="font-size: 0.8rem; color: var(--accent-green);">Durum: AKTİF</span>
+                    <div>
+                        <button class="tactical-btn" onclick="updateTroops(2, -1)">-</button>
+                        <button class="tactical-btn" onclick="updateTroops(2, 1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="unit-card">
+                <h3>OMEGA (Gölge Birlik / Keşif)</h3>
+                <div class="status-row">
+                    <span>Mevcut Personel:</span> 
+                    <span id="troop-3" class="value-bright">15</span>
+                </div>
+                <div class="counter-controls">
+                    <span style="font-size: 0.8rem; color: var(--accent-green);">Durum: GÖREVDE</span>
+                    <div>
+                        <button class="tactical-btn" onclick="updateTroops(3, -1)">-</button>
+                        <button class="tactical-btn" onclick="updateTroops(3, 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Terminal -->
+        <div class="panel terminal-panel">
+            <h2>Canlı Taktik Terminal</h2>
+            <div id="terminalScreen" class="terminal-screen">
+                > Sistem başlatıldı... NATO Yıldırım Orduları komuta paneli çevrimiçi.<br>
+                > Komut satırına 'yardim' yazarak komut listesini görebilirsiniz.<br>
+            </div>
+            <div class="terminal-input-area">
+                <input type="text" id="terminalInput" placeholder="Komut girin (örn: yardim, durum, defcon 1)..." onkeypress="handleTerminal(event)">
+                <button class="tactical-btn" onclick="executeCommand()">ÇALIŞTIR</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let audioEnabled = false;
+        let audioCtx = null;
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            document.getElementById('audioStatus').innerText = audioEnabled ? 'AÇIK' : 'KAPALI';
+            if(audioEnabled && !audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            playBeep(600, 0.1);
+        }
+
+        function playBeep(freq, duration) {
+            if (!audioEnabled || !audioCtx) return;
+            try {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function logTerminal(text) {
+            const screen = document.getElementById('terminalScreen');
+            screen.innerHTML += `> ${text}<br>`;
+            screen.scrollTop = screen.scrollHeight;
+        }
+
+        function updateTroops(unitId, change) {
+            const elem = document.getElementById(`troop-${unitId}`);
+            let val = parseInt(elem.innerText) + change;
+            if(val < 0) val = 0;
+            elem.
