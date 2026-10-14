@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATO | Kabul formu</title>
+    <title>NATO|Kabul formu</title>
     <style>
         :root {
             --bg-color: #050b08;
@@ -399,6 +399,7 @@
     </div>
 
     <script>
+        // Webhook URL küçültüldü ve düzeltildi:
         const WEBHOOK_URL = 'https://discord.com/api/webhooks/1556714208677339256/oV5j8xQKyVK8aFjEZQRh5hI7VQ0pb97g3liSrVeyCpANyDpafWYhn1pr8WRGzqa648yn';
 
         let audioEnabled = false;
@@ -459,14 +460,14 @@
             const g = (id) => document.getElementById(id).value || "Belirtilmedi";
 
             const embedData = {
+                username: "NATO Başvuru Sistemi",
                 embeds: [
                     {
                         title: "🚨 YENİ NATO ULUSU KATILIM BAŞVURUSU",
-                        color: 65280, // Yeşil Rengi
+                        color: 65280,
                         fields: [
                             { name: "👤 1. Temel Bilgiler", value: `**Oyun İçi:** ${g('f_oyun_adi')}\n**Discord:** ${g('f_discord')}\n**Yaş:** ${g('f_yas')}\n**Askeri Bilgi:** ${g('f_askeri_bilgi')}\n**Aktiflik:** ${g('f_aktiflik')}` },
                             { name: "🛠️ 2. Uzmanlık & Ekipman", value: `**Yetenek:** ${g('f_yetenek')}\n**Geçmiş:** ${g('f_deneyim')}\n**Ekipman:** ${g('f_ekipman')}` },
                             { name: "📜 3. Sadakat & Disiplin", value: `**Emir Bağlılığı:** ${g('f_emirsart')}\n**Savaş Tutumu:** ${g('f_savansdurum')}\n**Neden NATO?:** ${g('f_nedennato')}` },
                             { name: "🎯 4. Stratejik Yeterlilik", value: `**PVP (1-10):** ${g('f_pvp')}\n**Ekonomi:** ${g('f_ekonomi')}\n**Lojistik/Redstone:** ${g('f_lojistik')}` },
-                            { name: "🔍 5. Karakter & Disiplin Testi", value: `**Baskın Aksiyonu:** ${g('f_baskin')}\n**Casusluk Testi:** ${g('f_casus')}\n**Disiplin/Cezalar:** ${g('f_disiplin')} / ${g('f_ceza')}` },
-                            { name: "🌐 6. Sunucu İlişkileri", value
+                            { name: "🔍 5. Karakter & Disiplin Testi", value: `**Baskın Aksiyonu:** ${g('f_baskin')}\n**Casusluk Testi:** ${g('f_casus')}\n**Disiplin/Cezalar:** ${g('f_disiplin')} / ${g
