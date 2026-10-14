@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATO // YILDIRIM ORDUNARI - KOMUTA KONTROL MERKEZİ</title>
+    <title>NATO | Kabul formu</title>
     <style>
         :root {
             --bg-color: #050b08;
@@ -113,7 +113,6 @@
 
         .defcon-1 { color: var(--accent-red); animation: blink 1s infinite; }
         .defcon-2 { color: var(--accent-yellow); }
-        .defcon-3 { color: var(--accent-green); }
 
         @keyframes blink {
             0% { opacity: 1; }
@@ -121,31 +120,11 @@
             100% { opacity: 1; }
         }
 
-        .unit-card {
-            border: 1px solid rgba(0, 255, 102, 0.3);
-            padding: 10px;
-            margin-bottom: 10px;
-            background: rgba(0, 0, 0, 0.4);
-        }
-
-        .unit-card h3 {
-            font-size: 0.95rem;
-            color: var(--text-bright);
-            margin-bottom: 5px;
-        }
-
-        .counter-controls {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 8px;
-        }
-
         button.tactical-btn {
             background: rgba(0, 255, 102, 0.1);
             border: 1px solid var(--border-color);
             color: var(--accent-green);
-            padding: 6px 12px;
+            padding: 8px 12px;
             cursor: pointer;
             font-weight: bold;
             width: 100%;
@@ -168,7 +147,7 @@
             margin-bottom: 4px;
         }
 
-        .form-group input, .form-group textarea, .form-group select {
+        .form-group input, .form-group textarea {
             width: 100%;
             background: #000;
             border: 1px solid var(--border-color);
@@ -185,10 +164,12 @@
 
         .section-title {
             color: var(--accent-green);
-            font-size: 0.9rem;
-            margin: 15px 0 8px 0;
-            border-bottom: 1px solid rgba(0, 255, 102, 0.2);
-            padding-bottom: 3px;
+            font-size: 0.95rem;
+            margin: 20px 0 10px 0;
+            border-bottom: 1px solid rgba(0, 255, 102, 0.3);
+            padding-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .terminal-panel {
@@ -218,11 +199,6 @@
             color: var(--text-bright);
             padding: 8px;
             font-family: 'Courier New', Courier, monospace;
-        }
-
-        .terminal-input-area input:focus {
-            outline: none;
-            box-shadow: 0 0 5px var(--accent-green);
         }
 
         .actions-panel {
@@ -277,17 +253,17 @@
 
         <!-- Başvuru Formu Paneli -->
         <div class="panel" style="grid-column: 1 / -1;">
-            <h2>NATO Ulusu Katılım Formu</h2>
+            <h2>NATO ULUSU KATILIM FORMU</h2>
             <form id="natoApplicationForm" onsubmit="submitApplication(event)">
                 
                 <div class="section-title">1. Temel Bilgiler</div>
                 <div class="form-group">
                     <label>Oyun İçi İsim? *</label>
-                    <input type="text" id="f_oyun_adi" required placeholder="Örn: Paşam">
+                    <input type="text" id="f_oyun_adi" required placeholder="Oyun kullanıcı adınız">
                 </div>
                 <div class="form-group">
                     <label>Discord İsminiz? *</label>
-                    <input type="text" id="f_discord" required placeholder="Örn: pasam#0001">
+                    <input type="text" id="f_discord" required placeholder="Örn: kullanıcı#0000">
                 </div>
                 <div class="form-group">
                     <label>Yaş? *</label>
@@ -295,31 +271,31 @@
                 </div>
                 <div class="form-group">
                     <label>Askeri hakkında ne kadar bilginiz var? *</label>
-                    <input type="text" id="f_askeri_bilgi" required placeholder="Taktik ve tarih bilginiz...">
+                    <input type="text" id="f_askeri_bilgi" required placeholder="Taktik ve askeri bilginiz">
                 </div>
                 <div class="form-group">
                     <label>Günlük Aktiflik Süresi? (Günde kaç saat sunucuda olabilirsiniz) *</label>
-                    <input type="text" id="f_aktiflik" required placeholder="Örn: 4-5 saat">
+                    <input type="text" id="f_aktiflik" required placeholder="Örn: 3-4 saat">
                 </div>
 
                 <div class="section-title">2. Uzmanlık Alanları</div>
                 <div class="form-group">
                     <label>Yeteneğin nedir? *</label>
-                    <input type="text" id="f_yetenek" required placeholder="Yapı, PvP, tarım, otomasyon vb.">
+                    <input type="text" id="f_yetenek" required placeholder="PvP, Yapı, Redstone vb.">
                 </div>
                 <div class="form-group">
-                    <label>Önceki Deneyim: Daha önce hangi kasabalarda veya uluslarda bulundunmu? *</label>
-                    <input type="text" id="f_deneyim" required placeholder="Geçmiş tecrübeleriniz">
+                    <label>Önceki Deneyim: Daha önce hangi kasabalarda veya uluslarda bulundun mu? *</label>
+                    <input type="text" id="f_deneyim" required placeholder="Geçmiş ulus/kasaba deneyimleriniz">
                 </div>
                 <div class="form-group">
                     <label>Ekipman Durumu: Şu anki zırh ve silah seviyen nedir? *</label>
-                    <input type="text" id="f_ekipman" required placeholder="Elmas, Netherite vb.">
+                    <input type="text" id="f_ekipman" required placeholder="Mevcut ekipman setiniz">
                 </div>
 
                 <div class="section-title">3. Sadakat ve Disiplin</div>
                 <div class="form-group">
                     <label>Emirlere Bağlılık: Paşam'ın ve üst rütbelilerin emirlerine kayıtsız şartsız uymayı kabul ediyor musun? *</label>
-                    <input type="text" id="f_emirsart" required placeholder="Evet / Hayır ve taahhüdünüz">
+                    <input type="text" id="f_emirsart" required placeholder="Kabul ediyor musunuz?">
                 </div>
                 <div class="form-group">
                     <label>Savaş Durumu: Ulus saldırı altındayken tüm işini bırakıp savunmaya katılır mısın? *</label>
@@ -327,7 +303,7 @@
                 </div>
                 <div class="form-group">
                     <label>Neden NATO? Seni neden diğer uluslar yerine bizim aramıza almalıyız? *</label>
-                    <textarea id="f_nedennato" rows="2" required placeholder="Gerekçeniz..."></textarea>
+                    <textarea id="f_nedennato" rows="2" required placeholder="Açıklamanız..."></textarea>
                 </div>
 
                 <div class="section-title">4. Stratejik ve Teknik Yeterlilik</div>
@@ -337,7 +313,7 @@
                 </div>
                 <div class="form-group">
                     <label>Ekonomi Bilgisi: Sunucu ekonomisinde kar elde etmek için kullandığın özel bir taktik var mı? *</label>
-                    <input type="text" id="f_ekonomi" required placeholder="Ticaret taktikleriniz">
+                    <input type="text" id="f_ekonomi" required placeholder="Ekonomi taktikleriniz">
                 </div>
                 <div class="form-group">
                     <label>Lojistik Destek: Otomatik tarla, sıralayıcı sistemler veya karmaşık Redstone mekanizmaları kurabilir misin? *</label>
@@ -347,29 +323,29 @@
                 <div class="section-title">5. Karakter ve Disiplin Analizi</div>
                 <div class="form-group">
                     <label>Kasaba baskın yediğinde ve üst rütbeliler oyunda olmadığında ilk aksiyonun ne olur? *</label>
-                    <input type="text" id="f_baskin" required placeholder="İlk hamleniz">
+                    <input type="text" id="f_baskin" required placeholder="Aksiyon planınız">
                 </div>
                 <div class="form-group">
-                    <label>Başka bir ulustan casusluk teklifi alırsan tavrın ne olur? (Dürüstlük testi). *</label>
-                    <input type="text" id="f_casus" required placeholder="Cevabınız">
+                    <label>Başka bir ulustan casusluk teklifi alırsan tavrın ne olur? (Dürüstlük testi) *</label>
+                    <input type="text" id="f_casus" required placeholder="Tavrınız">
                 </div>
                 <div class="form-group">
-                    <label>Emir-Komuta: Verilen görev (mesela saatlerce kazı yapmak olsa bile) sıkılmadan ve tam bir disiplinle yerine getirilecekmisin? *</label>
+                    <label>Emir-Komuta: Verilen görev (mesela saatlerce kazı yapmak olsa bile) sıkılmadan ve tam bir disiplinle yerine getirilecek misin? *</label>
                     <input type="text" id="f_disiplin" required placeholder="Cevabınız">
                 </div>
                 <div class="form-group">
                     <label>Hatalı bir davranışında verilen disiplin cezalarını (maden cezası, vergi vb.) peşinen kabul ediyor musun? *</label>
-                    <input type="text" id="f_ceza" required placeholder="Cevabınız">
+                    <input type="text" id="f_ceza" required placeholder="Kabul ediyor musunuz?">
                 </div>
 
                 <div class="section-title">6. Sunucu ve Toplum İlişkileri</div>
                 <div class="form-group">
                     <label>Sunucuda husumetli olduğun veya çok yakın olduğun başka bir ulus var mı? *</label>
-                    <input type="text" id="f_husumet" required placeholder="Varsa belirtiniz">
+                    <input type="text" id="f_husumet" required placeholder="Varsa ulus isimleri">
                 </div>
                 <div class="form-group">
                     <label>Seni NATO'ya önerebilecek, halihazırda içeride olan bir üyemiz var mı? *</label>
-                    <input type="text" id="f_referans" required placeholder="Referansınız (Yoksa yok yazın)">
+                    <input type="text" id="f_referans" required placeholder="Referans üye ismi">
                 </div>
                 <div class="form-group">
                     <label>Sesli kanallarda aktif olup mikrofon kullanabiliyor musun? *</label>
@@ -379,7 +355,7 @@
                 <div class="section-title">7. Son Taahhüt</div>
                 <div class="form-group">
                     <label>NATO'nun koordinatlarını, depo içeriklerini veya stratejik planlarını dışarı sızdırmanın "vatan hainliği" sayılacağını ve sınırsız sürgünle sonuçlanacağını biliyor musun? *</label>
-                    <input type="text" id="f_hainlik" required placeholder="Cevabınız">
+                    <input type="text" id="f_hainlik" required placeholder="Biliyor musunuz?">
                 </div>
                 <div class="form-group">
                     <label>NATO sloganı nedir? *</label>
@@ -387,20 +363,20 @@
                 </div>
                 <div class="form-group">
                     <label>Ulu Önder Mustafa Kemal Atatürk'ün bir sözünü yazınız. *</label>
-                    <input type="text" id="f_ataturk" required placeholder="Atatürk'ün bir sözü">
+                    <input type="text" id="f_ataturk" required placeholder="Atatürk sözü">
                 </div>
 
-                <div class="section-title">8. Son.</div>
+                <div class="section-title">8. Son Değerlendirme</div>
                 <div class="form-group">
                     <label>Sana neden güvenelim? *</label>
-                    <textarea id="f_guven" rows="2" required placeholder="Gerekçeniz..."></textarea>
+                    <textarea id="f_guven" rows="2" required placeholder="Neden size güvenmeliyiz?"></textarea>
                 </div>
                 <div class="form-group">
                     <label>Ulusa kabul edilsen ne gibi yararların olacak? *</label>
-                    <textarea id="f_yarar" rows="2" required placeholder="Katkılarınız..."></textarea>
+                    <textarea id="f_yarar" rows="2" required placeholder="Kazanımlarınız ve faydalarınız"></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Ulusa sadece müğümat içinmi geliyorsun? (Evet/Hayır) *</label>
+                    <label>Ulusa sadece mühimmat için mi geliyorsun? (Evet/Hayır) *</label>
                     <input type="text" id="f_mugumat" required placeholder="Evet / Hayır">
                 </div>
 
@@ -413,7 +389,7 @@
             <h2>Canlı Taktik Terminal</h2>
             <div id="terminalScreen" class="terminal-screen">
                 > Sistem başlatıldı... NATO Yıldırım Orduları komuta paneli çevrimiçi.<br>
-                > Komut satırına 'yardim' yazarak komut listesini görebilirsiniz.<br>
+                > Başvuru modülü aktifleştirildi.<br>
             </div>
             <div class="terminal-input-area">
                 <input type="text" id="terminalInput" placeholder="Komut girin (örn: yardim, durum, defcon 1)..." onkeypress="handleTerminal(event)">
@@ -476,18 +452,21 @@
             e.preventDefault();
             playBeep(700, 0.1);
 
-            const formData = {
-                oyun_adi: document.getElementById('f_oyun_adi').value,
-                discord: document.getElementById('f_discord').value,
-                yas: document.getElementById('f_yas').value,
-                askeri_bilgi: document.getElementById('f_askeri_bilgi').value,
-                aktiflik: document.getElementById('f_aktiflik').value,
-                yetenek: document.getElementById('f_yetenek').value,
-                deneyim: document.getElementById('f_deneyim').value,
-                ekipman: document.getElementById('f_ekipman').value,
-                emirsart: document.getElementById('f_emirsart').value,
-                savansdurum: document.getElementById('f_savansdurum').value,
-                nedennato: document.getElementById('f_nedennato').value,
-                pvp: document.getElementById('f_pvp').value,
-                ekonomi: document.getElementById('f_ekonomi').value,
-     
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.innerText = "GÖNDERİLİYOR...";
+            btn.disabled = true;
+
+            const g = (id) => document.getElementById(id).value || "Belirtilmedi";
+
+            const embedData = {
+                embeds: [
+                    {
+                        title: "🚨 YENİ NATO ULUSU KATILIM BAŞVURUSU",
+                        color: 65280, // Yeşil Rengi
+                        fields: [
+                            { name: "👤 1. Temel Bilgiler", value: `**Oyun İçi:** ${g('f_oyun_adi')}\n**Discord:** ${g('f_discord')}\n**Yaş:** ${g('f_yas')}\n**Askeri Bilgi:** ${g('f_askeri_bilgi')}\n**Aktiflik:** ${g('f_aktiflik')}` },
+                            { name: "🛠️ 2. Uzmanlık & Ekipman", value: `**Yetenek:** ${g('f_yetenek')}\n**Geçmiş:** ${g('f_deneyim')}\n**Ekipman:** ${g('f_ekipman')}` },
+                            { name: "📜 3. Sadakat & Disiplin", value: `**Emir Bağlılığı:** ${g('f_emirsart')}\n**Savaş Tutumu:** ${g('f_savansdurum')}\n**Neden NATO?:** ${g('f_nedennato')}` },
+                            { name: "🎯 4. Stratejik Yeterlilik", value: `**PVP (1-10):** ${g('f_pvp')}\n**Ekonomi:** ${g('f_ekonomi')}\n**Lojistik/Redstone:** ${g('f_lojistik')}` },
+                            { name: "🔍 5. Karakter & Disiplin Testi", value: `**Baskın Aksiyonu:** ${g('f_baskin')}\n**Casusluk Testi:** ${g('f_casus')}\n**Disiplin/Cezalar:** ${g('f_disiplin')} / ${g('f_ceza')}` },
+                            { name: "🌐 6. Sunucu İlişkileri", value
