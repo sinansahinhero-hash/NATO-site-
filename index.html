@@ -3,461 +3,635 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATO</title>
+    <title>NATO Komuta Portalı</title>
+    <!-- Font Awesome İkonları -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --bg-color: #050b08;
-            --panel-bg: rgba(8, 20, 14, 0.9);
-            --border-color: #00ff66;
-            --accent-green: #00ff66;
-            --accent-red: #ff3333;
-            --accent-yellow: #ffcc00;
-            --text-main: #c0d8c0;
-            --text-bright: #ffffff;
-            --shadow-glow: 0 0 15px rgba(0, 255, 102, 0.2);
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: #e2e8f0;
+            --primary-blue: #1d4ed8;
+            --primary-hover: #1e40af;
+            --accent-glow: rgba(29, 78, 216, 0.08);
+            --header-bg: #ffffff;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Courier New', Courier, monospace;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            background-image: 
-                linear-gradient(rgba(0, 255, 102, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 102, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
             min-height: 100vh;
-            padding: 15px;
-        }
-
-        header {
-            border: 2px solid var(--border-color);
-            background: var(--panel-bg);
-            padding: 20px;
-            text-align: center;
-            box-shadow: var(--shadow-glow);
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        h1 {
-            color: var(--text-bright);
-            font-size: 1.6rem;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px var(--accent-green);
-        }
-
-        .subtitle {
-            font-size: 0.85rem;
-            color: var(--accent-yellow);
-            margin-top: 5px;
-        }
-
-        /* Navigasyon Sekmeleri */
-        .nav-tabs {
             display: flex;
-            gap: 5px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
+            flex-direction: column;
+            overflow-x: hidden;
         }
 
-        .nav-tab {
-            background: rgba(0, 255, 102, 0.05);
-            border: 1px solid var(--border-color);
-            color: var(--accent-green);
-            padding: 8px 15px;
+        /* --- ÜST ŞERİT (HEADER) --- */
+        .top-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.25rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 1.25rem;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
         }
 
-        .nav-tab.active, .nav-tab:hover {
-            background: var(--accent-green);
-            color: var(--bg-color);
-            box-shadow: 0 0 10px var(--accent-green);
+        .icon-btn:hover {
+            background-color: #f1f5f9;
+            color: var(--primary-blue);
         }
 
-        .tab-content {
-            display: none;
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
         }
 
-        .tab-content.active {
-            display: block;
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
         }
 
-        .panel {
-            border: 1px solid var(--border-color);
-            background: var(--panel-bg);
-            padding: 20px;
-            box-shadow: var(--shadow-glow);
-            margin-bottom: 20px;
+        .brand-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            color: var(--text-primary);
         }
 
-        .panel h2 {
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .login-btn {
+            background-color: var(--primary-blue);
+            color: #ffffff;
+            border: none;
+            padding: 0.55rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(29, 78, 216, 0.2);
+        }
+
+        .login-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        /* --- YAN MENÜ (DRAWER) --- */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #ffffff;
+            z-index: 201;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+            transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .drawer.active {
+            left: 0;
+        }
+
+        .drawer-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .drawer-title {
             font-size: 1.1rem;
-            color: var(--accent-green);
-            border-bottom: 1px dashed var(--border-color);
-            padding-bottom: 8px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text-primary);
         }
 
-        .branch-card {
-            border: 1px solid rgba(0, 255, 102, 0.3);
-            background: rgba(0, 0, 0, 0.5);
-            padding: 15px;
-            margin-bottom: 15px;
+        .drawer-nav {
+            padding: 1rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
         }
 
-        .branch-card h3 {
-            color: var(--text-bright);
-            font-size: 1rem;
-            margin-bottom: 8px;
-            color: var(--accent-yellow);
+        .drawer-item {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.85rem 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
         }
 
-        .branch-card p {
-            font-size: 0.9rem;
-            margin-bottom: 6px;
+        .drawer-item i {
+            width: 20px;
+            font-size: 1.1rem;
         }
 
-        /* Form Elemanları */
-        .form-group {
-            margin-bottom: 12px;
+        .drawer-item:hover {
+            background-color: #f1f5f9;
+            color: var(--primary-blue);
+            padding-left: 1.75rem;
         }
 
-        .form-group label {
-            display: block;
-            font-size: 0.85rem;
-            color: var(--accent-yellow);
-            margin-bottom: 4px;
-        }
-
-        .form-group input, .form-group textarea {
+        /* --- ANA İÇERİK --- */
+        .main-content {
+            flex: 1;
+            padding: 1.5rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
             width: 100%;
-            background: #000;
-            border: 1px solid var(--border-color);
-            color: var(--text-bright);
-            padding: 8px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.9rem;
         }
 
-        .form-group input:focus, .form-group textarea:focus {
-            outline: none;
-            box-shadow: 0 0 5px var(--accent-green);
+        .carousel-container {
+            position: relative;
+            padding: 0 1rem;
+        }
+
+        .carousel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding: 0 0.5rem;
         }
 
         .section-title {
-            color: var(--accent-green);
-            font-size: 0.95rem;
-            margin: 20px 0 10px 0;
-            border-bottom: 1px solid rgba(0, 255, 102, 0.3);
-            padding-bottom: 4px;
-            text-transform: uppercase;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        button.tactical-btn {
-            background: rgba(0, 255, 102, 0.1);
+        .carousel-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .control-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
             border: 1px solid var(--border-color);
-            color: var(--accent-green);
-            padding: 10px 15px;
+            background: #ffffff;
+            color: var(--text-primary);
             cursor: pointer;
-            font-weight: bold;
-            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .control-btn:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+            background-color: #eff6ff;
+        }
+
+        /* SAĞA-SOLA KAYAN BÖLÜM (CAROUSEL) */
+        .carousel-track {
+            display: flex;
+            gap: 1.25rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            padding: 0.5rem 0.25rem 1.25rem 0.25rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .carousel-track::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .carousel-track::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+
+        .carousel-track::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .carousel-card {
+            flex: 0 0 calc(100% - 2rem);
+            min-width: 280px;
+            scroll-snap-align: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        @media (min-width: 640px) {
+            .carousel-card {
+                flex: 0 0 340px;
+            }
+        }
+
+        .carousel-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            border-color: #cbd5e1;
+        }
+
+        .card-tag {
+            align-self: flex-start;
+            padding: 0.25rem 0.65rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
             text-transform: uppercase;
-            font-size: 1rem;
-            margin-top: 15px;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
         }
 
-        button.tactical-btn:hover {
-            background: var(--accent-green);
-            color: var(--bg-color);
+        .tag-yildirim { background: #dbeafe; color: #1e40af; }
+        .tag-kizil { background: #fee2e2; color: #991b1b; }
+        .tag-omega { background: #fef3c7; color: #92400e; }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
         }
 
-        /* Terminal */
-        .terminal-screen {
-            background: #000;
-            border: 1px solid #004411;
-            height: 150px;
-            padding: 10px;
-            overflow-y: auto;
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-action {
+            width: 100%;
+            padding: 0.65rem;
+            background-color: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-weight: 600;
             font-size: 0.85rem;
-            color: var(--accent-green);
-            margin-bottom: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .card-action:hover {
+            background-color: var(--primary-blue);
+            color: #ffffff;
+            border-color: var(--primary-blue);
+        }
+
+        /* --- MODAL (GİRİŞ PENCERESİ) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background-color: #ffffff;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-blue);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--primary-hover);
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>NATO // YILDIRIM ORDUNARI</h1>
-        <div class="subtitle">STRATEJİK KOMUTA KONTROL VE BİLGİ MERKEZİ</div>
+    <!-- ÜST ŞERİT -->
+    <header class="top-header">
+        <div class="header-left">
+            <button class="icon-btn" id="openDrawerBtn" aria-label="Menüyü Aç">
+                <i class="fa-solid fa-house"></i>
+            </button>
+            <a href="#" class="brand-container">
+                <svg class="brand-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" stroke="#1d4ed8" stroke-width="8"/>
+                    <path d="M50 10 V90 M10 50 H90 M20 20 L80 80 M20 80 L80 20" stroke="#1d4ed8" stroke-width="4"/>
+                    <polygon points="50,25 58,42 75,50 58,58 50,75 42,58 25,50 42,42" fill="#1d4ed8"/>
+                </svg>
+                <span class="brand-title">NATO</span>
+            </a>
+        </div>
+        
+        <div class="header-right">
+            <button class="login-btn" id="openLoginBtn">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <span>Giriş Yap</span>
+            </button>
+        </div>
     </header>
 
-    <!-- Site Sekmeleri -->
-    <div class="nav-tabs">
-        <button class="nav-tab active" onclick="switchTab('tab-ana', event)">Ana Sayfa</button>
-        <button class="nav-tab" onclick="switchTab('tab-birimler', event)">Birimler & Branşlar</button>
-        <button class="nav-tab" onclick="switchTab('tab-kadro', event)">Emek Verenler</button>
-        <button class="nav-tab" onclick="switchTab('tab-basvuru', event)">Katılım Formu</button>
-        <button class="nav-tab" onclick="switchTab('tab-baglan', event)">Bağlantılar</button>
-    </div>
-
-    <!-- 1. ANA SAYFA -->
-    <div id="tab-ana" class="tab-content active">
-        <div class="panel">
-            <h2>NATO Ulusu Hakkında</h2>
-            <p style="margin-bottom: 10px;">NATO sadece bir klan değil, gerçej bir askeri yapıdır. Yaşadığı bütün zorluklara ve ihanetlere rağmen ayakta kalmayı başarmış güçlü bir klandır. Barbarlık küfür ve toksiklikle değil akгла kazanan bir yapıdır.</p>
-            <h3 style="color: var(--accent-yellow); margin-top: 15px; margin-bottom: 5px;">NATO Yükselişi:</h3>
-            <p>İlk eğitimler başladı, branşlar kuruldu. NATO'nun sadık personelleri ulusu daima geliştirdi. Güçlenemeyen barbar devletler NATO'yu güçsüzleştirmek için iftira atmaya başladılar ancak NATO her zaman daha güçlü ayağa kalktı.</p>
+    <!-- AÇILIR YAN MENÜ -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="drawer" id="drawer">
+        <div class="drawer-header">
+            <span class="drawer-title">NATO Komuta Portalı</span>
+            <button class="icon-btn" id="closeDrawerBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
-    </div>
+        <nav class="drawer-nav">
+            <a href="#bolumler" class="drawer-item">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>Bölümler</span>
+            </a>
+            <a href="#braslar" class="drawer-item">
+                <i class="fa-solid fa-sitemap"></i>
+                <span>Branşlar</span>
+            </a>
+            <a href="#emegi-gecenler" class="drawer-item">
+                <i class="fa-solid fa-award"></i>
+                <span>Emeği Geçenler</span>
+            </a>
+            <a href="#duyurular" class="drawer-item">
+                <i class="fa-solid fa-bullhorn"></i>
+                <span>Duyurular</span>
+            </a>
+            <a href="#discord" class="drawer-item">
+                <i class="fa-brands fa-discord"></i>
+                <span>Discord Sunucusu</span>
+            </a>
+        </nav>
+    </aside>
 
-    <!-- 2. BİRİMLER & BRANŞLAR -->
-    <div id="tab-birimler" class="tab-content">
-        <div class="panel">
-            <h2>Komutanlıklar ve Branşlar</h2>
-            
-            <div class="branch-card">
-                <h3>Özel Kuvvetler Komutanlığı</h3>
-                <p><strong>Görev:</strong> Koruma yapmak, operasyon yapmak ve düşman uluslara ajanlık yapmaktır. NATO'nun en elit 2. branşıdır.</p>
-                <p><strong>Lideri:</strong> Bazarat4737</p>
-                <p><strong>Alt Birimleri:</strong> OKB (Özel Koruma Birliği), KNT (Keskin Nişancı Timi)</p>
+    <!-- ANA İÇERİK -->
+    <main class="main-content">
+        <section class="carousel-container">
+            <div class="carousel-header">
+                <div class="section-title">
+                    <i class="fa-solid fa-shield-halved" style="color: var(--primary-blue);"></i>
+                    <span>Taktik Birlikler & Bölümler</span>
+                </div>
+                <div class="carousel-controls">
+                    <button class="control-btn" id="prevBtn" aria-label="Önceki">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button class="control-btn" id="nextBtn" aria-label="Sonraki">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
             </div>
 
-            <div class="branch-card">
-                <h3>Kara Kuvvetleri Komutanlığı</h3>
-                <p><strong>Görev:</strong> Karadan sorumlu birimdir. Ana taarruz branşıdır.</p>
-                <p><strong>Lideri:</strong> Belirleniyor (Boşta)</p>
-                <p><strong>Alt Birimleri:</strong> BÖRÜ, KHO (Komando Harp Okulu), Muharebe Arama Kurtarma</p>
-            </div>
-
-            <div class="branch-card">
-                <h3>Askeri İnzibat</h3>
-                <p><strong>Görev:</strong> En elit ve tek asayiş branşıdır. Disiplin cezalarını denetler.</p>
-                <p><strong>Lideri:</strong> Herobrine_sinan</p>
-            </div>
-
-            <div class="branch-card">
-                <h3>Sınır Müfettişleri & Deniz Kuvvetleri</h3>
-                <p><strong>Görev:</strong> Sınır güvenliği ve deniz operasyonlarından sorumludur. Deniz Kuvvetleri şu anda restore edilmektedir.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- 3. EMEĞİ GEÇENLER -->
-    <div id="tab-kadro" class="tab-content">
-        <div class="panel">
-            <h2>Yönetim Kurulu ve Emeği Geçenler</h2>
-            <p style="margin-bottom: 12px; font-size: 0.85rem; color: var(--accent-yellow);">Şu an NATO'da değil veya Kara listekteler ama yine de aralarında çok büyük emekleri geçmiş ve Yönetim Kurulu üyelerimiz:</p>
-            <ul style="list-style: none; line-height: 1.8;">
-                <li>⚔️ <strong>Herobrine_sinan:</strong> NATO Meraşali ve Askeri yapı olmasında en büyük emeği geçen baş komutan.</li>
-                <li>🛡️ <strong>Yusufg:</strong> Ulusa maddi açıdan ve diğer konularda çok büyük emekleri geçmiş ve NATO Meraşal yardımcısı olarak uzun zaman NATO'ya hizmet etmiştir.</li>
-                <li>🛠️ <strong>omer_salih:</strong> Ulusa çok büyük emekleri geçmiştir. Ulusun ilk üyelerinden biridir.</li>
-                <li>🌾 <strong>Tahirg:</strong> Farm, ekonomik konularda NATO'ya yardımcı olmuştur.</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- 4. KATILIM FORMU -->
-    <div id="tab-basvuru" class="tab-content">
-        <div class="panel">
-            <h2>NATO Ulusu Katılım Formu</h2>
-            <form id="natoApplicationForm" onsubmit="submitApplication(event)">
+            <!-- SAĞA-SOLA KAYAN BÖLÜM -->
+            <div class="carousel-track" id="carouselTrack">
                 
-                <div class="section-title">1. Temel Bilgiler</div>
-                <div class="form-group">
-                    <label>Oyun İçi İsim? *</label>
-                    <input type="text" id="f_oyun_adi" required placeholder="Oyun kullanıcı adınız">
-                </div>
-                <div class="form-group">
-                    <label>Discord İsminiz? *</label>
-                    <input type="text" id="f_discord" required placeholder="Örn: kullanıcı#0000">
-                </div>
-                <div class="form-group">
-                    <label>Yaş? *</label>
-                    <input type="text" id="f_yas" required placeholder="Yaşınız">
-                </div>
-                <div class="form-group">
-                    <label>Askeri hakkında ne kadar bilginiz var? *</label>
-                    <input type="text" id="f_askeri_bilgi" required placeholder="Taktik ve askeri bilginiz">
-                </div>
-                <div class="form-group">
-                    <label>Günlük Aktiflik Süresi? *</label>
-                    <input type="text" id="f_aktiflik" required placeholder="Örn: 3-4 saat">
+                <!-- BÖLÜM 1 -->
+                <div class="carousel-card">
+                    <div>
+                        <span class="card-tag tag-yildirim">Ana Birlik</span>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-bolt-lightning"></i>
+                        </div>
+                        <h3 class="card-title">Yıldırım Orduları</h3>
+                        <p class="card-desc">NATO askeri komutasının öncü taarruz ve savunma gücü. Kara harekâtlarının ana omurgasını oluşturur.</p>
+                    </div>
+                    <button class="card-action">
+                        <span>Detayları İncele</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
                 </div>
 
-                <div class="section-title">2. Uzmanlık Alanları</div>
-                <div class="form-group">
-                    <label>Yeteneğin nedir? *</label>
-                    <input type="text" id="f_yetenek" required placeholder="PvP, Yapı, Redstone vb.">
-                </div>
-                <div class="form-group">
-                    <label>Önceki Deneyimler? *</label>
-                    <input type="text" id="f_deneyim" required placeholder="Geçmiş kasaba veya uluslar">
-                </div>
-                <div class="form-group">
-                    <label>Ekipman Durumu? *</label>
-                    <input type="text" id="f_ekipman" required placeholder="Mevcut zırh/silah seviyesi">
-                </div>
-
-                <div class="section-title">3. Sadakat ve Disiplin</div>
-                <div class="form-group">
-                    <label>Emirlere Bağlılık Kabulü mu? *</label>
-                    <input type="text" id="f_emirsart" required placeholder="Evet / Hayır">
-                </div>
-                <div class="form-group">
-                    <label>Savaş Durumu Savunma Taahhüdü? *</label>
-                    <input type="text" id="f_savansdurum" required placeholder="Cevabınız">
-                </div>
-                <div class="form-group">
-                    <label>Neden NATO? *</label>
-                    <textarea id="f_nedennato" rows="2" required placeholder="Gerekçeniz..."></textarea>
+                <!-- BÖLÜM 2 -->
+                <div class="carousel-card">
+                    <div>
+                        <span class="card-tag tag-kizil">Özel Kuvvetler</span>
+                        <div class="card-icon" style="color: #dc2626;">
+                            <i class="fa-solid fa-hand-fist"></i>
+                        </div>
+                        <h3 class="card-title">Kızıl Sağ El</h3>
+                        <p class="card-desc">Gizli operasyonlar, keşif ve düşman hattı arkasında görev yapan elit taktik operasyon timi.</p>
+                    </div>
+                    <button class="card-action">
+                        <span>Detayları İncele</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
                 </div>
 
-                <div class="section-title">4. Stratejik ve Teknik</div>
-                <div class="form-group">
-                    <label>PVP Yeteneği (1-10)? *</label>
-                    <input type="text" id="f_pvp" required placeholder="Örn: 8/10">
-                </div>
-                <div class="form-group">
-                    <label>Ekonomi Bilgisi / Taktikleri? *</label>
-                    <input type="text" id="f_ekonomi" required placeholder="Ticaret taktikleriniz">
-                </div>
-                <div class="form-group">
-                    <label>Lojistik / Redstone Bilgisi? *</label>
-                    <input type="text" id="f_lojistik" required placeholder="Cevabınız">
-                </div>
-
-                <div class="section-title">5. Karakter ve Disiplin Testi</div>
-                <div class="form-group">
-                    <label>Baskın Reaksiyonu? *</label>
-                    <input type="text" id="f_baskin" required placeholder="İlk hamleniz">
-                </div>
-                <div class="form-group">
-                    <label>Casusluk Teklifi Testi? *</label>
-                    <input type="text" id="f_casus" required placeholder="Tavrınız">
-                </div>
-                <div class="form-group">
-                    <label>Emir-Komuta Disiplini? *</label>
-                    <input type="text" id="f_disiplin" required placeholder="Cevabınız">
-                </div>
-                <div class="form-group">
-                    <label>Disiplin Cezası Kabulü? *</label>
-                    <input type="text" id="f_ceza" required placeholder="Cevabınız">
+                <!-- BÖLÜM 3 -->
+                <div class="carousel-card">
+                    <div>
+                        <span class="card-tag tag-omega">Taktik Destek</span>
+                        <div class="card-icon" style="color: #d97706;">
+                            <i class="fa-solid fa-chess-knight"></i>
+                        </div>
+                        <h3 class="card-title">OMEGA</h3>
+                        <p class="card-desc">Stratejik istihbarat, lojistik destek ve kritik bölge güvenlik koordinasyonundan sorumlu birim.</p>
+                    </div>
+                    <button class="card-action">
+                        <span>Detayları İncele</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
                 </div>
 
-                <div class="section-title">6. Toplum İlişkileri</div>
-                <div class="form-group">
-                    <label>Husumetli Olduğun Ulus Var mı? *</label>
-                    <input type="text" id="f_husumet" required placeholder="Varsa belirtiniz">
-                </div>
-                <div class="form-group">
-                    <label>Referans Üyeniz Var mı? *</label>
-                    <input type="text" id="f_referans" required placeholder="Referans ismi veya 'yok'">
-                </div>
-                <div class="form-group">
-                    <label>Mikrofon Kullanabiliyor musun? *</label>
-                    <input type="text" id="f_mikrofon" required placeholder="Evet / Hayır">
-                </div>
+            </div>
+        </section>
+    </main>
 
-                <div class="section-title">7. Taahhütler</div>
+    <!-- GİRİŞ MODALI -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">Giriş Yap</h3>
+                <button class="icon-btn" id="closeLoginBtn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="loginForm" onsubmit="event.preventDefault();">
                 <div class="form-group">
-                    <label>Sızıntı / Hainlik Sürgün Cezası Bilinci? *</label>
-                    <input type="text" id="f_hainlik" required placeholder="Biliyor musunuz?">
+                    <label class="form-label">Kullanıcı Adı / Sicil No</label>
+                    <input type="text" class="form-input" placeholder="Örn: Paşam" required>
                 </div>
                 <div class="form-group">
-                    <label>NATO Sloganı Nedir? *</label>
-                    <input type="text" id="f_slogan" required placeholder="Slogan">
+                    <label class="form-label">Parola</label>
+                    <input type="password" class="form-input" placeholder="••••••••" required>
                 </div>
-                <div class="form-group">
-                    <label>Atatürk'ün Bir Sözü? *</label>
-                    <input type="text" id="f_ataturk" required placeholder="Atatürk sözü">
-                </div>
-
-                <div class="section-title">8. Son Değerlendirme</div>
-                <div class="form-group">
-                    <label>Sana Neden Güvenelim? *</label>
-                    <textarea id="f_guven" rows="2" required placeholder="Gerekçeniz..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Ulusa Ne Gibi Yararların Olacak? *</label>
-                    <textarea id="f_yarar" rows="2" required placeholder="Katkılarınız..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Sadece Mühimmat İçin mi Geliyorsun? *</label>
-                    <input type="text" id="f_mugumat" required placeholder="Evet / Hayır">
-                </div>
-
-                <button type="submit" class="tactical-btn">BAŞVURUYU GÖNDER</button>
+                <button type="submit" class="submit-btn">Portala Giriş Yap</button>
             </form>
         </div>
     </div>
 
-    <!-- 5. BAĞLANTILAR -->
-    <div id="tab-baglan" class="tab-content">
-        <div class="panel">
-            <h2>İletişim ve Medya Kanalları</h2>
-            <p style="margin-bottom: 10px;">🔴 <strong>Resmi Youtube Hesabımız:</strong> <a href="https://youtube.com/@nato_delta?si=fixw8mVby20TrJnZ" target="_blank" style="color: var(--accent-green);">youtube.com/@nato_delta</a></p>
-            <p>💬 <strong>Resmi Discord Sunucumuz:</strong> <a href="https://discord.gg/ymv8D3WHnZ" target="_blank" style="color: var(--accent-green);">discord.gg/ymv8D3WHnZ</a></p>
-        </div>
-    </div>
-
-    <!-- Terminal Paneli -->
-    <div class="panel">
-        <h2>Canlı Taktik Terminal</h2>
-        <div id="terminalScreen" class="terminal-screen">
-            > Sistem başlatıldı... NATO Yıldırım Orduları arşivi yüklendi.<br>
-            > Eski bilgiler temizlendi, güncel komuta kademesi aktif.<br>
-        </div>
-    </div>
-
+    <!-- JAVASCRIPT KOORDINASYONU -->
     <script>
-        // Sekme Değiştirme Fonksiyonu
-        function switchTab(tabId, event) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById(tabId).classList.add('active');
-            event.target.classList.add('active');
-        }
+        // DOM Elemanları
+        const openDrawerBtn = document.getElementById('openDrawerBtn');
+        const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+        const drawer = document.getElementById('drawer');
+        const drawerOverlay = document.getElementById('drawerOverlay');
 
-        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1556714208677339256/oV5j8xQKyVK8aFjEZQRh5hI7VQ0pb97g3liSrVeyCpANyDpafWYhn1pr8WRGzqa648yn';
+        const openLoginBtn = document.getElementById('openLoginBtn');
+        const closeLoginBtn = document.getElementById('closeLoginBtn');
+        const loginModal = document.getElementById('loginModal');
 
-        function logTerminal(text) {
-            const screen = document.getElementById('terminalScreen');
-            screen.innerHTML += `> ${text}<br>`;
-            screen.scrollTop = screen.scrollHeight;
-        }
-
-        async function submitApplication(e) {
-            e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            btn.innerText = "GÖNDERİLİYOR...";
-            btn.disabled = true;
-
-            const g = (id) => document.getElementById(id).value || "Belirtilmedi";
-
-            const embedData = {
-                username: "NATO Başvuru Sistemi",
-                embeds: [
-                    {
-                        title: "🚨 YENİ NATO ULUSU KATILIM BAŞVURUSU",
-                        color: 65280,
-                        fields: [
-                            { name: "👤 1. Temel Bilgiler", value: `**Oyun İçi:** ${g('f_oyun_adi')}\n**Discord:** ${g('f_discord')}\n**Yaş:** ${g('f_yas')}\n**Askeri Bilgi:** ${g('f_askeri_bilgi')}\n**Aktiflik:** ${g('f_aktiflik')}` },
-                            { name: "🛠️ 2. Uzmanlık & Ekipman", value: `**Yetenek:** ${g('f_yetenek')}\n**Geçmiş:** ${g('f_deneyim')}\n**Ekipman:** ${g('f_ekipman')}` },
-                            { name: "📜 3. Sadakat & Disiplin", value: `**Emir Bağlılığı:** ${g('f_emirsart')}\n**Savaş Tutumu:** ${g('f_savansdurum')}\n**Neden NATO?:** ${g('f_nedennato')}` },
-                            { name: "🎯 4. Stratejik Yeterlilik", value: `**PVP (1-10):** ${g('f_pvp')}\n**Ekonomi:** ${g('f_ekonomi')}\n**Lojistik/Redstone:** ${g('f_lojistik')}` },
-                            { name: "🔍 5. Karakter & Disiplin Testi", value: `**Baskın Aksiyonu:** ${g('f_baskin')}\n**Casusluk Testi:** ${g('f_casus')}\n**Disiplin/Cezalar:** ${g('f_disiplin')} / ${g('f_ceza')}` },
-                            { name: "🌐 6. Sunucu İlişkileri", value: `**Husumet:** ${g('f_husumet')}\n**Referans:** ${g('f_referans')}\n**Mikrofon:** ${g('f_mikrofon')}` },
-          
+        const carouselTrack = document.getElementById('carousel
