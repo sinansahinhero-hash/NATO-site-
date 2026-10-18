@@ -38,11 +38,11 @@
             overflow-x: hidden;
         }
 
-        /* --- ÜST ŞERİT (EN ÜST KATMAN GARANTİSİ) --- */
+        /* --- ÜST ŞERİT --- */
         .top-header {
             position: sticky;
             top: 0;
-            z-index: 9999;
+            z-index: 1000;
             background-color: var(--header-bg);
             border-bottom: 1px solid var(--border-color);
             height: 64px;
@@ -56,8 +56,6 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            position: relative;
-            z-index: 10000;
         }
 
         .icon-btn {
@@ -72,8 +70,6 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            position: relative;
-            z-index: 10001;
         }
 
         .brand-container {
@@ -108,12 +104,6 @@
             align-items: center;
             gap: 0.4rem;
             cursor: pointer;
-            position: relative;
-            z-index: 10001;
-        }
-
-        .login-btn:hover {
-            background-color: var(--primary-hover);
         }
 
         /* --- YAN MENÜ (DRAWER) --- */
@@ -124,12 +114,8 @@
             width: 100vw;
             height: 100vh;
             background-color: rgba(15, 23, 42, 0.5);
-            z-index: 20000;
+            z-index: 2000;
             display: none;
-        }
-
-        .drawer-overlay.active {
-            display: block;
         }
 
         .drawer {
@@ -139,7 +125,7 @@
             width: 280px;
             height: 100vh;
             background-color: #ffffff;
-            z-index: 20001;
+            z-index: 2001;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             display: flex;
             flex-direction: column;
@@ -306,7 +292,7 @@
             cursor: pointer;
         }
 
-        /* --- GİRİŞ MODALI --- */
+        /* --- GİRİŞ MODALI (NET DISPLAY KONTROLÜ) --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -314,15 +300,11 @@
             width: 100vw;
             height: 100vh;
             background-color: rgba(15, 23, 42, 0.6);
-            z-index: 30000;
-            display: none;
+            z-index: 3000;
+            display: none; /* Başlangıçta kesin kapalı */
             align-items: center;
             justify-content: center;
             padding: 1rem;
-        }
-
-        .modal-overlay.active {
-            display: flex;
         }
 
         .modal-card-double {
@@ -594,17 +576,31 @@
 
         function openDrawer() {
             drawer.classList.add('active');
-            drawerOverlay.classList.add('active');
+            drawerOverlay.style.display = 'block';
         }
 
         function closeDrawer() {
             drawer.classList.remove('active');
-            drawerOverlay.classList.remove('active');
+            drawerOverlay.style.display = 'none';
         }
 
         function openLogin() {
-            loginModal.classList.add('active');
+            loginModal.style.display = 'flex';
         }
 
         function closeLogin() {
-   
+            loginModal.style.display = 'none';
+        }
+
+        document.getElementById('openDrawerBtn').onclick = function(e) {
+            e.stopPropagation();
+            openDrawer();
+        };
+
+        document.getElementById('closeDrawerBtn').onclick = function(e) {
+            e.stopPropagation();
+            closeDrawer();
+        };
+
+        drawerOverlay.onclick = function(e) {
+ 
