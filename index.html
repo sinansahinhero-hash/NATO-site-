@@ -38,11 +38,11 @@
             overflow-x: hidden;
         }
 
-        /* --- ÜST ŞERİT --- */
+        /* --- ÜST ŞERİT (EN ÜST KATMAN GARANTİSİ) --- */
         .top-header {
             position: sticky;
             top: 0;
-            z-index: 50;
+            z-index: 9999;
             background-color: var(--header-bg);
             border-bottom: 1px solid var(--border-color);
             height: 64px;
@@ -56,13 +56,8 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-        }
-
-        /* BUTONLAR İÇİN EN GARANTİ TIKLAMA AYARI */
-        .action-click {
-            cursor: pointer;
-            touch-action: manipulation;
-            user-select: none;
+            position: relative;
+            z-index: 10000;
         }
 
         .icon-btn {
@@ -76,10 +71,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .icon-btn:active {
-            background-color: #e2e8f0;
+            cursor: pointer;
+            position: relative;
+            z-index: 10001;
         }
 
         .brand-container {
@@ -87,6 +81,7 @@
             align-items: center;
             gap: 0.5rem;
             text-decoration: none;
+            cursor: pointer;
         }
 
         .brand-logo-svg {
@@ -112,9 +107,12 @@
             display: flex;
             align-items: center;
             gap: 0.4rem;
+            cursor: pointer;
+            position: relative;
+            z-index: 10001;
         }
 
-        .login-btn:active {
+        .login-btn:hover {
             background-color: var(--primary-hover);
         }
 
@@ -126,7 +124,7 @@
             width: 100vw;
             height: 100vh;
             background-color: rgba(15, 23, 42, 0.5);
-            z-index: 998;
+            z-index: 20000;
             display: none;
         }
 
@@ -141,7 +139,7 @@
             width: 280px;
             height: 100vh;
             background-color: #ffffff;
-            z-index: 999;
+            z-index: 20001;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             display: flex;
             flex-direction: column;
@@ -180,6 +178,7 @@
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
+            cursor: pointer;
         }
 
         .drawer-item i {
@@ -228,6 +227,7 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            cursor: pointer;
         }
 
         .carousel-track {
@@ -303,6 +303,7 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            cursor: pointer;
         }
 
         /* --- GİRİŞ MODALI --- */
@@ -313,7 +314,7 @@
             width: 100vw;
             height: 100vh;
             background-color: rgba(15, 23, 42, 0.6);
-            z-index: 1000;
+            z-index: 30000;
             display: none;
             align-items: center;
             justify-content: center;
@@ -396,6 +397,7 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            cursor: pointer;
         }
 
         .btn-minecraft {
@@ -411,6 +413,7 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -419,7 +422,7 @@
     <!-- ÜST ŞERİT -->
     <header class="top-header">
         <div class="header-left">
-            <button class="icon-btn action-click" id="openDrawerBtn">
+            <button class="icon-btn" id="openDrawerBtn">
                 <i class="fa-solid fa-house"></i>
             </button>
             <a href="#" class="brand-container">
@@ -439,7 +442,7 @@
         </div>
         
         <div class="header-right">
-            <button class="login-btn action-click" id="openLoginBtn">
+            <button class="login-btn" id="openLoginBtn">
                 <i class="fa-solid fa-right-to-bracket"></i>
                 <span>Giriş Yap</span>
             </button>
@@ -451,7 +454,7 @@
     <aside class="drawer" id="drawer">
         <div class="drawer-header">
             <span class="drawer-title">NATO Komuta Portalı</span>
-            <button class="icon-btn action-click" id="closeDrawerBtn">
+            <button class="icon-btn" id="closeDrawerBtn">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
@@ -488,10 +491,10 @@
                     <span>Taktik Birlikler</span>
                 </div>
                 <div class="carousel-controls">
-                    <button class="control-btn action-click" id="prevBtn">
+                    <button class="control-btn" id="prevBtn">
                         <i class="fa-solid fa-chevron-left"></i>
                     </button>
-                    <button class="control-btn action-click" id="nextBtn">
+                    <button class="control-btn" id="nextBtn">
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>
                 </div>
@@ -505,7 +508,7 @@
                         <h3 class="card-title">Yıldırım Orduları</h3>
                         <p class="card-desc">NATO askeri komutasının öncü taarruz ve savunma gücü. Kara harekâtlarının ana omurgasını oluşturur.</p>
                     </div>
-                    <button class="card-action action-click" onclick="alert('Yıldırım Orduları seçildi!')">
+                    <button class="card-action" onclick="alert('Yıldırım Orduları seçildi!')">
                         <span>Detayları İncele</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
@@ -518,7 +521,7 @@
                         <h3 class="card-title">Kızıl Sağ El</h3>
                         <p class="card-desc">Gizli operasyonlar, keşif ve düşman hattı arkasında görev yapan elit taktik operasyon timi.</p>
                     </div>
-                    <button class="card-action action-click" onclick="alert('Kızıl Sağ El seçildi!')">
+                    <button class="card-action" onclick="alert('Kızıl Sağ El seçildi!')">
                         <span>Detayları İncele</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
@@ -531,7 +534,7 @@
                         <h3 class="card-title">OMEGA</h3>
                         <p class="card-desc">Stratejik istihbarat, lojistik destek ve kritik bölge güvenlik koordinasyonundan sorumlu birim.</p>
                     </div>
-                    <button class="card-action action-click" onclick="alert('OMEGA seçildi!')">
+                    <button class="card-action" onclick="alert('OMEGA seçildi!')">
                         <span>Detayları İncele</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
@@ -545,7 +548,7 @@
         <div class="modal-card-double">
             <div class="modal-header">
                 <h3 style="font-size: 1.25rem; font-weight: 700;">Giriş Yöntemini Seçin</h3>
-                <button class="icon-btn action-click" id="closeLoginBtn" style="width: 32px; height: 32px; font-size: 1rem;">
+                <button class="icon-btn" id="closeLoginBtn" style="width: 32px; height: 32px; font-size: 1rem;">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -559,7 +562,7 @@
                         <h4 class="box-title">Discord İle Giriş</h4>
                         <p class="box-desc">Discord hesabınızı bağlayarak sunucudaki rütbenizi ve profilinizi doğrulayın.</p>
                     </div>
-                    <button class="btn-discord action-click" onclick="alert('Discord sayfasına yönlendiriliyorsunuz...'); closeLogin();">
+                    <button class="btn-discord" onclick="alert('Discord sayfasına yönlendiriliyorsunuz...'); closeLogin();">
                         <i class="fa-brands fa-discord"></i>
                         <span>Discord ile Bağlan</span>
                     </button>
@@ -573,7 +576,7 @@
                         <h4 class="box-title">Minecraft (Xbox) İle Giriş</h4>
                         <p class="box-desc">Microsoft/Xbox hesabınızla oturum açarak oyundaki kimliğinizi güvenle onaylayın.</p>
                     </div>
-                    <button class="btn-minecraft action-click" onclick="alert('Xbox sayfasına yönlendiriliyorsunuz...'); closeLogin();">
+                    <button class="btn-minecraft" onclick="alert('Xbox sayfasına yönlendiriliyorsunuz...'); closeLogin();">
                         <i class="fa-brands fa-xbox"></i>
                         <span>Xbox ile Bağlan</span>
                     </button>
@@ -604,4 +607,4 @@
         }
 
         function closeLogin() {
-            loginModal.classList.remove
+   
