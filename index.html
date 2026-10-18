@@ -17,6 +17,10 @@
             --primary-blue: #1d4ed8;
             --primary-hover: #1e40af;
             --header-bg: #ffffff;
+            --discord-color: #5865F2;
+            --discord-hover: #4752C4;
+            --xbox-color: #107C41;
+            --xbox-hover: #0b582e;
         }
 
         * {
@@ -242,7 +246,6 @@
             border-color: var(--primary-blue);
         }
 
-        /* KARTLAR LAYOUT */
         .carousel-track {
             display: flex;
             gap: 1rem;
@@ -325,7 +328,7 @@
             border-color: var(--primary-blue);
         }
 
-        /* --- MODAL --- */
+        /* --- ÇİFTLİ GİRİŞ MODALI (DISCORD & MINECRAFT) --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -348,13 +351,13 @@
             pointer-events: auto;
         }
 
-        .modal-card {
+        .modal-card-double {
             background-color: #ffffff;
-            border-radius: 16px;
+            border-radius: 20px;
             width: 100%;
-            max-width: 380px;
+            max-width: 680px;
             padding: 1.75rem;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             border: 1px solid var(--border-color);
         }
 
@@ -362,40 +365,96 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (min-width: 600px) {
+            .login-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .login-box {
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.5rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            justify-content: space-between;
+            background: #fafafa;
+            transition: all 0.2s ease;
+        }
+
+        .login-box:hover {
+            border-color: #cbd5e1;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .box-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .box-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .box-desc {
+            font-size: 0.825rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
             margin-bottom: 1.25rem;
         }
 
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.4rem;
-            color: var(--text-secondary);
-        }
-
-        .form-input {
+        .btn-discord {
             width: 100%;
             padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: var(--primary-blue);
+            background-color: var(--discord-color);
             color: white;
             border: none;
             border-radius: 8px;
             font-weight: 600;
+            font-size: 0.9rem;
             cursor: pointer;
-            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-discord:active {
+            background-color: var(--discord-hover);
+        }
+
+        .btn-minecraft {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--xbox-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-minecraft:active {
+            background-color: var(--xbox-hover);
         }
     </style>
 </head>
@@ -525,72 +584,36 @@
         </section>
     </main>
 
-    <!-- GİRİŞ MODALI -->
+    <!-- YAN YANA İKİLİ GİRİŞ MODALI (DISCORD & MINECRAFT) -->
     <div class="modal-overlay" id="loginModal">
-        <div class="modal-card">
+        <div class="modal-card-double">
             <div class="modal-header">
-                <h3 style="font-size: 1.2rem; font-weight: 700;">Giriş Yap</h3>
+                <h3 style="font-size: 1.25rem; font-weight: 700;">Giriş Yöntemini Seçin</h3>
                 <button class="icon-btn" id="closeLoginBtn" style="width: 32px; height: 32px; font-size: 1rem;">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <form onsubmit="event.preventDefault(); alert('Giriş başarılı!'); closeLogin();">
-                <div class="form-group">
-                    <label class="form-label">Kullanıcı Adı</label>
-                    <input type="text" class="form-input" placeholder="Paşam" required>
+            
+            <div class="login-grid">
+                <!-- DISCORD KUTUSU -->
+                <div class="login-box">
+                    <div>
+                        <div class="box-icon" style="color: var(--discord-color);">
+                            <i class="fa-brands fa-discord"></i>
+                        </div>
+                        <h4 class="box-title">Discord İle Giriş</h4>
+                        <p class="box-desc">Discord hesabınızı bağlayarak sunucudaki rütbenizi ve profilinizi doğrulayın.</p>
+                    </div>
+                    <button class="btn-discord" onclick="alert('Discord yetkilendirme sayfasına yönlendiriliyorsunuz...'); closeLogin();">
+                        <i class="fa-brands fa-discord"></i>
+                        <span>Discord ile Bağlan</span>
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Parola</label>
-                    <input type="password" class="form-input" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="submit-btn">Giriş Yap</button>
-            </form>
-        </div>
-    </div>
 
-    <!-- JAVASCRIPT -->
-    <script>
-        const drawer = document.getElementById('drawer');
-        const drawerOverlay = document.getElementById('drawerOverlay');
-        const loginModal = document.getElementById('loginModal');
-        const carouselTrack = document.getElementById('carouselTrack');
-
-        function openDrawer() {
-            drawer.classList.add('active');
-            drawerOverlay.classList.add('active');
-        }
-
-        function closeDrawer() {
-            drawer.classList.remove('active');
-            drawerOverlay.classList.remove('active');
-        }
-
-        function openLogin() {
-            loginModal.classList.add('active');
-        }
-
-        function closeLogin() {
-            loginModal.classList.remove('active');
-        }
-
-        document.getElementById('openDrawerBtn').addEventListener('click', openDrawer);
-        document.getElementById('closeDrawerBtn').addEventListener('click', closeDrawer);
-        drawerOverlay.addEventListener('click', closeDrawer);
-
-        document.getElementById('openLoginBtn').addEventListener('click', openLogin);
-        document.getElementById('closeLoginBtn').addEventListener('click', closeLogin);
-
-        loginModal.addEventListener('click', (e) => {
-            if (e.target === loginModal) closeLogin();
-        });
-
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            carouselTrack.scrollBy({ left: 320, behavior: 'smooth' });
-        });
-
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            carouselTrack.scrollBy({ left: -320, behavior: 'smooth' });
-        });
-    </script>
-</body>
-                                                                    </html>
+                <!-- MINECRAFT KUTUSU -->
+                <div class="login-box">
+                    <div>
+                        <div class="box-icon" style="color: var(--xbox-color);">
+                            <i class="fa-brands fa-xbox"></i>
+                        </div>
+                        <h4 class="bo
