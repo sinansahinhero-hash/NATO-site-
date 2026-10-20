@@ -27,7 +27,6 @@
             box-sizing: border-box;
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             -webkit-tap-highlight-color: rgba(0,0,0,0.1);
-            user-select: none; /* Mobilde metin seçip tıklamayı engellemesini önler */
         }
 
         body {
@@ -37,14 +36,6 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
-        }
-
-        /* TIKLANABİLİR TÜM BUTONLAR İÇİN MOBİL MOBİL DOKUNMA GARANTİSİ */
-        .touch-btn {
-            touch-action: manipulation !important;
-            cursor: pointer !important;
-            position: relative;
-            z-index: 10000 !important;
         }
 
         /* --- ÜST ŞERİT --- */
@@ -78,6 +69,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+            touch-action: manipulation;
         }
 
         .icon-btn:active {
@@ -114,6 +107,8 @@
             display: flex;
             align-items: center;
             gap: 0.4rem;
+            cursor: pointer;
+            touch-action: manipulation;
         }
 
         .login-btn:active {
@@ -178,6 +173,7 @@
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
+            cursor: pointer;
         }
 
         .drawer-item i {
@@ -226,6 +222,8 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            cursor: pointer;
+            touch-action: manipulation;
         }
 
         .carousel-track {
@@ -301,6 +299,8 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            cursor: pointer;
+            touch-action: manipulation;
         }
 
         /* --- GİRİŞ MODALI --- */
@@ -311,7 +311,7 @@
             width: 100vw;
             height: 100vh;
             background-color: rgba(15, 23, 42, 0.6);
-            z-index: 20000 !important;
+            z-index: 20000;
             display: none;
             align-items: center;
             justify-content: center;
@@ -392,6 +392,8 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            cursor: pointer;
+            touch-action: manipulation;
         }
 
         .btn-minecraft {
@@ -407,15 +409,18 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            cursor: pointer;
+            touch-action: manipulation;
         }
     </style>
 </head>
 <body>
 
-    <!-- ÜST ŞERİT -->
+    <!-- ÜST ŞERİT (DOĞRUDAN HTML İÇİNDEN TETİKLEME) -->
     <header class="top-header">
         <div class="header-left">
-            <button class="icon-btn touch-btn" id="openDrawerBtn">
+            <!-- Sol üst ev simgesi artık doğrudan openDrawer() tetikliyor -->
+            <button class="icon-btn" onclick="openDrawer()">
                 <i class="fa-solid fa-house"></i>
             </button>
             <a href="#" class="brand-container">
@@ -435,7 +440,8 @@
         </div>
         
         <div class="header-right">
-            <button class="login-btn touch-btn" id="openLoginBtn">
+            <!-- Sağ üst giriş yap butonu artık doğrudan openLogin() tetikliyor -->
+            <button class="login-btn" onclick="openLogin()">
                 <i class="fa-solid fa-right-to-bracket"></i>
                 <span>Giriş Yap</span>
             </button>
@@ -443,32 +449,32 @@
     </header>
 
     <!-- YAN MENÜ -->
-    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
     <aside class="drawer" id="drawer">
         <div class="drawer-header">
             <span class="drawer-title">NATO Komuta Portalı</span>
-            <button class="icon-btn touch-btn" id="closeDrawerBtn">
+            <button class="icon-btn" onclick="closeDrawer()">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
         <nav class="drawer-nav">
-            <a href="#bolumler" class="drawer-item touch-btn" onclick="closeDrawer()">
+            <a href="#bolumler" class="drawer-item" onclick="closeDrawer()">
                 <i class="fa-solid fa-layer-group"></i>
                 <span>Bölümler</span>
             </a>
-            <a href="#braslar" class="drawer-item touch-btn" onclick="closeDrawer()">
+            <a href="#braslar" class="drawer-item" onclick="closeDrawer()">
                 <i class="fa-solid fa-sitemap"></i>
                 <span>Branşlar</span>
             </a>
-            <a href="#emegi-gecenler" class="drawer-item touch-btn" onclick="closeDrawer()">
+            <a href="#emegi-gecenler" class="drawer-item" onclick="closeDrawer()">
                 <i class="fa-solid fa-award"></i>
                 <span>Emeği Geçenler</span>
             </a>
-            <a href="#duyurular" class="drawer-item touch-btn" onclick="closeDrawer()">
+            <a href="#duyurular" class="drawer-item" onclick="closeDrawer()">
                 <i class="fa-solid fa-bullhorn"></i>
                 <span>Duyurular</span>
             </a>
-            <a href="#discord" class="drawer-item touch-btn" onclick="closeDrawer()">
+            <a href="#discord" class="drawer-item" onclick="closeDrawer()">
                 <i class="fa-brands fa-discord"></i>
                 <span>Discord Sunucusu</span>
             </a>
@@ -484,10 +490,10 @@
                     <span>Taktik Birlikler</span>
                 </div>
                 <div class="carousel-controls">
-                    <button class="control-btn touch-btn" id="prevBtn">
+                    <button class="control-btn" id="prevBtn" onclick="scrollCarousel(-320)">
                         <i class="fa-solid fa-chevron-left"></i>
                     </button>
-                    <button class="control-btn touch-btn" id="nextBtn">
+                    <button class="control-btn" id="nextBtn" onclick="scrollCarousel(320)">
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>
                 </div>
@@ -501,7 +507,7 @@
                         <h3 class="card-title">Yıldırım Orduları</h3>
                         <p class="card-desc">NATO askeri komutasının öncü taarruz ve savunma gücü. Kara harekâtlarının ana omurgasını oluşturur.</p>
                     </div>
-                    <button class="card-action touch-btn" onclick="alert('Yıldırım Orduları seçildi!')">
+                    <button class="card-action" onclick="alert('Yıldırım Orduları seçildi!')">
                         <span>Detayları İncele</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
@@ -514,7 +520,7 @@
                         <h3 class="card-title">Kızıl Sağ El</h3>
                         <p class="card-desc">Gizli operasyonlar, keşif ve düşman hattı arkasında görev yapan elit taktik operasyon timi.</p>
                     </div>
-                    <button class="card-action touch-btn" onclick="alert('Kızıl Sağ El seçildi!')">
+                    <button class="card-action" onclick="alert('Kızıl Sağ El seçildi!')">
                         <span>Detayları İncele</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
@@ -527,7 +533,7 @@
                         <h3 class="card-title">OMEGA</h3>
                         <p class="card-desc">Stratejik istihbarat, lojistik destek ve kritik bölge güvenlik koordinasyonundan sorumlu birim.</p>
                     </div>
-                    <button class="card-action touch-btn" onclick="alert('OMEGA seçildi!')">
+                    <button class="card-action" onclick="alert('OMEGA seçildi!')">
                         <span>Detayları İncele</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
@@ -537,11 +543,11 @@
     </main>
 
     <!-- GİRİŞ MODALI -->
-    <div class="modal-overlay" id="loginModal">
+    <div class="modal-overlay" id="loginModal" onclick="checkModalClose(event)">
         <div class="modal-card-double">
             <div class="modal-header">
                 <h3 style="font-size: 1.25rem; font-weight: 700;">Giriş Yöntemini Seçin</h3>
-                <button class="icon-btn touch-btn" id="closeLoginBtn" style="width: 32px; height: 32px; font-size: 1rem;">
+                <button class="icon-btn" onclick="closeLogin()" style="width: 32px; height: 32px; font-size: 1rem;">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -555,7 +561,7 @@
                         <h4 class="box-title">Discord İle Giriş</h4>
                         <p class="box-desc">Discord hesabınızı bağlayarak sunucudaki rütbenizi ve profilinizi doğrulayın.</p>
                     </div>
-                    <button class="btn-discord touch-btn" onclick="alert('Discord sayfasına yönlendiriliyorsunuz...'); closeLogin();">
+                    <button class="btn-discord" onclick="alert('Discord sayfasına yönlendiriliyorsunuz...'); closeLogin();">
                         <i class="fa-brands fa-discord"></i>
                         <span>Discord ile Bağlan</span>
                     </button>
@@ -569,7 +575,7 @@
                         <h4 class="box-title">Minecraft (Xbox) İle Giriş</h4>
                         <p class="box-desc">Microsoft/Xbox hesabınızla oturum açarak oyundaki kimliğinizi güvenle onaylayın.</p>
                     </div>
-                    <button class="btn-minecraft touch-btn" onclick="alert('Xbox sayfasına yönlendiriliyorsunuz...'); closeLogin();">
+                    <button class="btn-minecraft" onclick="alert('Xbox sayfasına yönlendiriliyorsunuz...'); closeLogin();">
                         <i class="fa-brands fa-xbox"></i>
                         <span>Xbox ile Bağlan</span>
                     </button>
@@ -578,18 +584,11 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT (MOBİL DOKUNMA DESTEKLİ) -->
+    <!-- KESİN ÇÖZÜM JAVASCRIPT -->
     <script>
         const drawer = document.getElementById('drawer');
         const drawerOverlay = document.getElementById('drawerOverlay');
         const loginModal = document.getElementById('loginModal');
         const carouselTrack = document.getElementById('carouselTrack');
 
-        function openDrawer() {
-            drawer.classList.add('active');
-            drawerOverlay.style.display = 'block';
-        }
-
-        function closeDrawer() {
-            drawer.classList.remove('active');
-            drawerOverlay.style.display =
+        function openDraw
