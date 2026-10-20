@@ -259,7 +259,6 @@
         .carousel-card {
             flex: 0 0 100%;
             max-width: 360px;
-            min-width: 300px;
             scroll-snap-align: center;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -326,53 +325,6 @@
             border-color: var(--primary-blue);
         }
 
-        /* PROFİL KARTI İÇERİĞİ STİLLERİ */
-        .profile-box {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background: #f8fafc;
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 1rem;
-        }
-
-        .profile-top {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .profile-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 2px solid var(--primary-blue);
-            object-fit: cover;
-        }
-
-        .profile-info h4 {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .profile-info p {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        .game-accounts {
-            display: flex;
-            justify-content: space-between;
-            border-top: 1px solid var(--border-color);
-            padding-top: 8px;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-
         /* --- MODAL --- */
         .modal-overlay {
             position: fixed;
@@ -413,27 +365,38 @@
             margin-bottom: 1.25rem;
         }
 
-        .login-option-btn {
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
             width: 100%;
             padding: 0.75rem;
-            border-radius: 8px;
             border: 1px solid var(--border-color);
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-            text-decoration: none;
-            transition: opacity 0.2s;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
         }
-        .login-option-btn:active { opacity: 0.85; }
 
-        .btn-discord { background: #5865F2; color: #fff; border-color: #5865F2; }
-        .btn-xbox { background: #107C10; color: #fff; border-color: #107C10; }
-        .btn-microsoft { background: #111111; color: #fff; border-color: #111111; }
+        .submit-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -463,7 +426,7 @@
         <div class="header-right">
             <button class="login-btn" id="openLoginBtn">
                 <i class="fa-solid fa-right-to-bracket"></i>
-                <span id="loginBtnText">Giriş Yap</span>
+                <span>Giriş Yap</span>
             </button>
         </div>
     </header>
@@ -520,7 +483,6 @@
             </div>
 
             <div class="carousel-track" id="carouselTrack">
-                <!-- KART 1 -->
                 <div class="carousel-card">
                     <div>
                         <span class="card-tag tag-yildirim">Ana Birlik</span>
@@ -534,7 +496,6 @@
                     </button>
                 </div>
 
-                <!-- KART 2 -->
                 <div class="carousel-card">
                     <div>
                         <span class="card-tag tag-kizil">Özel Kuvvetler</span>
@@ -548,29 +509,15 @@
                     </button>
                 </div>
 
-                <!-- KART 3: OYUNCU PROFİLİ (3. KART) -->
                 <div class="carousel-card">
                     <div>
-                        <span class="card-tag tag-omega">Kimlik Kartı</span>
-                        <div class="card-icon" style="color: #d97706;"><i class="fa-solid fa-id-card"></i></div>
-                        <h3 class="card-title">Oyuncu Profili</h3>
-                        
-                        <div class="profile-box">
-                            <div class="profile-top">
-                                <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="profile-avatar" id="profileAvatar" alt="Avatar">
-                                <div class="profile-info">
-                                    <h4 id="profileName">Giriş Yapılmadı</h4>
-                                    <p id="profileRank">Lütfen sağ üstten giriş yapın</p>
-                                </div>
-                            </div>
-                            <div class="game-accounts">
-                                <span>MC: <strong id="mcName">-</strong></span>
-                                <span>DC: <strong id="dcName">-</strong></span>
-                            </div>
-                        </div>
+                        <span class="card-tag tag-omega">Taktik Destek</span>
+                        <div class="card-icon" style="color: #d97706;"><i class="fa-solid fa-chess-knight"></i></div>
+                        <h3 class="card-title">OMEGA</h3>
+                        <p class="card-desc">Stratejik istihbarat, lojistik destek ve kritik bölge güvenlik koordinasyonundan sorumlu birim.</p>
                     </div>
-                    <button class="card-action" onclick="handleProfileCardClick()">
-                        <span id="profileCardBtnText">Giriş Yap / Hesap Bağla</span>
+                    <button class="card-action" onclick="alert('OMEGA seçildi!')">
+                        <span>Detayları İncele</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
@@ -578,22 +525,73 @@
         </section>
     </main>
 
-    <!-- GİRİŞ MODALI (Platform Seçenekleri) -->
+    <!-- GİRİŞ MODALI -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-card">
             <div class="modal-header">
-                <h3 style="font-size: 1.2rem; font-weight: 700;">NATO Oturum Açma</h3>
+                <h3 style="font-size: 1.2rem; font-weight: 700;">Giriş Yap</h3>
                 <button class="icon-btn" id="closeLoginBtn" style="width: 32px; height: 32px; font-size: 1rem;">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Hesabınızı bağlamak için platform seçin:</p>
-            
-            <div style="display: flex; flex-direction: column;">
-                <button class="login-option-btn btn-discord" onclick="completeLogin('Discord', 'Paşam#0001', 'Pasam_TR')">
-                    <i class="fa-brands fa-discord" style="font-size: 1.1rem;"></i> Discord ile Giriş Yap
-                </button>
-                <button class="login-option-btn btn-xbox" onclick="completeLogin('Xbox', 'Paşam Xbox', 'Pasam_TR')">
-                    <i class="fa-brands fa-xbox" style="font-size: 1.1rem;"></i> Xbox Hesabı ile Bağlan
-                </button>
-      
+            <form onsubmit="event.preventDefault(); alert('Giriş başarılı!'); closeLogin();">
+                <div class="form-group">
+                    <label class="form-label">Kullanıcı Adı</label>
+                    <input type="text" class="form-input" placeholder="Paşam" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Parola</label>
+                    <input type="password" class="form-input" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="submit-btn">Giriş Yap</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        const drawer = document.getElementById('drawer');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const loginModal = document.getElementById('loginModal');
+        const carouselTrack = document.getElementById('carouselTrack');
+
+        function openDrawer() {
+            drawer.classList.add('active');
+            drawerOverlay.classList.add('active');
+        }
+
+        function closeDrawer() {
+            drawer.classList.remove('active');
+            drawerOverlay.classList.remove('active');
+        }
+
+        function openLogin() {
+            loginModal.classList.add('active');
+        }
+
+        function closeLogin() {
+            loginModal.classList.remove('active');
+        }
+
+        document.getElementById('openDrawerBtn').addEventListener('click', openDrawer);
+        document.getElementById('closeDrawerBtn').addEventListener('click', closeDrawer);
+        drawerOverlay.addEventListener('click', closeDrawer);
+
+        document.getElementById('openLoginBtn').addEventListener('click', openLogin);
+        document.getElementById('closeLoginBtn').addEventListener('click', closeLogin);
+
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) closeLogin();
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            carouselTrack.scrollBy({ left: 320, behavior: 'smooth' });
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            carouselTrack.scrollBy({ left: -320, behavior: 'smooth' });
+        });
+    </script>
+</body>
+    </html>
+    
