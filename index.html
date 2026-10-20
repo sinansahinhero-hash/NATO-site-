@@ -98,7 +98,7 @@
             background: #0040cc;
         }
 
-        /* Ana İçerik / Taktik Birlikler Alanı */
+        /* Ana İçerik Alanı */
         .main-container {
             width: 100%;
             max-width: 600px;
@@ -192,7 +192,7 @@
         }
 
         .card h3 {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #111;
             display: flex;
@@ -202,29 +202,96 @@
 
         .card p {
             color: #555;
-            font-size: 1rem;
+            font-size: 0.95rem;
             line-height: 1.5;
         }
 
-        .detail-btn {
-            background: transparent;
-            border: none;
-            color: #111;
-            font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 5px;
-            transition: 0.2s;
-            align-self: flex-start;
-            padding: 0;
+        /* Destek Formu Elemanları */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
 
-        .detail-btn:hover {
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input, .form-group textarea {
+            background: #f9fafc;
+            border: 1px solid #eaeaea;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #111;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #0052ff;
+        }
+
+        .action-btn {
+            background: #0052ff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .action-btn:hover {
+            background: #0040cc;
+        }
+
+        /* Profil Kartı İçeriği */
+        .profile-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f9fafc;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #eaeaea;
+        }
+
+        .avatar {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: 2px solid #0052ff;
+        }
+
+        .profile-info h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .profile-info p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .role-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 5px;
+        }
+
+        .role-pill {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(0, 82, 255, 0.1);
             color: #0052ff;
-            gap: 12px;
         }
     </style>
 </head>
@@ -241,11 +308,11 @@
         <button class="login-btn"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
     </div>
 
-    <!-- Ana Taktik Birlikler Alanı -->
+    <!-- Ana Kaydırılabilir Kartlar Alanı -->
     <div class="main-container">
         <div class="section-header">
-            <div class="section-title">
-                <i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> Taktik Birlikler
+            <div class="section-title" id="sectionTitle">
+                <i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> NATO Tanıtım
             </div>
             <div class="slider-controls">
                 <button class="control-btn" onclick="moveCard(-1)"><i class="fa-solid fa-chevron-left"></i></button>
@@ -257,43 +324,65 @@
         <div class="cards-viewport">
             <div class="cards-wrapper" id="cardsWrapper">
                 
-                <!-- KART 1: Yıldırım Orduları -->
+                <!-- KART 1: NATO Tanıtımı -->
                 <div class="card">
-                    <span class="badge blue"><i class="fa-solid fa-bolt"></i> ANA BİRLİK</span>
-                    <h3><i class="fa-solid fa-bolt" style="color: #0052ff;"></i> Yıldırım Orduları</h3>
-                    <p>NATO askeri komutasının öncü taarruz ve savunma gücü. Kara harekatlarının ana omurgasını oluşturur.</p>
-                    <button class="detail-btn">Detayları İncele <i class="fa-solid fa-arrow-right"></i></button>
+                    <span class="badge blue"><i class="fa-solid fa-circle-info"></i> KURUMSAL</span>
+                    <h3><i class="fa-solid fa-globe" style="color: #0052ff;"></i> NATO Hakkında</h3>
+                    <p>NATO; disiplin, taktik strateji ve askeri hiyerarşiyi esas alan lider gaming topluluğudur. Minecraft Towny sunucularında ve operasyonlarda hakimiyet kurarız.</p>
+                    <a href="https://discord.gg/" target="_blank" style="color: #0052ff; font-weight: 700; text-decoration: none; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; margin-top: 5px;">
+                        Discord Sunucusuna Katıl <i class="fa-solid fa-arrow-right"></i>
+                    </a>
                 </div>
 
-                <!-- KART 2: Kızıl Sağ El -->
+                <!-- KART 2: NATO Destek Sistemi -->
                 <div class="card">
-                    <span class="badge red"><i class="fa-solid fa-hand-fist"></i> ÖZEL KUVVETLER</span>
-                    <h3><i class="fa-solid fa-hand-fist" style="color: #ff3344;"></i> Kızıl Sağ El</h3>
-                    <p>Gizli operasyonlar, keşif ve düşman hattı arkasında görev yapan elit taktik operasyon timi.</p>
-                    <button class="detail-btn">Detayları İncele <i class="fa-solid fa-arrow-right"></i></button>
+                    <span class="badge red"><i class="fa-solid fa-headset"></i> YARDIM MASASI</span>
+                    <h3><i class="fa-solid fa-ticket" style="color: #ff3344;"></i> NATO Destek Sistemi</h3>
+                    <div class="form-group">
+                        <label>Talep / Şikayet Konusu</label>
+                        <input type="text" placeholder="Kısaca konuyu belirtin...">
+                    </div>
+                    <button class="action-btn" onclick="alert('Destek talebiniz iletildi Paşam!')">Destek Talebi Oluştur</button>
                 </div>
 
-                <!-- KART 3: OMEGA -->
+                <!-- KART 3: Kişinin NATO Profili -->
                 <div class="card">
-                    <span class="badge blue"><i class="fa-solid fa-dna"></i> STRATEJİK BİRİM</span>
-                    <h3><i class="fa-solid fa-shield" style="color: #0052ff;"></i> OMEGA</h3>
-                    <p>Yüksek güvenlik, kriz yönetimi ve özel savunma hatlarının inşasından sorumlu üst düzey birim.</p>
-                    <button class="detail-btn">Detayları İncele <i class="fa-solid fa-arrow-right"></i></button>
+                    <span class="badge blue"><i class="fa-solid fa-id-card"></i> KİMLİK KARTI</span>
+                    <h3><i class="fa-solid fa-user-shield" style="color: #0052ff;"></i> Oyuncu Profili</h3>
+                    <div class="profile-box">
+                        <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="avatar" alt="Avatar">
+                        <div class="profile-info">
+                            <h4>Paşam</h4>
+                            <p>NATO Aktif Komutanı</p>
+                            <div class="role-tags">
+                                <span class="role-pill">Kurucu</span>
+                                <span class="role-pill" style="color: #ff3344; background: rgba(255,51,68,0.1);">Yıldırım Orduları</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Slider Kontrolü -->
+    <!-- JavaScript Slider Kontrolü ve Dinamik Başlık -->
     <script>
         let currentIndex = 0;
         const totalCards = 3;
         const wrapper = document.getElementById('cardsWrapper');
+        const sectionTitle = document.getElementById('sectionTitle');
+        
+        const titles = [
+            '<i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> NATO Tanıtım',
+            '<i class="fa-solid fa-headset" style="color: #ff3344;"></i> NATO Destek Sistemi',
+            '<i class="fa-solid fa-id-card" style="color: #0052ff;"></i> Kişisel Profil'
+        ];
 
         function moveCard(direction) {
             currentIndex = (currentIndex + direction + totalCards) % totalCards;
             wrapper.style.transform = `translateX(-${currentIndex * 105}%)`;
+            sectionTitle.innerHTML = titles[currentIndex];
         }
     </script>
 </body>
