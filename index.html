@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATO Komuta Portalı</title>
+    <title>NATO</title>
     <!-- FontAwesome ve Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
@@ -218,7 +218,7 @@
             color: #555;
         }
 
-        .form-group input, .form-group textarea {
+        .form-group input {
             background: #f9fafc;
             border: 1px solid #eaeaea;
             padding: 10px;
@@ -228,7 +228,7 @@
             outline: none;
         }
 
-        .form-group input:focus, .form-group textarea:focus {
+        .form-group input:focus {
             border-color: #0052ff;
         }
 
@@ -361,29 +361,27 @@
             color: #333;
         }
 
-        .login-option-btn {
-            width: 100%;
-            padding: 12px 15px;
-            border-radius: 10px;
-            border: 1px solid #eaeaea;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
+        .external-link-row {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: 0.2s;
-            text-decoration: none;
-            color: #fff;
-            text-align: center;
-            justify-content: center;
+            gap: 10px;
         }
 
-        .btn-discord { background: #5865F2; }
-        .btn-discord:hover { background: #4752C4; }
-
-        .btn-xbox { background: #107C10; }
-        .btn-xbox:hover { background: #0e6b0e; }
+        .ext-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .btn-discord-link { background: #5865F2; }
+        .btn-xbox-link { background: #107C10; }
     </style>
 </head>
 <body>
@@ -396,32 +394,50 @@
                 <i class="fa-solid fa-globe"></i> NATO
             </div>
         </div>
-        <button class="login-btn" id="authBtn" onclick="handleAuthClick()"><i class="fa-solid fa-right-to-bracket"></i> <span id="authBtnText">Hesap Eşle / Giriş</span></button>
+        <!-- Buton yazısı hep "Giriş Yap" olarak sabit kalır -->
+        <button class="login-btn" onclick="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
     </div>
 
-    <!-- Resmi Giriş Sayfalarına Yönlendiren Doğrulama Modalı -->
+    <!-- RoVerify Tarzı Gerçek Eşleme Modalı -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-link" style="color: #0052ff;"></i> Hesap Doğrulama</h3>
+                <h3><i class="fa-solid fa-link" style="color: #0052ff;"></i> Hesap Doğrulama (RoVerify)</h3>
                 <button class="close-modal" onclick="closeLoginModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p style="font-size: 0.85rem; color: #666;">RoVerify mantığıyla hesaplarınızı resmi giriş sayfalarından bağlayın:</p>
+            <p style="font-size: 0.85rem; color: #666;">İstiyorsan resmi sayfalardan giriş yapıp kontrol edebilir, ardından hesap adlarını girerek eşleyebilirsin:</p>
             
-            <!-- Discord Resmi Giriş Ekranına Yönlendirir -->
-            <a href="https://discord.com/login" target="_blank" class="login-option-btn btn-discord" onclick="simulateVerification('Discord', 'Paşam#0001')">
-                <i class="fa-brands fa-discord" style="font-size: 1.2rem;"></i> Discord ile Giriş Yap
-            </a>
-            
-            <!-- Microsoft / Xbox Resmi Giriş Ekranına Yönlendirir -->
-            <a href="https://login.live.com/" target="_blank" class="login-option-btn btn-xbox" onclick="simulateVerification('Xbox', 'Pasam_TR')">
-                <i class="fa-brands fa-xbox" style="font-size: 1.2rem;"></i> Xbox / Microsoft ile Giriş Yap
-            </a>
+            <!-- Resmi Sitelere Gitmek İçin Yardımcı Linkler -->
+            <div class="external-link-row">
+                <a href="https://discord.com/login" target="_blank" class="ext-btn btn-discord-link">
+                    <i class="fa-brands fa-discord"></i> Discord Giriş
+                </a>
+                <a href="https://login.live.com/" target="_blank" class="ext-btn btn-xbox-link">
+                    <i class="fa-brands fa-xbox"></i> Microsoft / Xbox
+                </a>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eaeaea; margin: 5px 0;">
+
+            <!-- Manuel Gerçek Doğrulama Alanı -->
+            <div class="form-group">
+                <label><i class="fa-brands fa-discord" style="color: #5865F2;"></i> Discord Kullanıcı Adın</label>
+                <input type="text" id="inputDc" placeholder="Örn: Paşam#0001">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-cube" style="color: #107C10;"></i> Minecraft / Xbox Oyuncu Adın</label>
+                <input type="text" id="inputMc" placeholder="Örn: Pasam_TR">
+            </div>
+
+            <button class="action-btn" onclick="verifyAndLinkAccounts()" style="margin-top: 5px;">
+                <i class="fa-solid fa-check-circle"></i> Doğrula ve Eşle
+            </button>
         </div>
     </div>
 
     <!-- Ana Kaydırılabilir Kartlar Alanı -->
-    <main class="main-container">
+    <div class="main-container">
         <div class="section-header">
             <div class="section-title" id="sectionTitle">
                 <i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> NATO Tanıtım
@@ -483,7 +499,7 @@
 
             </div>
         </div>
-    </main>
+    </div>
 
     <!-- JavaScript Kodları -->
     <script>
@@ -513,42 +529,42 @@
             document.getElementById('loginModal').style.display = 'none';
         }
 
-        function handleAuthClick() {
-            const isLoggedIn = localStorage.getItem('nato_logged_in');
-            if (isLoggedIn === 'true') {
-                logout();
-            } else {
-                openLoginModal();
-            }
-        }
+        // Kullanıcı kendi adlarını girip "Doğrula ve Eşle" dediğinde kart güncellenir
+        function verifyAndLinkAccounts() {
+            const dcInput = document.getElementById('inputDc').value.trim();
+            const mcInput = document.getElementById('inputMc').value.trim();
 
-        // Resmi Giriş Sayfalarına Gidiş Simülasyonu ve Eşleme Kaydı
-        function simulateVerification(platform, sampleName) {
+            if(!dcInput || !mcInput) {
+                alert("Lütfen hem Discord hem de Minecraft kullanıcı adınızı eksiksiz girin Paşam!");
+                return;
+            }
+
             closeLoginModal();
             localStorage.setItem('nato_logged_in', 'true');
-            localStorage.setItem('nato_dc', 'Paşam#0001');
-            localStorage.setItem('nato_mc', 'Pasam_TR');
+            localStorage.setItem('nato_dc', dcInput);
+            localStorage.setItem('nato_mc', mcInput);
             
             checkLoginStatus();
+            alert("Hesaplar başarıyla doğrulandı ve eşlendi Paşam!");
         }
 
         function checkLoginStatus() {
             const isLoggedIn = localStorage.getItem('nato_logged_in');
-            const authBtnText = document.getElementById('authBtnText');
             
             if (isLoggedIn === 'true') {
+                const savedDc = localStorage.getItem('nato_dc') || 'Paşam#0001';
+                const savedMc = localStorage.getItem('nato_mc') || 'Pasam_TR';
+
                 document.getElementById('profileName').innerText = "Paşam";
                 document.getElementById('profileRank').innerText = "NATO Aktif Komutanı";
                 document.getElementById('profileAvatar').src = "https://ui-avatars.com/api/?name=Pasam&background=0052ff&color=fff";
-                document.getElementById('mcName').innerText = "Pasam_TR";
-                document.getElementById('dcName').innerText = "Paşam#0001";
+                document.getElementById('mcName').innerText = savedMc;
+                document.getElementById('dcName').innerText = savedDc;
                 
                 document.getElementById('profileRoles').innerHTML = `
                     <span class="role-pill">Kurucu</span>
                     <span class="role-pill" style="color: #ff3344; background: rgba(255,51,68,0.1);">Yıldırım Orduları</span>
                 `;
-                
-                authBtnText.innerText = "Bağlantıyı Kes";
             } else {
                 document.getElementById('profileName').innerText = "Giriş Yapılmadı";
                 document.getElementById('profileRank').innerText = "Lütfen hesap eşleyin";
@@ -559,17 +575,7 @@
                 document.getElementById('profileRoles').innerHTML = `
                     <span class="role-pill" style="background: rgba(255,51,68,0.1); color: #ff3344;">Yetkisiz Misafir</span>
                 `;
-                
-                authBtnText.innerText = "Hesap Eşle / Giriş";
             }
-        }
-
-        function logout() {
-            localStorage.removeItem('nato_logged_in');
-            localStorage.removeItem('nato_dc');
-            localStorage.removeItem('nato_mc');
-            checkLoginStatus();
-            alert("Hesap eşlemesi kaldırıldı Paşam!");
         }
 
         // Sayfa açıldığında durumu kontrol et
