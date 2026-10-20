@@ -335,12 +335,6 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-            animation: modalOpen 0.3s ease;
-        }
-
-        @keyframes modalOpen {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
         }
 
         .modal-header {
@@ -415,7 +409,7 @@
                 <i class="fa-solid fa-globe"></i> NATO
             </div>
         </div>
-        <button class="login-btn" onclick="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
+        <button class="login-btn" id="authBtn" onclick="handleAuthClick()"><i class="fa-solid fa-right-to-bracket"></i> <span id="authBtnText">Giriş Yap</span></button>
     </div>
 
     <!-- Giriş Yap Modal -->
@@ -425,21 +419,20 @@
                 <h3><i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> NATO Oturum Açma</h3>
                 <button class="close-modal" onclick="closeLoginModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p style="font-size: 0.9rem; color: #666;">Hesabınızı bağlamak için platform seçin (Giriş sayfasına yönlendirileceksiniz):</p>
+            <p style="font-size: 0.9rem; color: #666;">Hesabınızı bağlamak için platform seçin:</p>
             
             <div style="display: flex; flex-direction: column; gap: 12px;">
-                <!-- Discord Resmi Giriş Sayfasına Yönlendirir ve Oturum açtırır -->
-                <a href="https://discord.com/login" target="_blank" class="login-option-btn btn-discord" onclick="triggerLogin('Discord')">
+                <button class="login-option-btn btn-discord" onclick="triggerLogin('Discord')">
                     <i class="fa-brands fa-discord" style="font-size: 1.2rem;"></i> Discord ile Giriş Yap
-                </a>
+                </button>
                 
-                <a href="https://login.live.com/" target="_blank" class="login-option-btn btn-xbox" onclick="triggerLogin('Xbox')">
+                <button class="login-option-btn btn-xbox" onclick="triggerLogin('Xbox')">
                     <i class="fa-brands fa-xbox" style="font-size: 1.2rem;"></i> Xbox Hesabı ile Bağlan
-                </a>
+                </button>
                 
-                <a href="https://login.microsoftonline.com/" target="_blank" class="login-option-btn btn-microsoft" onclick="triggerLogin('Microsoft')">
+                <button class="login-option-btn btn-microsoft" onclick="triggerLogin('Microsoft')">
                     <i class="fa-brands fa-microsoft" style="font-size: 1.2rem;"></i> Microsoft Hesabı (PC)
-                </a>
+                </button>
             </div>
         </div>
     </div>
@@ -537,38 +530,41 @@
             document.getElementById('loginModal').style.display = 'none';
         }
 
-        // Kullanıcı giriş butonuna bastığında tarayıcıda oturum açıldığını hafızaya kaydediyoruz
+        function handleAuthClick() {
+            const isLoggedIn = localStorage.getItem('nato_logged_in');
+            if (isLoggedIn === 'true') {
+                logout();
+            } else {
+                openLoginModal();
+            }
+        }
+
         function triggerLogin(provider) {
             closeLoginModal();
             localStorage.setItem('nato_logged_in', 'true');
             localStorage.setItem('nato_provider', provider);
-            
-            // Kullanıcı giriş yaptıktan sonra sayfayı simüle edip güncelliyoruz
-            setTimeout(checkLoginStatus, 500);
+            checkLoginStatus();
+            alert(provider + " hesabı başarıyla bağlandı Paşam!");
         }
 
-        // Sayfa yüklendiğinde veya giriş yapıldığında profili kontrol eden fonksiyon
         function checkLoginStatus() {
             const isLoggedIn = localStorage.getItem('nato_logged_in');
+            const authBtnText = document.getElementById('authBtnText');
             
             if (isLoggedIn === 'true') {
-                // Giriş yapılmışsa kartı dolduruyoruz
                 document.getElementById('profileName').innerText = "Paşam";
                 document.getElementById('profileRank').innerText = "NATO Aktif Komutanı";
                 document.getElementById('profileAvatar').src = "https://ui-avatars.com/api/?name=Pasam&background=0052ff&color=fff";
                 document.getElementById('mcName').innerText = "Pasam_TR";
-                document.getElementById('dcName').innerText = "Pasam#0001";
+                document.getElementById('dcName').innerText = "Paşam#0001";
                 
                 document.getElementById('profileRoles').innerHTML = `
                     <span class="role-pill">Kurucu</span>
                     <span class="role-pill" style="color: #ff3344; background: rgba(255,51,68,0.1);">Yıldırım Orduları</span>
                 `;
                 
-                // Sağ üstteki giriş butonunu "Çıkış Yap" olarak değiştirebiliriz
-                document.querySelector('.login-btn').innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap';
-                document.querySelector('.login-btn').setAttribute('onclick', 'logout()');
+                authBtnText.innerText = "Çıkış Yap";
             } else {
-                // Giriş yapılmamışsa varsayılan durum
                 document.getElementById('profileName').innerText = "Giriş Yapılmadı";
                 document.getElementById('profileRank').innerText = "Lütfen sağ üstten giriş yapın";
                 document.getElementById('profileAvatar').src = "https://cdn.discordapp.com/embed/avatars/0.png";
@@ -578,19 +574,21 @@
                 document.getElementById('profileRoles').innerHTML = `
                     <span class="role-pill" style="background: rgba(255,51,68,0.1); color: #ff3344;">Yetkisiz Misafir</span>
                 `;
+                
+                authBtnText.innerText = "Giriş Yap";
             }
         }
 
-        // Çıkış yapma fonksiyonu
         function logout() {
             localStorage.removeItem('nato_logged_in');
             localStorage.removeItem('nato_provider');
-            location.reload();
+            checkLoginStatus();
+            alert("Oturum kapatıldı Paşam!");
         }
 
         // Sayfa açıldığında durumu kontrol et
         window.onload = checkLoginStatus;
     </script>
 </body>
-                                                                                                         </html>
-                                                                                                         
+    </html>
+                                                                          
