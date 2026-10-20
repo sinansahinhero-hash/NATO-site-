@@ -4,597 +4,619 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NATO Komuta Portalı</title>
-    <!-- FontAwesome ve Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
+        :root {
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: #e2e8f0;
+            --primary-blue: #1d4ed8;
+            --primary-hover: #1e40af;
+            --header-bg: #ffffff;
+        }
+
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: #f4f6f9;
-            color: #1a1a1a;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 15px;
+            overflow-x: hidden;
         }
 
-        /* Üst Navigasyon Çubuğu */
-        .navbar {
-            width: 100%;
-            max-width: 600px;
-            background: #ffffff;
-            border-radius: 14px;
-            padding: 12px 20px;
+        /* --- ÜST ŞERİT --- */
+        .top-header {
+            position: sticky;
+            top: 0;
+            z-index: 900;
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            height: 64px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+            padding: 0 1rem;
         }
 
-        .nav-left {
+        .header-left {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 0.75rem;
         }
 
         .icon-btn {
-            background: #f0f2f5;
-            border: none;
-            width: 40px;
-            height: 40px;
+            background: #f1f5f9;
+            border: 1px solid var(--border-color);
+            width: 42px;
+            height: 42px;
             border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            color: #333;
-            font-size: 1.1rem;
             transition: 0.2s;
         }
 
         .icon-btn:hover {
-            background: #e4e6eb;
+            background: #e2e8f0;
         }
 
-        .logo-area {
+        .brand-container {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: #111;
+            gap: 0.5rem;
+            text-decoration: none;
         }
 
-        .logo-area i {
-            color: #ff3344;
+        .brand-logo-svg {
+            width: 36px;
+            height: 36px;
+        }
+
+        .brand-title {
             font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            color: var(--text-primary);
         }
 
         .login-btn {
-            background: #0052ff;
-            color: #fff;
+            background-color: var(--primary-blue);
+            color: #ffffff;
             border: none;
-            padding: 10px 18px;
-            border-radius: 10px;
+            padding: 0.55rem 1.1rem;
+            border-radius: 8px;
             font-weight: 600;
+            font-size: 0.9rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.95rem;
+            gap: 0.4rem;
             transition: 0.2s;
         }
 
         .login-btn:hover {
-            background: #0040cc;
+            background-color: var(--primary-hover);
         }
 
-        /* Ana İçerik Alanı */
-        .main-container {
-            width: 100%;
-            max-width: 600px;
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            position: relative;
+        /* --- YAN MENÜ (DRAWER) --- */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(15, 23, 42, 0.5);
+            z-index: 1999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
         }
 
-        .section-header {
+        .drawer-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #ffffff;
+            z-index: 2000;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            transition: left 0.3s ease;
+        }
+
+        .drawer.active {
+            left: 0;
+        }
+
+        .drawer-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+        }
+
+        .drawer-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .drawer-nav {
+            padding: 1rem 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .drawer-item {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.9rem 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .drawer-item i {
+            width: 20px;
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+        }
+
+        .drawer-item:hover {
+            background-color: #eff6ff;
+            color: var(--primary-blue);
+        }
+
+        /* --- ANA İÇERİK --- */
+        .main-content {
+            flex: 1;
+            padding: 1.5rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .carousel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
         }
 
         .section-title {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: 700;
-            color: #111;
+            color: var(--text-primary);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.5rem;
         }
 
-        .slider-controls {
+        .carousel-controls {
             display: flex;
-            gap: 8px;
-            z-index: 10;
+            gap: 0.5rem;
         }
 
         .control-btn {
-            background: #f0f2f5;
-            border: none;
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            color: var(--text-primary);
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            color: #333;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             transition: 0.2s;
         }
 
         .control-btn:hover {
-            background: #e4e6eb;
+            background-color: #eff6ff;
+            color: var(--primary-blue);
+            border-color: var(--primary-blue);
         }
 
-        /* Kart Slider Yapısı */
-        .cards-viewport {
-            overflow: hidden;
-            width: 100%;
-        }
-
-        .cards-wrapper {
+        /* KARTLAR LAYOUT */
+        .carousel-track {
             display: flex;
-            transition: transform 0.4s ease-in-out;
-            gap: 15px;
-            width: 300%;
+            gap: 1rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            padding-bottom: 1rem;
         }
 
-        .card {
-            width: 100%;
-            background: #fff;
-            border: 1px solid #eaeaea;
-            border-radius: 14px;
-            padding: 25px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        .carousel-track::-webkit-scrollbar {
+            display: none;
+        }
+
+        .carousel-card {
+            flex: 0 0 100%;
+            max-width: 360px;
+            min-width: 300px;
+            scroll-snap-align: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            justify-content: space-between;
         }
 
-        .badge {
+        .card-tag {
             align-self: flex-start;
+            padding: 0.25rem 0.65rem;
+            border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 700;
-            padding: 5px 12px;
-            border-radius: 6px;
-            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
         }
 
-        .badge.blue {
-            background: rgba(0, 82, 255, 0.1);
-            color: #0052ff;
+        .tag-yildirim { background: #dbeafe; color: #1e40af; }
+        .tag-kizil { background: #fee2e2; color: #991b1b; }
+        .tag-omega { background: #fef3c7; color: #92400e; }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
         }
 
-        .badge.red {
-            background: rgba(255, 51, 68, 0.1);
-            color: #ff3344;
-        }
-
-        .card h3 {
-            font-size: 1.3rem;
+        .card-title {
+            font-size: 1.25rem;
             font-weight: 700;
-            color: #111;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-action {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .card p {
-            color: #555;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        /* Destek Formu Elemanları */
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .form-group label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #555;
-        }
-
-        .form-group input, .form-group textarea {
-            background: #f9fafc;
-            border: 1px solid #eaeaea;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            color: #111;
-            outline: none;
-        }
-
-        .form-group input:focus, .form-group textarea:focus {
-            border-color: #0052ff;
-        }
-
-        .action-btn {
-            background: #0052ff;
-            color: #fff;
-            border: none;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
+            justify-content: center;
+            gap: 0.5rem;
             transition: 0.2s;
-            font-size: 0.95rem;
         }
 
-        .action-btn:hover {
-            background: #0040cc;
+        .card-action:hover {
+            background-color: var(--primary-blue);
+            color: #ffffff;
+            border-color: var(--primary-blue);
         }
 
-        /* Profil Kartı İçeriği */
+        /* --- PROFİL KARTI İÇERİĞİ --- */
         .profile-box {
             display: flex;
             flex-direction: column;
             gap: 12px;
-            background: #f9fafc;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #eaeaea;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1rem;
         }
 
         .profile-top {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
-        .avatar {
-            width: 55px;
-            height: 55px;
+        .profile-avatar {
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            border: 2px solid #0052ff;
+            border: 2px solid var(--primary-blue);
+            object-fit: cover;
         }
 
         .profile-info h4 {
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 700;
-            color: #111;
+            color: var(--text-primary);
         }
 
         .profile-info p {
-            font-size: 0.85rem;
-            color: #666;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
         }
 
         .game-accounts {
             display: flex;
             justify-content: space-between;
-            border-top: 1px solid #eaeaea;
-            padding-top: 10px;
-            font-size: 0.85rem;
-            color: #444;
+            border-top: 1px solid var(--border-color);
+            padding-top: 8px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
             font-weight: 600;
         }
 
-        .role-tags {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-top: 2px;
-        }
-
-        .role-pill {
-            font-size: 0.7rem;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 4px;
-            background: rgba(0, 82, 255, 0.1);
-            color: #0052ff;
-        }
-
-        /* Modal Stilleri */
+        /* --- MODAL --- */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(15, 23, 42, 0.5);
+            z-index: 3000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(4px);
+            padding: 1rem;
         }
 
-        .modal-content {
-            background: #ffffff;
-            width: 90%;
-            max-width: 400px;
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background-color: #ffffff;
             border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            animation: modalOpen 0.3s ease;
-        }
-
-        @keyframes modalOpen {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            width: 100%;
+            max-width: 380px;
+            padding: 1.75rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
         }
 
         .modal-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #eaeaea;
-            padding-bottom: 12px;
+            align-items: center;
+            margin-bottom: 1.25rem;
         }
 
-        .modal-header h3 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #111;
+        .form-group {
+            margin-bottom: 1rem;
         }
 
-        .close-modal {
-            background: #f0f2f5;
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             font-size: 1rem;
-            color: #333;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-blue);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--primary-hover);
         }
 
         .login-option-btn {
             width: 100%;
-            padding: 12px 15px;
-            border-radius: 10px;
-            border: 1px solid #eaeaea;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 12px;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
             transition: 0.2s;
-            background: #f9fafc;
-            color: #111;
+            text-decoration: none;
         }
 
-        .login-option-btn:hover { background: #f0f2f5; }
+        .btn-discord { background: #5865F2; color: #fff; border-color: #5865F2; }
+        .btn-discord:hover { background: #4752C4; }
 
-        #discordLoginForm {
-            display: none;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .btn-xbox { background: #107C10; color: #fff; border-color: #107C10; }
+        .btn-xbox:hover { background: #0e6b0e; }
+
+        .btn-microsoft { background: #111111; color: #fff; border-color: #111111; }
+        .btn-microsoft:hover { background: #000000; }
     </style>
 </head>
 <body>
 
-    <!-- Üst Navbar -->
-    <div class="navbar">
-        <div class="nav-left">
-            <button class="icon-btn" onclick="moveCard(0)"><i class="fa-solid fa-house"></i></button>
-            <div class="logo-area">
-                <i class="fa-solid fa-globe"></i> NATO
-            </div>
+    <!-- ÜST ŞERİT -->
+    <header class="top-header">
+        <div class="header-left">
+            <button class="icon-btn" id="openDrawerBtn">
+                <i class="fa-solid fa-house"></i>
+            </button>
+            <a href="#" class="brand-container">
+                <svg class="brand-logo-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="100" r="90" stroke="#dc2626" stroke-width="4" opacity="0.3"/>
+                    <line x1="100" y1="0" x2="100" y2="200" stroke="#dc2626" stroke-width="5"/>
+                    <line x1="0" y1="100" x2="200" y2="100" stroke="#dc2626" stroke-width="5"/>
+                    <circle cx="100" cy="100" r="60" stroke="#dc2626" stroke-width="6"/>
+                    <path d="M100 15 L115 85 L185 100 L115 115 L100 185 L85 115 L15 100 L85 85 Z" fill="#dc2626"/>
+                    <path d="M100 15 L115 85 L100 100 L85 85 Z" fill="#ef4444"/>
+                    <path d="M185 100 L115 115 L100 100 L115 85 Z" fill="#ef4444"/>
+                    <path d="M100 185 L85 115 L100 100 L115 115 Z" fill="#b91c1c"/>
+                    <path d="M15 100 L85 85 L100 100 L85 115 Z" fill="#b91c1c"/>
+                </svg>
+                <span class="brand-title">NATO</span>
+            </a>
         </div>
-        <!-- Giriş / Çıkış Butonu ID ile Yönetiliyor -->
-        <button class="login-btn" id="authBtn" onclick="handleAuthClick()"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
-    </div>
-
-    <!-- Giriş Yap Modal -->
-    <div class="modal-overlay" id="loginModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalTitle"><i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> NATO Oturum Açma</h3>
-                <button class="close-modal" onclick="closeLoginModal()"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <div id="loginOptions" style="display: flex; flex-direction: column; gap: 12px;">
-                <p style="font-size: 0.9rem; color: #666;">Hesabınızı bağlamak için platform seçin:</p>
-                
-                <button class="login-option-btn" onclick="showDiscordForm()" style="background: #5865F2; color: #fff; border-color: #5865F2;">
-                    <i class="fa-brands fa-discord" style="font-size: 1.2rem;"></i> Discord ile Giriş Yap
-                </button>
-                
-                <button class="login-option-btn" onclick="simulateAuth('Xbox')" style="background: #107C10; color: #fff; border-color: #107C10;">
-                    <i class="fa-brands fa-xbox" style="font-size: 1.2rem;"></i> Xbox Hesabı ile Bağlan
-                </button>
-                
-                <button class="login-option-btn" onclick="simulateAuth('Microsoft')" style="background: #111111; color: #fff; border-color: #111111;">
-                    <i class="fa-brands fa-microsoft" style="font-size: 1.2rem;"></i> Microsoft Hesabı (PC)
-                </button>
-            </div>
-
-            <div id="discordLoginForm">
-                <p style="font-size: 0.85rem; color: #666;"><i class="fa-brands fa-discord" style="color: #5865F2;"></i> Discord hesap bilgilerinizi girin:</p>
-                <div class="form-group">
-                    <label>E-posta veya Telefon</label>
-                    <input type="text" id="dcEmail" placeholder="ornek@email.com">
-                </div>
-                <div class="form-group">
-                    <label>Şifre</label>
-                    <input type="password" id="dcPassword" placeholder="••••••••">
-                </div>
-                <div style="display: flex; gap: 10px; margin-top: 5px;">
-                    <button class="action-btn" onclick="backToOptions()" style="background: #6c757d; flex: 1;">Geri</button>
-                    <button class="action-btn" onclick="completeDiscordLogin()" style="background: #5865F2; flex: 2;">Giriş Yap</button>
-                </div>
-            </div>
-
+        
+        <div class="header-right">
+            <button class="login-btn" id="openLoginBtn">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <span id="loginBtnText">Giriş Yap</span>
+            </button>
         </div>
-    </div>
+    </header>
 
-    <!-- Ana Kaydırılabilir Kartlar Alanı -->
-    <div class="main-container">
-        <div class="section-header">
-            <div class="section-title" id="sectionTitle">
-                <i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> NATO Tanıtım
-            </div>
-            <div class="slider-controls">
-                <button class="control-btn" onclick="moveCard(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-                <button class="control-btn" onclick="moveCard(1)"><i class="fa-solid fa-chevron-right"></i></button>
-            </div>
+    <!-- YAN MENÜ -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="drawer" id="drawer">
+        <div class="drawer-header">
+            <span class="drawer-title">NATO Komuta Portalı</span>
+            <button class="icon-btn" id="closeDrawerBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
+        <nav class="drawer-nav">
+            <a href="#bolumler" class="drawer-item" onclick="closeDrawer()">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>Bölümler</span>
+            </a>
+            <a href="#braslar" class="drawer-item" onclick="closeDrawer()">
+                <i class="fa-solid fa-sitemap"></i>
+                <span>Branşlar</span>
+            </a>
+            <a href="#emegi-gecenler" class="drawer-item" onclick="closeDrawer()">
+                <i class="fa-solid fa-award"></i>
+                <span>Emeği Geçenler</span>
+            </a>
+            <a href="#duyurular" class="drawer-item" onclick="closeDrawer()">
+                <i class="fa-solid fa-bullhorn"></i>
+                <span>Duyurular</span>
+            </a>
+            <a href="#discord" class="drawer-item" onclick="closeDrawer()">
+                <i class="fa-brands fa-discord"></i>
+                <span>Discord Sunucusu</span>
+            </a>
+        </nav>
+    </aside>
 
-        <!-- Kaydırılabilir Kartlar -->
-        <div class="cards-viewport">
-            <div class="cards-wrapper" id="cardsWrapper">
-                
-                <!-- KART 1: NATO Tanıtımı -->
-                <div class="card">
-                    <span class="badge blue"><i class="fa-solid fa-circle-info"></i> KURUMSAL</span>
-                    <h3><i class="fa-solid fa-globe" style="color: #0052ff;"></i> NATO Hakkında</h3>
-                    <p>NATO; disiplin, taktik strateji ve hiyerarşiyi esas alan lider gaming topluluğudur. Minecraft Towny sunucularında ve operasyonlarda hakimiyet kurarız.</p>
-                    <a href="https://discord.gg/" target="_blank" style="color: #0052ff; font-weight: 700; text-decoration: none; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; margin-top: 5px;">
-                        Discord Sunucusuna Katıl <i class="fa-solid fa-arrow-right"></i>
-                    </a>
+    <!-- ANA İÇERİK -->
+    <main class="main-content">
+        <section class="carousel-container">
+            <div class="carousel-header">
+                <div class="section-title">
+                    <i class="fa-solid fa-shield-halved" style="color: var(--primary-blue);"></i>
+                    <span>Taktik Birlikler & Profil</span>
                 </div>
+                <div class="carousel-controls">
+                    <button class="control-btn" id="prevBtn">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button class="control-btn" id="nextBtn">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
 
-                <!-- KART 2: NATO Destek Sistemi -->
-                <div class="card">
-                    <span class="badge red"><i class="fa-solid fa-headset"></i> YARDIM MASASI</span>
-                    <h3><i class="fa-solid fa-ticket" style="color: #ff3344;"></i> NATO Destek Sistemi</h3>
-                    <div class="form-group">
-                        <label>Talep / Şikayet Konusu</label>
-                        <input type="text" placeholder="Kısaca konuyu belirtin...">
+            <div class="carousel-track" id="carouselTrack">
+                <!-- KART 1: Yıldırım Orduları -->
+                <div class="carousel-card">
+                    <div>
+                        <span class="card-tag tag-yildirim">Ana Birlik</span>
+                        <div class="card-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+                        <h3 class="card-title">Yıldırım Orduları</h3>
+                        <p class="card-desc">NATO askeri komutasının öncü taarruz ve savunma gücü. Kara harekâtlarının ana omurgasını oluşturur.</p>
                     </div>
-                    <button class="action-btn" onclick="alert('Destek talebiniz iletildi Paşam!')">Destek Talebi Oluştur</button>
+                    <button class="card-action" onclick="alert('Yıldırım Orduları seçildi!')">
+                        <span>Detayları İncele</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
                 </div>
 
-                <!-- KART 3: Kişinin NATO Profili -->
-                <div class="card">
-                    <span class="badge blue"><i class="fa-solid fa-id-card"></i> KİMLİK KARTI</span>
-                    <h3><i class="fa-solid fa-user-shield" style="color: #0052ff;"></i> Oyuncu Profili</h3>
-                    
-                    <div class="profile-box">
-                        <div class="profile-top">
-                            <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="avatar" id="profileAvatar" alt="Avatar">
-                            <div class="profile-info">
-                                <h4 id="profileName">Giriş Yapılmadı</h4>
-                                <p id="profileRank">Lütfen sağ üstten giriş yapın</p>
-                                <div class="role-tags" id="profileRoles">
-                                    <span class="role-pill" style="background: rgba(255,51,68,0.1); color: #ff3344;">Yetkisiz Misafir</span>
+                <!-- KART 2: Kızıl Sağ El -->
+                <div class="carousel-card">
+                    <div>
+                        <span class="card-tag tag-kizil">Özel Kuvvetler</span>
+                        <div class="card-icon" style="color: #dc2626;"><i class="fa-solid fa-hand-fist"></i></div>
+                        <h3 class="card-title">Kızıl Sağ El</h3>
+                        <p class="card-desc">Gizli operasyonlar, keşif ve düşman hattı arkasında görev yapan elit taktik operasyon timi.</p>
+                    </div>
+                    <button class="card-action" onclick="alert('Kızıl Sağ El seçildi!')">
+                        <span>Detayları İncele</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- KART 3: Kişisel NATO Profili -->
+                <div class="carousel-card">
+                    <div>
+                        <span class="card-tag tag-omega">Kimlik Kartı</span>
+                        <div class="card-icon" style="color: var(--primary-blue);"><i class="fa-solid fa-id-card"></i></div>
+                        <h3 class="card-title">Oyuncu Profili</h3>
+                        
+                        <div class="profile-box">
+                            <div class="profile-top">
+                                <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="profile-avatar" id="profileAvatar" alt="Avatar">
+                                <div class="profile-info">
+                                    <h4 id="profileName">Giriş Yapılmadı</h4>
+                                    <p id="profileRank">Lütfen sağ üstten giriş yapın</p>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="game-accounts">
-                            <span><i class="fa-solid fa-cube" style="color: #107C10;"></i> MC: <strong id="mcName">-</strong></span>
-                            <span><i class="fa-brands fa-discord" style="color: #5865F2;"></i> DC: <strong id="dcName">-</strong></span>
+                            <div class="game-accounts">
+                                <span><i class="fa-solid fa-cube" style="color: #107C10;"></i> MC: <strong id="mcName">-</strong></span>
+                                <span><i class="fa-brands fa-discord" style="color: #5865F2;"></i> DC: <strong id="dcName">-</strong></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- JavaScript Kodları -->
-    <script>
-        let currentIndex = 0;
-        const totalCards = 3;
-        const wrapper = document.getElementById('cardsWrapper');
-        const sectionTitle = document.getElementById('sectionTitle');
-        
-        const titles = [
-            '<i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> NATO Tanıtım',
-            '<i class="fa-solid fa-headset" style="color: #ff3344;"></i> NATO Destek Sistemi',
-            '<i class="fa-solid fa-id-card" style="color: #0052ff;"></i> Kişisel Profil'
-        ];
-
-        function moveCard(direction) {
-            if(direction === 0) {
-                currentIndex = 0;
-            } else {
-                currentIndex = (currentIndex + direction + totalCards) % totalCards;
-            }
-            wrapper.style.transform = `translateX(-${currentIndex * 33.333}%)`;
-            sectionTitle.innerHTML = titles[currentIndex];
-        }
-
-        function openLoginModal() {
-            document.getElementById('loginModal').style.display = 'flex';
-            backToOptions();
-        }
-
-        function closeLoginModal() {
-            document.getElementById('loginModal').style.display = 'none';
-        }
-
-        function showDiscordForm() {
-            document.getElementById('loginOptions').style.display = 'none';
-            document.getElementById('discordLoginForm').style.display = 'flex';
-            document.getElementById('modalTitle').innerHTML = '<i class="fa-brands fa-discord" style="color: #5865F2;"></i> Discord Girişi';
-        }
-
-        function backToOptions() {
-            document.getElementById('loginOptions').style.display = 'flex';
-            document.getElementById('discordLoginForm').style.display = 'none';
-            document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> NATO Oturum Açma';
-        }
-
-        function handleAuthClick() {
-            const isLoggedIn = localStorage.getItem('nato_logged_in');
-            if (isLoggedIn === 'true') {
-                logout();
-            } else {
-                openLoginModal();
-            }
-        }
-
-        function completeDiscordLogin() {
-            const email = document.getElementById('dcEmail').value;
-            if(!email) {
-                alert("Lütfen bilgileri girin Paşam!");
-                return;
-            }
-            closeLoginModal();
-            localStorage.setItem('nato_logged_in', 'true');
-            checkLoginStatus();
-            alert("Discord hesabı başarıyla bağlandı Paşam!");
-        }
-
-        function simulateAuth(provider) {
-            closeLoginModal();
-            localStorage.setItem('nato_logged_in', 'true');
-            checkLoginStatus();
-            alert(provider + " hesabı başarıyla bağlandı Paşam!");
-        }
-
-        function checkLoginStatus() {
-            const isLoggedIn = localStorage.getItem('nato_logged_in');
-            const authBtn = document.getElementById('authBtn');
-            
-            if (isLoggedIn === 'true') {
-                document.getElementById('profileName').innerText = "Paşam";
-                document.getElementById('profileRank').innerText = "NATO Aktif Komutanı";
-                document.getElementById('profileAvatar').src = "https://ui-avatars.com/api/?name=Pasam&background=0052ff&color=fff";
-                
+                    <button class="card-action" onclick="handleProfileBtnClick()" id="profileCardBtn">
+                        <span id="profileBtnText">Giriş Yap / Hesap Bağla</sp
