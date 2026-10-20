@@ -17,6 +17,8 @@
             --primary-blue: #1d4ed8;
             --primary-hover: #1e40af;
             --header-bg: #ffffff;
+            --discord-color: #5865F2;
+            --xbox-color: #107C41;
         }
 
         * {
@@ -70,6 +72,11 @@
             align-items: center;
             justify-content: center;
             z-index: 1001;
+            touch-action: manipulation;
+        }
+
+        .icon-btn:active {
+            background-color: #cbd5e1;
         }
 
         .brand-container {
@@ -111,6 +118,11 @@
             align-items: center;
             gap: 0.4rem;
             z-index: 1001;
+            touch-action: manipulation;
+        }
+
+        .login-btn:active {
+            background-color: var(--primary-hover);
         }
 
         /* --- YAN MENÜ (DRAWER) --- */
@@ -122,14 +134,11 @@
             height: 100vh;
             background-color: rgba(15, 23, 42, 0.5);
             z-index: 2000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+            display: none;
         }
 
         .drawer-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
+            display: block;
         }
 
         .drawer {
@@ -187,11 +196,6 @@
             color: var(--primary-blue);
         }
 
-        .drawer-item:active {
-            background-color: #eff6ff;
-            color: var(--primary-blue);
-        }
-
         /* --- ANA İÇERİK --- */
         .main-content {
             flex: 1;
@@ -234,15 +238,9 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            touch-action: manipulation;
         }
 
-        .control-btn:active {
-            background-color: #eff6ff;
-            color: var(--primary-blue);
-            border-color: var(--primary-blue);
-        }
-
-        /* KARTLAR LAYOUT */
         .carousel-track {
             display: flex;
             gap: 1rem;
@@ -317,44 +315,35 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            touch-action: manipulation;
         }
 
-        .card-action:active {
-            background-color: var(--primary-blue);
-            color: #ffffff;
-            border-color: var(--primary-blue);
-        }
-
-        /* --- MODAL --- */
+        /* --- ÇİFT GİRİŞ MODALI (DISCORD / XBOX) --- */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: rgba(15, 23, 42, 0.5);
+            background-color: rgba(15, 23, 42, 0.6);
             z-index: 3000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             padding: 1rem;
         }
 
         .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
+            display: flex;
         }
 
-        .modal-card {
+        .modal-card-double {
             background-color: #ffffff;
-            border-radius: 16px;
+            border-radius: 20px;
             width: 100%;
-            max-width: 380px;
+            max-width: 680px;
             padding: 1.75rem;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             border: 1px solid var(--border-color);
         }
 
@@ -362,49 +351,92 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (min-width: 600px) {
+            .login-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .login-box {
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.5rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            justify-content: space-between;
+            background: #fafafa;
+        }
+
+        .box-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .box-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .box-desc {
+            font-size: 0.825rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
             margin-bottom: 1.25rem;
         }
 
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.4rem;
-            color: var(--text-secondary);
-        }
-
-        .form-input {
+        .btn-discord {
             width: 100%;
             padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: var(--primary-blue);
+            background-color: var(--discord-color);
             color: white;
             border: none;
             border-radius: 8px;
             font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
             cursor: pointer;
-            margin-top: 0.5rem;
+            touch-action: manipulation;
+        }
+
+        .btn-minecraft {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--xbox-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            touch-action: manipulation;
         }
     </style>
 </head>
 <body>
 
-    <!-- ÜST ŞERİT -->
+    <!-- ÜST ŞERİT (DOĞRUDAN onclick İLE KESİN ÇÖZÜM) -->
     <header class="top-header">
         <div class="header-left">
-            <button class="icon-btn" id="openDrawerBtn">
+            <button class="icon-btn" onclick="openDrawer()">
                 <i class="fa-solid fa-house"></i>
             </button>
             <a href="#" class="brand-container">
@@ -424,7 +456,7 @@
         </div>
         
         <div class="header-right">
-            <button class="login-btn" id="openLoginBtn">
+            <button class="login-btn" onclick="openLogin()">
                 <i class="fa-solid fa-right-to-bracket"></i>
                 <span>Giriş Yap</span>
             </button>
@@ -432,11 +464,11 @@
     </header>
 
     <!-- YAN MENÜ -->
-    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
     <aside class="drawer" id="drawer">
         <div class="drawer-header">
             <span class="drawer-title">NATO Komuta Portalı</span>
-            <button class="icon-btn" id="closeDrawerBtn">
+            <button class="icon-btn" onclick="closeDrawer()" style="width: 36px; height: 36px; font-size: 1rem;">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
@@ -473,10 +505,10 @@
                     <span>Taktik Birlikler</span>
                 </div>
                 <div class="carousel-controls">
-                    <button class="control-btn" id="prevBtn">
+                    <button class="control-btn" onclick="scrollCarousel(-320)">
                         <i class="fa-solid fa-chevron-left"></i>
                     </button>
-                    <button class="control-btn" id="nextBtn">
+                    <button class="control-btn" onclick="scrollCarousel(320)">
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>
                 </div>
@@ -525,73 +557,49 @@
         </section>
     </main>
 
-    <!-- GİRİŞ MODALI -->
-    <div class="modal-overlay" id="loginModal">
-        <div class="modal-card">
+    <!-- GİRİŞ MODALI (DÜÄMELİ ÇİFT SEÇENEK) -->
+    <div class="modal-overlay" id="loginModal" onclick="checkModalClose(event)">
+        <div class="modal-card-double">
             <div class="modal-header">
-                <h3 style="font-size: 1.2rem; font-weight: 700;">Giriş Yap</h3>
-                <button class="icon-btn" id="closeLoginBtn" style="width: 32px; height: 32px; font-size: 1rem;">
+                <h3 style="font-size: 1.25rem; font-weight: 700;">Giriş Yöntemini Seçin</h3>
+                <button class="icon-btn" onclick="closeLogin()" style="width: 32px; height: 32px; font-size: 1rem;">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <form onsubmit="event.preventDefault(); alert('Giriş başarılı!'); closeLogin();">
-                <div class="form-group">
-                    <label class="form-label">Kullanıcı Adı</label>
-                    <input type="text" class="form-input" placeholder="Paşam" required>
+            
+            <div class="login-grid">
+                <div class="login-box">
+                    <div>
+                        <div class="box-icon" style="color: var(--discord-color);">
+                            <i class="fa-brands fa-discord"></i>
+                        </div>
+                        <h4 class="box-title">Discord İle Giriş</h4>
+                        <p class="box-desc">Discord hesabınızı bağlayarak sunucudaki rütbenizi ve profilinizi doğrulayın.</p>
+                    </div>
+                    <button class="btn-discord" onclick="alert('Discord sayfasına yönlendiriliyorsunuz...'); closeLogin();">
+                        <i class="fa-brands fa-discord"></i>
+                        <span>Discord ile Bağlan</span>
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Parola</label>
-                    <input type="password" class="form-input" placeholder="••••••••" required>
+
+                <div class="login-box">
+                    <div>
+                        <div class="box-icon" style="color: var(--xbox-color);">
+                            <i class="fa-brands fa-xbox"></i>
+                        </div>
+                        <h4 class="box-title">Minecraft (Xbox) İle Giriş</h4>
+                        <p class="box-desc">Microsoft/Xbox hesabınızla oturum açarak oyundaki kimliğinizi güvenle onaylayın.</p>
+                    </div>
+                    <button class="btn-minecraft" onclick="alert('Xbox sayfasına yönlendiriliyorsunuz...'); closeLogin();">
+                        <i class="fa-brands fa-xbox"></i>
+                        <span>Xbox ile Bağlan</span>
+                    </button>
                 </div>
-                <button type="submit" class="submit-btn">Giriş Yap</button>
-            </form>
+            </div>
         </div>
     </div>
 
     <!-- JAVASCRIPT -->
     <script>
         const drawer = document.getElementById('drawer');
-        const drawerOverlay = document.getElementById('drawerOverlay');
-        const loginModal = document.getElementById('loginModal');
-        const carouselTrack = document.getElementById('carouselTrack');
-
-        function openDrawer() {
-            drawer.classList.add('active');
-            drawerOverlay.classList.add('active');
-        }
-
-        function closeDrawer() {
-            drawer.classList.remove('active');
-            drawerOverlay.classList.remove('active');
-        }
-
-        function openLogin() {
-            loginModal.classList.add('active');
-        }
-
-        function closeLogin() {
-            loginModal.classList.remove('active');
-        }
-
-        document.getElementById('openDrawerBtn').addEventListener('click', openDrawer);
-        document.getElementById('closeDrawerBtn').addEventListener('click', closeDrawer);
-        drawerOverlay.addEventListener('click', closeDrawer);
-
-        document.getElementById('openLoginBtn').addEventListener('click', openLogin);
-        document.getElementById('closeLoginBtn').addEventListener('click', closeLogin);
-
-        loginModal.addEventListener('click', (e) => {
-            if (e.target === loginModal) closeLogin();
-        });
-
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            carouselTrack.scrollBy({ left: 320, behavior: 'smooth' });
-        });
-
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            carouselTrack.scrollBy({ left: -320, behavior: 'smooth' });
-        });
-    </script>
-</body>
-    </html>
-    
+        const drawerOverlay = docu
