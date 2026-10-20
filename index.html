@@ -206,7 +206,6 @@
             line-height: 1.5;
         }
 
-        /* Destek Formu Elemanları */
         .form-group {
             display: flex;
             flex-direction: column;
@@ -219,7 +218,7 @@
             color: #555;
         }
 
-        .form-group input {
+        .form-group input, .form-group textarea {
             background: #f9fafc;
             border: 1px solid #eaeaea;
             padding: 10px;
@@ -229,7 +228,7 @@
             outline: none;
         }
 
-        .form-group input:focus {
+        .form-group input:focus, .form-group textarea:focus {
             border-color: #0052ff;
         }
 
@@ -376,6 +375,8 @@
             transition: 0.2s;
             text-decoration: none;
             color: #fff;
+            text-align: center;
+            justify-content: center;
         }
 
         .btn-discord { background: #5865F2; }
@@ -398,33 +399,29 @@
         <button class="login-btn" id="authBtn" onclick="handleAuthClick()"><i class="fa-solid fa-right-to-bracket"></i> <span id="authBtnText">Hesap Eşle / Giriş</span></button>
     </div>
 
-    <!-- RoVerify Tarzı Hesap Eşleme Modalı -->
+    <!-- Resmi Giriş Sayfalarına Yönlendiren Doğrulama Modalı -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-link" style="color: #0052ff;"></i> NATO Hesap Eşleme</h3>
+                <h3><i class="fa-solid fa-link" style="color: #0052ff;"></i> Hesap Doğrulama</h3>
                 <button class="close-modal" onclick="closeLoginModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p style="font-size: 0.85rem; color: #666;">RoVerify mantığıyla Discord ve Minecraft hesaplarını eşleştirin:</p>
+            <p style="font-size: 0.85rem; color: #666;">RoVerify mantığıyla hesaplarınızı resmi giriş sayfalarından bağlayın:</p>
             
-            <div class="form-group">
-                <label><i class="fa-brands fa-discord" style="color: #5865F2;"></i> Discord Kullanıcı Adı</label>
-                <input type="text" id="inputDc" placeholder="Örn: Paşam#0001">
-            </div>
-
-            <div class="form-group">
-                <label><i class="fa-solid fa-cube" style="color: #107C10;"></i> Minecraft / Xbox Oyuncu Adı</label>
-                <input type="text" id="inputMc" placeholder="Örn: Pasam_TR">
-            </div>
-
-            <button class="action-btn" onclick="verifyAccounts()" style="margin-top: 5px;">
-                <i class="fa-solid fa-check-circle"></i> Hesapları Eşle ve Doğrula
-            </button>
+            <!-- Discord Resmi Giriş Ekranına Yönlendirir -->
+            <a href="https://discord.com/login" target="_blank" class="login-option-btn btn-discord" onclick="simulateVerification('Discord', 'Paşam#0001')">
+                <i class="fa-brands fa-discord" style="font-size: 1.2rem;"></i> Discord ile Giriş Yap
+            </a>
+            
+            <!-- Microsoft / Xbox Resmi Giriş Ekranına Yönlendirir -->
+            <a href="https://login.live.com/" target="_blank" class="login-option-btn btn-xbox" onclick="simulateVerification('Xbox', 'Pasam_TR')">
+                <i class="fa-brands fa-xbox" style="font-size: 1.2rem;"></i> Xbox / Microsoft ile Giriş Yap
+            </a>
         </div>
     </div>
 
     <!-- Ana Kaydırılabilir Kartlar Alanı -->
-    <div class="main-container">
+    <main class="main-container">
         <div class="section-header">
             <div class="section-title" id="sectionTitle">
                 <i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> NATO Tanıtım
@@ -460,7 +457,7 @@
                     <button class="action-btn" onclick="alert('Destek talebiniz iletildi Paşam!')">Destek Talebi Oluştur</button>
                 </div>
 
-                <!-- KART 3: Kişinki NATO Profili (Eşleme / Kimlik Kartı) -->
+                <!-- KART 3: Kişinin NATO Profili (Kimlik Kartı) -->
                 <div class="card">
                     <span class="badge blue"><i class="fa-solid fa-id-card"></i> KİMLİK KARTI</span>
                     <h3><i class="fa-solid fa-user-shield" style="color: #0052ff;"></i> Oyuncu Profili</h3>
@@ -486,7 +483,7 @@
 
             </div>
         </div>
-    </div>
+    </main>
 
     <!-- JavaScript Kodları -->
     <script>
@@ -525,23 +522,14 @@
             }
         }
 
-        // RoVerify Mantığıyla Eşleme
-        function verifyAccounts() {
-            const dcInput = document.getElementById('inputDc').value.trim();
-            const mcInput = document.getElementById('inputMc').value.trim();
-
-            if(!dcInput || !mcInput) {
-                alert("Lütfen hem Discord hem de Minecraft kullanıcı adınızı girin Paşam!");
-                return;
-            }
-
+        // Resmi Giriş Sayfalarına Gidiş Simülasyonu ve Eşleme Kaydı
+        function simulateVerification(platform, sampleName) {
             closeLoginModal();
             localStorage.setItem('nato_logged_in', 'true');
-            localStorage.setItem('nato_dc', dcInput);
-            localStorage.setItem('nato_mc', mcInput);
+            localStorage.setItem('nato_dc', 'Paşam#0001');
+            localStorage.setItem('nato_mc', 'Pasam_TR');
             
             checkLoginStatus();
-            alert("Hesaplar başarıyla eşlendi ve doğrulandı Paşam!");
         }
 
         function checkLoginStatus() {
@@ -549,14 +537,11 @@
             const authBtnText = document.getElementById('authBtnText');
             
             if (isLoggedIn === 'true') {
-                const savedDc = localStorage.getItem('nato_dc') || 'Paşam#0001';
-                const savedMc = localStorage.getItem('nato_mc') || 'Pasam_TR';
-
                 document.getElementById('profileName').innerText = "Paşam";
                 document.getElementById('profileRank').innerText = "NATO Aktif Komutanı";
                 document.getElementById('profileAvatar').src = "https://ui-avatars.com/api/?name=Pasam&background=0052ff&color=fff";
-                document.getElementById('mcName').innerText = savedMc;
-                document.getElementById('dcName').innerText = savedDc;
+                document.getElementById('mcName').innerText = "Pasam_TR";
+                document.getElementById('dcName').innerText = "Paşam#0001";
                 
                 document.getElementById('profileRoles').innerHTML = `
                     <span class="role-pill">Kurucu</span>
@@ -591,5 +576,4 @@
         window.onload = checkLoginStatus;
     </script>
 </body>
-                                    </html>
-                                    
+</html>
