@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NATO Komuta Portalı</title>
+    <title>NATO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
@@ -58,6 +58,16 @@
             gap: 0.75rem;
         }
 
+        /* Butonları doğrudan 'a' etiketi yaptık ki tarayıcı engellemesin */
+        .icon-btn, .login-btn {
+            text-decoration: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-appearance: none;
+        }
+
         .icon-btn {
             background: #f1f5f9;
             border: 1px solid var(--border-color);
@@ -66,11 +76,6 @@
             border-radius: 10px;
             color: var(--text-primary);
             font-size: 1.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            touch-action: manipulation;
         }
 
         .icon-btn:active {
@@ -104,11 +109,7 @@
             border-radius: 8px;
             font-weight: 600;
             font-size: 0.9rem;
-            display: flex;
-            align-items: center;
             gap: 0.4rem;
-            cursor: pointer;
-            touch-action: manipulation;
         }
 
         .login-btn:active {
@@ -221,9 +222,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             cursor: pointer;
-            touch-action: manipulation;
         }
 
         .carousel-track {
@@ -300,7 +299,6 @@
             justify-content: center;
             gap: 0.5rem;
             cursor: pointer;
-            touch-action: manipulation;
         }
 
         /* --- GİRİŞ MODALI --- */
@@ -393,7 +391,6 @@
             justify-content: center;
             gap: 0.5rem;
             cursor: pointer;
-            touch-action: manipulation;
         }
 
         .btn-minecraft {
@@ -410,19 +407,18 @@
             justify-content: center;
             gap: 0.5rem;
             cursor: pointer;
-            touch-action: manipulation;
         }
     </style>
 </head>
 <body>
 
-    <!-- ÜST ŞERİT (DOĞRUDAN HTML İÇİNDEN TETİKLEME) -->
+    <!-- ÜST ŞERİT (LINK YAPISIYLA GARANTİLENMİŞ) -->
     <header class="top-header">
         <div class="header-left">
-            <!-- Sol üst ev simgesi artık doğrudan openDrawer() tetikliyor -->
-            <button class="icon-btn" onclick="openDrawer()">
+            <!-- Butonları 'a' etiketi yaptık, JavaScript'e href içinden bağlanıyor -->
+            <a href="javascript:void(0);" class="icon-btn" onclick="openDrawer(); return false;">
                 <i class="fa-solid fa-house"></i>
-            </button>
+            </a>
             <a href="#" class="brand-container">
                 <svg class="brand-logo-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="100" cy="100" r="90" stroke="#dc2626" stroke-width="4" opacity="0.3"/>
@@ -440,11 +436,10 @@
         </div>
         
         <div class="header-right">
-            <!-- Sağ üst giriş yap butonu artık doğrudan openLogin() tetikliyor -->
-            <button class="login-btn" onclick="openLogin()">
+            <a href="javascript:void(0);" class="login-btn" onclick="openLogin(); return false;">
                 <i class="fa-solid fa-right-to-bracket"></i>
                 <span>Giriş Yap</span>
-            </button>
+            </a>
         </div>
     </header>
 
@@ -453,9 +448,9 @@
     <aside class="drawer" id="drawer">
         <div class="drawer-header">
             <span class="drawer-title">NATO Komuta Portalı</span>
-            <button class="icon-btn" onclick="closeDrawer()">
+            <a href="javascript:void(0);" class="icon-btn" onclick="closeDrawer(); return false;" style="width: 36px; height: 36px; font-size: 1rem;">
                 <i class="fa-solid fa-xmark"></i>
-            </button>
+            </a>
         </div>
         <nav class="drawer-nav">
             <a href="#bolumler" class="drawer-item" onclick="closeDrawer()">
@@ -490,10 +485,10 @@
                     <span>Taktik Birlikler</span>
                 </div>
                 <div class="carousel-controls">
-                    <button class="control-btn" id="prevBtn" onclick="scrollCarousel(-320)">
+                    <button class="control-btn" onclick="scrollCarousel(-320)">
                         <i class="fa-solid fa-chevron-left"></i>
                     </button>
-                    <button class="control-btn" id="nextBtn" onclick="scrollCarousel(320)">
+                    <button class="control-btn" onclick="scrollCarousel(320)">
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>
                 </div>
@@ -547,9 +542,9 @@
         <div class="modal-card-double">
             <div class="modal-header">
                 <h3 style="font-size: 1.25rem; font-weight: 700;">Giriş Yöntemini Seçin</h3>
-                <button class="icon-btn" onclick="closeLogin()" style="width: 32px; height: 32px; font-size: 1rem;">
+                <a href="javascript:void(0);" class="icon-btn" onclick="closeLogin(); return false;" style="width: 32px; height: 32px; font-size: 1rem;">
                     <i class="fa-solid fa-xmark"></i>
-                </button>
+                </a>
             </div>
             
             <div class="login-grid">
@@ -591,4 +586,7 @@
         const loginModal = document.getElementById('loginModal');
         const carouselTrack = document.getElementById('carouselTrack');
 
-        function openDraw
+        function openDrawer() {
+            drawer.classList.add('active');
+            drawerOverlay.style.display = 'block';
+        }
