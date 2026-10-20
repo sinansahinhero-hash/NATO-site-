@@ -40,7 +40,7 @@
         .top-header {
             position: sticky;
             top: 0;
-            z-index: 900;
+            z-index: 999;
             background-color: var(--header-bg);
             border-bottom: 1px solid var(--border-color);
             height: 64px;
@@ -54,6 +54,7 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            z-index: 1000;
         }
 
         .icon-btn {
@@ -68,11 +69,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: 0.2s;
-        }
-
-        .icon-btn:hover {
-            background: #e2e8f0;
+            z-index: 1001;
         }
 
         .brand-container {
@@ -80,6 +77,7 @@
             align-items: center;
             gap: 0.5rem;
             text-decoration: none;
+            z-index: 1001;
         }
 
         .brand-logo-svg {
@@ -94,6 +92,12 @@
             color: var(--text-primary);
         }
 
+        .header-right {
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+
         .login-btn {
             background-color: var(--primary-blue);
             color: #ffffff;
@@ -106,11 +110,7 @@
             display: flex;
             align-items: center;
             gap: 0.4rem;
-            transition: 0.2s;
-        }
-
-        .login-btn:hover {
-            background-color: var(--primary-hover);
+            z-index: 1001;
         }
 
         /* --- YAN MENÜ (DRAWER) --- */
@@ -121,7 +121,7 @@
             width: 100vw;
             height: 100vh;
             background-color: rgba(15, 23, 42, 0.5);
-            z-index: 1999;
+            z-index: 2000;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
@@ -139,7 +139,7 @@
             width: 280px;
             height: 100vh;
             background-color: #ffffff;
-            z-index: 2000;
+            z-index: 2001;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             display: flex;
             flex-direction: column;
@@ -179,7 +179,6 @@
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
-            transition: 0.2s;
         }
 
         .drawer-item i {
@@ -188,7 +187,7 @@
             color: var(--primary-blue);
         }
 
-        .drawer-item:hover {
+        .drawer-item:active {
             background-color: #eff6ff;
             color: var(--primary-blue);
         }
@@ -235,10 +234,9 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            transition: 0.2s;
         }
 
-        .control-btn:hover {
+        .control-btn:active {
             background-color: #eff6ff;
             color: var(--primary-blue);
             border-color: var(--primary-blue);
@@ -320,23 +318,22 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            transition: 0.2s;
         }
 
-        .card-action:hover {
+        .card-action:active {
             background-color: var(--primary-blue);
             color: #ffffff;
             border-color: var(--primary-blue);
         }
 
-        /* --- PROFİL KARTI İÇERİĞİ --- */
+        /* PROFİL KARTI İÇERİĞİ STİLLERİ */
         .profile-box {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             background: #f8fafc;
-            padding: 12px;
-            border-radius: 12px;
+            padding: 10px;
+            border-radius: 10px;
             border: 1px solid var(--border-color);
             margin-bottom: 1rem;
         }
@@ -348,21 +345,21 @@
         }
 
         .profile-avatar {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             border: 2px solid var(--primary-blue);
             object-fit: cover;
         }
 
         .profile-info h4 {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 700;
             color: var(--text-primary);
         }
 
         .profile-info p {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-secondary);
         }
 
@@ -371,7 +368,7 @@
             justify-content: space-between;
             border-top: 1px solid var(--border-color);
             padding-top: 8px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-secondary);
             font-weight: 600;
         }
@@ -416,48 +413,6 @@
             margin-bottom: 1.25rem;
         }
 
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.4rem;
-            color: var(--text-secondary);
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .form-input:focus {
-            border-color: var(--primary-blue);
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: var(--primary-blue);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 0.5rem;
-            transition: 0.2s;
-        }
-
-        .submit-btn:hover {
-            background-color: var(--primary-hover);
-        }
-
         .login-option-btn {
             width: 100%;
             padding: 0.75rem;
@@ -471,18 +426,14 @@
             justify-content: center;
             gap: 0.5rem;
             margin-bottom: 0.75rem;
-            transition: 0.2s;
             text-decoration: none;
+            transition: opacity 0.2s;
         }
+        .login-option-btn:active { opacity: 0.85; }
 
         .btn-discord { background: #5865F2; color: #fff; border-color: #5865F2; }
-        .btn-discord:hover { background: #4752C4; }
-
         .btn-xbox { background: #107C10; color: #fff; border-color: #107C10; }
-        .btn-xbox:hover { background: #0e6b0e; }
-
         .btn-microsoft { background: #111111; color: #fff; border-color: #111111; }
-        .btn-microsoft:hover { background: #000000; }
     </style>
 </head>
 <body>
@@ -556,7 +507,7 @@
             <div class="carousel-header">
                 <div class="section-title">
                     <i class="fa-solid fa-shield-halved" style="color: var(--primary-blue);"></i>
-                    <span>Taktik Birlikler & Profil</span>
+                    <span>Taktik Birlikler</span>
                 </div>
                 <div class="carousel-controls">
                     <button class="control-btn" id="prevBtn">
@@ -569,7 +520,7 @@
             </div>
 
             <div class="carousel-track" id="carouselTrack">
-                <!-- KART 1: Yıldırım Orduları -->
+                <!-- KART 1 -->
                 <div class="carousel-card">
                     <div>
                         <span class="card-tag tag-yildirim">Ana Birlik</span>
@@ -583,7 +534,7 @@
                     </button>
                 </div>
 
-                <!-- KART 2: Kızıl Sağ El -->
+                <!-- KART 2 -->
                 <div class="carousel-card">
                     <div>
                         <span class="card-tag tag-kizil">Özel Kuvvetler</span>
@@ -597,11 +548,11 @@
                     </button>
                 </div>
 
-                <!-- KART 3: Kişisel NATO Profili -->
+                <!-- KART 3: OYUNCU PROFİLİ (3. KART) -->
                 <div class="carousel-card">
                     <div>
                         <span class="card-tag tag-omega">Kimlik Kartı</span>
-                        <div class="card-icon" style="color: var(--primary-blue);"><i class="fa-solid fa-id-card"></i></div>
+                        <div class="card-icon" style="color: #d97706;"><i class="fa-solid fa-id-card"></i></div>
                         <h3 class="card-title">Oyuncu Profili</h3>
                         
                         <div class="profile-box">
@@ -613,10 +564,36 @@
                                 </div>
                             </div>
                             <div class="game-accounts">
-                                <span><i class="fa-solid fa-cube" style="color: #107C10;"></i> MC: <strong id="mcName">-</strong></span>
-                                <span><i class="fa-brands fa-discord" style="color: #5865F2;"></i> DC: <strong id="dcName">-</strong></span>
+                                <span>MC: <strong id="mcName">-</strong></span>
+                                <span>DC: <strong id="dcName">-</strong></span>
                             </div>
                         </div>
                     </div>
-                    <button class="card-action" onclick="handleProfileBtnClick()" id="profileCardBtn">
-                        <span id="profileBtnText">Giriş Yap / Hesap Bağla</sp
+                    <button class="card-action" onclick="handleProfileCardClick()">
+                        <span id="profileCardBtnText">Giriş Yap / Hesap Bağla</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- GİRİŞ MODALI (Platform Seçenekleri) -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 style="font-size: 1.2rem; font-weight: 700;">NATO Oturum Açma</h3>
+                <button class="icon-btn" id="closeLoginBtn" style="width: 32px; height: 32px; font-size: 1rem;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Hesabınızı bağlamak için platform seçin:</p>
+            
+            <div style="display: flex; flex-direction: column;">
+                <button class="login-option-btn btn-discord" onclick="completeLogin('Discord', 'Paşam#0001', 'Pasam_TR')">
+                    <i class="fa-brands fa-discord" style="font-size: 1.1rem;"></i> Discord ile Giriş Yap
+                </button>
+                <button class="login-option-btn btn-xbox" onclick="completeLogin('Xbox', 'Paşam Xbox', 'Pasam_TR')">
+                    <i class="fa-brands fa-xbox" style="font-size: 1.1rem;"></i> Xbox Hesabı ile Bağlan
+                </button>
+      
