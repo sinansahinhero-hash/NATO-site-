@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NATO</title>
+    <title>NATOx</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
@@ -58,7 +58,6 @@
             gap: 0.75rem;
         }
 
-        /* Butonları doğrudan 'a' etiketi yaptık ki tarayıcı engellemesin */
         .icon-btn, .login-btn {
             text-decoration: none;
             cursor: pointer;
@@ -412,10 +411,9 @@
 </head>
 <body>
 
-    <!-- ÜST ŞERİT (LINK YAPISIYLA GARANTİLENMİŞ) -->
+    <!-- ÜST ŞERİT -->
     <header class="top-header">
         <div class="header-left">
-            <!-- Butonları 'a' etiketi yaptık, JavaScript'e href içinden bağlanıyor -->
             <a href="javascript:void(0);" class="icon-btn" onclick="openDrawer(); return false;">
                 <i class="fa-solid fa-house"></i>
             </a>
@@ -579,7 +577,7 @@
         </div>
     </div>
 
-    <!-- KESİN ÇÖZÜM JAVASCRIPT -->
+    <!-- JAVASCRIPT -->
     <script>
         const drawer = document.getElementById('drawer');
         const drawerOverlay = document.getElementById('drawerOverlay');
@@ -590,3 +588,11 @@
             drawer.classList.add('active');
             drawerOverlay.style.display = 'block';
         }
+
+        function closeDrawer() {
+            drawer.classList.remove('active');
+            drawerOverlay.style.display = 'none';
+        }
+
+        function openLogin() {
+            loginModal.style.di
