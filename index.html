@@ -293,6 +293,100 @@
             background: rgba(0, 82, 255, 0.1);
             color: #0052ff;
         }
+
+        /* Giriş Yap Modal (Açılır Pencere) Stilleri */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: #ffffff;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: modalOpen 0.3s ease;
+        }
+
+        @keyframes modalOpen {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 12px;
+        }
+
+        .modal-header h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .close-modal {
+            background: #f0f2f5;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .login-option-btn {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid #eaeaea;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-discord {
+            background: #5865F2;
+            color: #fff;
+            border-color: #5865F2;
+        }
+        .btn-discord:hover { background: #4752C4; }
+
+        .btn-xbox {
+            background: #107C10;
+            color: #fff;
+            border-color: #107C10;
+        }
+        .btn-xbox:hover { background: #0e6b0e; }
+
+        .btn-microsoft {
+            background: #111111;
+            color: #fff;
+            border-color: #111111;
+        }
+        .btn-microsoft:hover { background: #000000; }
     </style>
 </head>
 <body>
@@ -305,7 +399,35 @@
                 <i class="fa-solid fa-globe"></i> NATO
             </div>
         </div>
-        <button class="login-btn"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
+        <button class="login-btn" onclick="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
+    </div>
+
+    <!-- Giriş Yap Modal (Açılır Pencere) -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> NATO Oturum Açma</h3>
+                <button class="close-modal" onclick="closeLoginModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p style="font-size: 0.9rem; color: #666;">Komuta portalına bağlanmak için kimliğinizi seçin:</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Discord ile Giriş -->
+                <button class="login-option-btn btn-discord" onclick="loginAction('Discord')">
+                    <i class="fa-brands fa-discord" style="font-size: 1.2rem;"></i> Discord ile Giriş Yap
+                </button>
+                
+                <!-- Xbox ile Giriş -->
+                <button class="login-option-btn btn-xbox" onclick="loginAction('Xbox')">
+                    <i class="fa-brands fa-xbox" style="font-size: 1.2rem;"></i> Xbox Hesabı ile Bağlan
+                </button>
+                
+                <!-- Microsoft ile Giriş -->
+                <button class="login-option-btn btn-microsoft" onclick="loginAction('Microsoft')">
+                    <i class="fa-brands fa-microsoft" style="font-size: 1.2rem;"></i> Microsoft Hesabı (PC)
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Ana Kaydırılabilir Kartlar Alanı -->
@@ -366,7 +488,7 @@
         </div>
     </div>
 
-    <!-- JavaScript Slider Kontrolü ve Dinamik Başlık -->
+    <!-- JavaScript Kodları -->
     <script>
         let currentIndex = 0;
         const totalCards = 3;
@@ -383,6 +505,20 @@
             currentIndex = (currentIndex + direction + totalCards) % totalCards;
             wrapper.style.transform = `translateX(-${currentIndex * 105}%)`;
             sectionTitle.innerHTML = titles[currentIndex];
+        }
+
+        // Modal (Açılır Pencere) Fonksiyonları
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function loginAction(provider) {
+            alert(provider + " hesabı ile giriş yapılıyor Paşam!");
+            closeLoginModal();
         }
     </script>
 </body>
