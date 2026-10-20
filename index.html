@@ -249,15 +249,21 @@
             background: #0040cc;
         }
 
-        /* Profil Kartı İçeriği */
+        /* Profil Kartı İçeriği (Discord + Minecraft/Xbox Entegreli) */
         .profile-box {
             display: flex;
-            align-items: center;
-            gap: 15px;
+            flex-direction: column;
+            gap: 12px;
             background: #f9fafc;
             padding: 15px;
             border-radius: 10px;
             border: 1px solid #eaeaea;
+        }
+
+        .profile-top {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .avatar {
@@ -278,11 +284,27 @@
             color: #666;
         }
 
+        .game-accounts {
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #eaeaea;
+            padding-top: 10px;
+            font-size: 0.85rem;
+            color: #444;
+            font-weight: 600;
+        }
+
+        .game-accounts span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
         .role-tags {
             display: flex;
             gap: 6px;
             flex-wrap: wrap;
-            margin-top: 5px;
+            margin-top: 2px;
         }
 
         .role-pill {
@@ -409,23 +431,23 @@
                 <h3><i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> NATO Oturum Açma</h3>
                 <button class="close-modal" onclick="closeLoginModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p style="font-size: 0.9rem; color: #666;">Komuta portalına bağlanmak için kimliğinizi seçin:</p>
+            <p style="font-size: 0.9rem; color: #666;">Komuta portalına bağlanmak için hesap seçin:</p>
             
             <div style="display: flex; flex-direction: column; gap: 12px;">
                 <!-- Discord ile Giriş -->
-                <button class="login-option-btn btn-discord" onclick="loginAction('Discord')">
+                <a href="https://discord.com/login" target="_blank" class="login-option-btn btn-discord" onclick="simulateLogin('Discord')">
                     <i class="fa-brands fa-discord" style="font-size: 1.2rem;"></i> Discord ile Giriş Yap
-                </button>
+                </a>
                 
                 <!-- Xbox ile Giriş -->
-                <button class="login-option-btn btn-xbox" onclick="loginAction('Xbox')">
+                <a href="https://login.live.com/" target="_blank" class="login-option-btn btn-xbox" onclick="simulateLogin('Xbox')">
                     <i class="fa-brands fa-xbox" style="font-size: 1.2rem;"></i> Xbox Hesabı ile Bağlan
-                </button>
+                </a>
                 
                 <!-- Microsoft ile Giriş -->
-                <button class="login-option-btn btn-microsoft" onclick="loginAction('Microsoft')">
+                <a href="https://login.microsoftonline.com/" target="_blank" class="login-option-btn btn-microsoft" onclick="simulateLogin('Microsoft')">
                     <i class="fa-brands fa-microsoft" style="font-size: 1.2rem;"></i> Microsoft Hesabı (PC)
-                </button>
+                </a>
             </div>
         </div>
     </div>
@@ -467,19 +489,27 @@
                     <button class="action-btn" onclick="alert('Destek talebiniz iletildi Paşam!')">Destek Talebi Oluştur</button>
                 </div>
 
-                <!-- KART 3: Kişinin NATO Profili -->
+                <!-- KART 3: Kişinin NATO Profili (Discord + Minecraft/Xbox Entegreli) -->
                 <div class="card">
                     <span class="badge blue"><i class="fa-solid fa-id-card"></i> KİMLİK KARTI</span>
                     <h3><i class="fa-solid fa-user-shield" style="color: #0052ff;"></i> Oyuncu Profili</h3>
+                    
                     <div class="profile-box">
-                        <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="avatar" alt="Avatar">
-                        <div class="profile-info">
-                            <h4>Paşam</h4>
-                            <p>NATO Aktif Komutanı</p>
-                            <div class="role-tags">
-                                <span class="role-pill">Kurucu</span>
-                                <span class="role-pill" style="color: #ff3344; background: rgba(255,51,68,0.1);">Yıldırım Orduları</span>
+                        <div class="profile-top">
+                            <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="avatar" id="profileAvatar" alt="Avatar">
+                            <div class="profile-info">
+                                <h4 id="profileName">Giriş Yapılmadı</h4>
+                                <p id="profileRank">NATO Misafir Personel</p>
+                                <div class="role-tags" id="profileRoles">
+                                    <span class="role-pill">Yetkisiz</span>
+                                </div>
                             </div>
+                        </div>
+                        
+                        <!-- Minecraft & Xbox Hesap Bilgileri -->
+                        <div class="game-accounts">
+                            <span><i class="fa-solid fa-cube" style="color: #107C10;"></i> MC: <strong id="mcName">Bağlı Değil</strong></span>
+                            <span><span style="color: #5865F2;">●</span> <strong id="dcName">Discord Yok</strong></span>
                         </div>
                     </div>
                 </div>
@@ -507,7 +537,7 @@
             sectionTitle.innerHTML = titles[currentIndex];
         }
 
-        // Modal (Açılır Pencere) Fonksiyonları
+        // Modal Fonksiyonları
         function openLoginModal() {
             document.getElementById('loginModal').style.display = 'flex';
         }
@@ -516,10 +546,25 @@
             document.getElementById('loginModal').style.display = 'none';
         }
 
-        function loginAction(provider) {
-            alert(provider + " hesabı ile giriş yapılıyor Paşam!");
+        // Giriş Yapıldığında Profili Otomatik Güncelleyen Simülasyon
+        function simulateLogin(provider) {
             closeLoginModal();
+            
+            // Profil bilgilerini senkronize edelim (Paşam'ın hesap bilgileri)
+            document.getElementById('profileName').innerText = "Paşam";
+            document.getElementById('profileRank').innerText = "NATO Aktif Komutanı (" + provider + ")";
+            document.getElementById('profileAvatar').src = "https://ui-avatars.com/api/?name=Pasam&background=0052ff&color=fff";
+            document.getElementById('mcName').innerText = "Pasam_TR";
+            document.getElementById('dcName').innerText = "Pasam#0001";
+            
+            document.getElementById('profileRoles').innerHTML = `
+                <span class="role-pill">Kurucu</span>
+                <span class="role-pill" style="color: #ff3344; background: rgba(255,51,68,0.1);">Yıldırım Orduları</span>
+            `;
+            
+            alert(provider + " hesabı başarıyla bağlandı, profil kartınız güncellendi Paşam!");
         }
     </script>
 </body>
-</html>
+                </html>
+    
