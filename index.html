@@ -128,6 +128,7 @@
         .slider-controls {
             display: flex;
             gap: 8px;
+            z-index: 10;
         }
 
         .control-btn {
@@ -158,10 +159,11 @@
             display: flex;
             transition: transform 0.4s ease-in-out;
             gap: 15px;
+            width: 300%;
         }
 
         .card {
-            min-width: 100%;
+            width: 100%;
             background: #fff;
             border: 1px solid #eaeaea;
             border-radius: 14px;
@@ -386,7 +388,6 @@
 
         .login-option-btn:hover { background: #f0f2f5; }
 
-        /* Dahili Şifre Giriş Ekranı Formu */
         #discordLoginForm {
             display: none;
             flex-direction: column;
@@ -399,15 +400,16 @@
     <!-- Üst Navbar -->
     <div class="navbar">
         <div class="nav-left">
-            <button class="icon-btn"><i class="fa-solid fa-house"></i></button>
+            <button class="icon-btn" onclick="moveCard(0)"><i class="fa-solid fa-house"></i></button>
             <div class="logo-area">
                 <i class="fa-solid fa-globe"></i> NATO
             </div>
         </div>
-        <button class="login-btn" onclick="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
+        <!-- Giriş / Çıkış Butonu ID ile Yönetiliyor -->
+        <button class="login-btn" id="authBtn" onclick="handleAuthClick()"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
     </div>
 
-    <!-- Giriş Yap Modal (Uygulamaya Atmaz, Site İçinde Çalışır) -->
+    <!-- Giriş Yap Modal -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -415,7 +417,6 @@
                 <button class="close-modal" onclick="closeLoginModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
-            <!-- Seçenekler Menüsü -->
             <div id="loginOptions" style="display: flex; flex-direction: column; gap: 12px;">
                 <p style="font-size: 0.9rem; color: #666;">Hesabınızı bağlamak için platform seçin:</p>
                 
@@ -432,7 +433,6 @@
                 </button>
             </div>
 
-            <!-- Site İçi Discord Giriş Formu (Şifre Girme Alanı) -->
             <div id="discordLoginForm">
                 <p style="font-size: 0.85rem; color: #666;"><i class="fa-brands fa-discord" style="color: #5865F2;"></i> Discord hesap bilgilerinizi girin:</p>
                 <div class="form-group">
@@ -472,7 +472,7 @@
                 <div class="card">
                     <span class="badge blue"><i class="fa-solid fa-circle-info"></i> KURUMSAL</span>
                     <h3><i class="fa-solid fa-globe" style="color: #0052ff;"></i> NATO Hakkında</h3>
-                    <p>NATO; disiplin, taktik strateji ve askeri hiyerarşiyi esas alan lider gaming topluluğudur. Minecraft Towny sunucularında ve operasyonlarda hakimiyet kurarız.</p>
+                    <p>NATO; disiplin, taktik strateji ve hiyerarşiyi esas alan lider gaming topluluğudur. Minecraft Towny sunucularında ve operasyonlarda hakimiyet kurarız.</p>
                     <a href="https://discord.gg/" target="_blank" style="color: #0052ff; font-weight: 700; text-decoration: none; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; margin-top: 5px;">
                         Discord Sunucusuna Katıl <i class="fa-solid fa-arrow-right"></i>
                     </a>
@@ -531,8 +531,12 @@
         ];
 
         function moveCard(direction) {
-            currentIndex = (currentIndex + direction + totalCards) % totalCards;
-            wrapper.style.transform = `translateX(-${currentIndex * 105}%)`;
+            if(direction === 0) {
+                currentIndex = 0;
+            } else {
+                currentIndex = (currentIndex + direction + totalCards) % totalCards;
+            }
+            wrapper.style.transform = `translateX(-${currentIndex * 33.333}%)`;
             sectionTitle.innerHTML = titles[currentIndex];
         }
 
@@ -557,6 +561,15 @@
             document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> NATO Oturum Açma';
         }
 
+        function handleAuthClick() {
+            const isLoggedIn = localStorage.getItem('nato_logged_in');
+            if (isLoggedIn === 'true') {
+                logout();
+            } else {
+                openLoginModal();
+            }
+        }
+
         function completeDiscordLogin() {
             const email = document.getElementById('dcEmail').value;
             if(!email) {
@@ -578,14 +591,10 @@
 
         function checkLoginStatus() {
             const isLoggedIn = localStorage.getItem('nato_logged_in');
+            const authBtn = document.getElementById('authBtn');
             
             if (isLoggedIn === 'true') {
                 document.getElementById('profileName').innerText = "Paşam";
                 document.getElementById('profileRank').innerText = "NATO Aktif Komutanı";
                 document.getElementById('profileAvatar').src = "https://ui-avatars.com/api/?name=Pasam&background=0052ff&color=fff";
-                document.getElementById('mcName').innerText = "Pasam_TR";
-                document.getElementById('dcName').innerText = "Pasam#0001";
                 
-                document.getElementById('profileRoles').innerHTML = `
-                    <span class="role-pill">Kurucu</span>
-                    <span class="role-pill" style="color: #ff3344; background: rgba(255
