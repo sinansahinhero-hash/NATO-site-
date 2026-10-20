@@ -4,454 +4,297 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NATO Komuta Portalı</title>
-    <!-- FontAwesome İkonları ve Fontlar -->
+    <!-- FontAwesome ve Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        :root {
-            --bg-dark: #0a0d14;
-            --panel-bg: rgba(16, 22, 34, 0.85);
-            --primary: #0088ff;
-            --primary-glow: rgba(0, 136, 255, 0.4);
-            --accent-red: #ff3344;
-            --text-main: #e1e7ed;
-            --text-muted: #8a99ad;
-            --border-color: rgba(0, 136, 255, 0.2);
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Rajdhani', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
+            background-color: #f4f6f9;
+            color: #1a1a1a;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            background-image: 
-                radial-gradient(circle at 50% 50%, rgba(0, 60, 120, 0.15) 0%, transparent 80%),
-                linear-gradient(rgba(10, 13, 20, 0.95), rgba(10, 13, 20, 0.95)),
-                url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=1920&q=80');
-            background-size: cover;
-            background-position: center;
-            overflow-x: hidden;
-            padding: 20px;
+            padding: 15px;
         }
 
-        /* Başlık Alanı */
-        .header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .header h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            letter-spacing: 3px;
-            color: #fff;
-            text-shadow: 0 0 15px var(--primary-glow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .header p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            margin-top: 5px;
-            letter-spacing: 1px;
-        }
-
-        /* Slider Ana Konteyner */
-        .slider-container {
+        /* Üst Navigasyon Çubuğu */
+        .navbar {
             width: 100%;
-            max-width: 900px;
-            position: relative;
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), 0 0 15px var(--primary-glow);
-            backdrop-filter: blur(10px);
-            overflow: hidden;
-        }
-
-        /* Slide Yapısı */
-        .slides-wrapper {
-            display: flex;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 300%; /* 3 Panel olduğu için */
-        }
-
-        .slide {
-            width: 33.333%;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-height: 480px;
-        }
-
-        /* Ortak Panel Başlıkları */
-        .panel-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            color: #fff;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 10px;
+            max-width: 600px;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 12px 20px;
             display: flex;
             align-items: center;
-            gap: 12px;
-        }
-
-        /* Panel 1: Tanıtım */
-        .intro-content p {
-            font-size: 1.15rem;
-            line-height: 1.6;
-            color: var(--text-main);
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             margin-bottom: 20px;
         }
 
-        .unit-tags {
+        .nav-left {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 25px;
-        }
-
-        .tag {
-            background: rgba(0, 136, 255, 0.1);
-            border: 1px solid var(--primary);
-            color: #fff;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
-
-        .tag.red {
-            border-color: var(--accent-red);
-            background: rgba(255, 51, 68, 0.1);
-        }
-
-        /* Panel 2: Destek */
-        .support-form {
-            display: flex;
-            flex-direction: column;
+            align-items: center;
             gap: 15px;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .form-group label {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-        }
-
-        .form-group input, .form-group textarea, .form-group select {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--border-color);
-            padding: 12px;
-            border-radius: 8px;
-            color: #fff;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 10px var(--primary-glow);
-        }
-
-        /* Panel 3: Profil */
-        .profile-box {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .profile-search {
-            display: flex;
-            gap: 10px;
-        }
-
-        .profile-card {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
+        .icon-btn {
+            background: #f0f2f5;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
-            gap: 20px;
+            justify-content: center;
+            cursor: pointer;
+            color: #333;
+            font-size: 1.1rem;
+            transition: 0.2s;
         }
 
-        .avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 2px solid var(--primary);
-            box-shadow: 0 0 10px var(--primary-glow);
+        .icon-btn:hover {
+            background: #e4e6eb;
         }
 
-        .profile-info h3 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.4rem;
-            color: #fff;
-        }
-
-        .roles-container {
+        .logo-area {
             display: flex;
+            align-items: center;
             gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 10px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #111;
         }
 
-        .role-badge {
-            font-size: 0.8rem;
-            padding: 4px 10px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .logo-area i {
+            color: #ff3344;
+            font-size: 1.3rem;
         }
 
-        /* Butonlar */
-        .btn {
-            background: var(--primary);
+        .login-btn {
+            background: #0052ff;
             color: #fff;
             border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 700;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
             cursor: pointer;
-            transition: 0.3s;
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
-            font-size: 1rem;
-            text-decoration: none;
+            font-size: 0.95rem;
+            transition: 0.2s;
         }
 
-        .btn:hover {
-            background: #0066cc;
-            box-shadow: 0 0 15px var(--primary-glow);
-            transform: translateY(-2px);
+        .login-btn:hover {
+            background: #0040cc;
         }
 
-        /* Navigation Kontrolleri */
-        .nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid var(--border-color);
-            color: #fff;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
+        /* Ana İçerik / Taktik Birlikler Alanı */
+        .main-container {
+            width: 100%;
+            max-width: 600px;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            position: relative;
+        }
+
+        .section-header {
             display: flex;
             align-items: center;
-            justify-content: center;
-            transition: 0.3s;
-            z-index: 10;
+            justify-content: space-between;
+            margin-bottom: 20px;
         }
 
-        .nav-btn:hover {
-            background: var(--primary);
-            box-shadow: 0 0 15px var(--primary-glow);
-        }
-
-        .prev-btn { left: 15px; }
-        .next-btn { right: 15px; }
-
-        /* Noktalar (Indicators) */
-        .dots-container {
-            position: absolute;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #111;
             display: flex;
+            align-items: center;
             gap: 10px;
         }
 
-        .dot {
-            width: 12px;
-            height: 12px;
+        .slider-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .control-btn {
+            background: #f0f2f5;
+            border: none;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            transition: 0.3s;
+            color: #333;
+            transition: 0.2s;
         }
 
-        .dot.active {
-            background: var(--primary);
-            box-shadow: 0 0 10px var(--primary-glow);
-            width: 28px;
-            border-radius: 10px;
+        .control-btn:hover {
+            background: #e4e6eb;
         }
 
-        /* Mobil Uyum */
-        @media (max-width: 768px) {
-            .slide { padding: 25px; }
-            .header h1 { font-size: 1.8rem; }
-            .nav-btn { display: none; }
-            .profile-card { flex-direction: column; text-align: center; }
+        /* Kart Slider Yapısı */
+        .cards-viewport {
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .cards-wrapper {
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+            gap: 15px;
+        }
+
+        .card {
+            min-width: 100%;
+            background: #fff;
+            border: 1px solid #eaeaea;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .badge {
+            align-self: flex-start;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .badge.blue {
+            background: rgba(0, 82, 255, 0.1);
+            color: #0052ff;
+        }
+
+        .badge.red {
+            background: rgba(255, 51, 68, 0.1);
+            color: #ff3344;
+        }
+
+        .card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #111;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card p {
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .detail-btn {
+            background: transparent;
+            border: none;
+            color: #111;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+            transition: 0.2s;
+            align-self: flex-start;
+            padding: 0;
+        }
+
+        .detail-btn:hover {
+            color: #0052ff;
+            gap: 12px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Üst Başlık -->
-    <div class="header">
-        <h1><i class="fa-solid => fa-shield-halved"></i> NATO KOMUTA PORTALI</h1>
-        <p>Askeri Simülasyon & Taktik Operasyon Merkezi</p>
+    <!-- Üst Navbar -->
+    <div class="navbar">
+        <div class="nav-left">
+            <button class="icon-btn"><i class="fa-solid fa-house"></i></button>
+            <div class="logo-area">
+                <i class="fa-solid fa-globe"></i> NATO
+            </div>
+        </div>
+        <button class="login-btn"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
     </div>
 
-    <!-- Slider Ana Alanı -->
-    <div class="slider-container">
-        
-        <!-- Yön Butonları -->
-        <button class="nav-btn prev-btn" onclick="moveSlide(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-        <button class="nav-btn next-btn" onclick="moveSlide(1)"><i class="fa-solid fa-chevron-right"></i></button>
-
-        <!-- Slide Panelleri -->
-        <div class="slides-wrapper" id="slidesWrapper">
-            
-            <!-- PANEL 1: NATO TANITIM -->
-            <div class="slide">
-                <h2 class="panel-title"><i class="fa-solid fa-globe"></i> NATO Hakkında</h2>
-                <div class="intro-content">
-                    <p>
-                        NATO, disiplin, taktik strateji ve askeri hiyerarşiyi esas alan lider gaming topluluğudur. Minecraft Towny sunucularında ve özel operasyonlarda hakimiyet kurmak için örgütlenmiş askeri gücüz.
-                    </p>
-                    <div class="unit-tags">
-                        <span class="tag"><i class="fa-solid fa-bolt"></i> Yıldırım Orduları</span>
-                        <span class="tag red"><i class="fa-solid fa-hand-fist"></i> Kızıl Sağ El</span>
-                        <span class="tag"><i class="fa-solid fa-dna"></i> OMEGA Birimi</span>
-                    </div>
-                    <a href="https://discord.gg/" target="_blank" class="btn">
-                        <i class="fa-brands fa-discord"></i> Birliğe Katıl
-                    </a>
-                </div>
+    <!-- Ana Taktik Birlikler Alanı -->
+    <div class="main-container">
+        <div class="section-header">
+            <div class="section-title">
+                <i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> Taktik Birlikler
             </div>
-
-            <!-- PANEL 2: NATO DESTEK SİSTEMİ -->
-            <div class="slide">
-                <h2 class="panel-title"><i class="fa-solid fa-headset"></i> NATO Destek Merkezi</h2>
-                <form class="support-form" onsubmit="handleSupportSubmit(event)">
-                    <div class="form-group">
-                        <label>Discord Kullanıcı Adı / ID</label>
-                        <input type="text" id="supUser" placeholder="Örn: Paşam#0001" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Talep Türü</label>
-                        <select id="supType">
-                            <option>Şikayet / Bildirim</option>
-                            <option>Birlik Başvurusu</option>
-                            <option>Diplomatik İletişim</option>
-                            <option>Diğer</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Mesajınız</label>
-                        <textarea id="supMsg" rows="3" placeholder="Taktiksel talebinizi buraya yazın..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn"><i class="fa-solid fa-paper-plane"></i> Talebi Gönder</button>
-                </form>
+            <div class="slider-controls">
+                <button class="control-btn" onclick="moveCard(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="control-btn" onclick="moveCard(1)"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
-
-            <!-- PANEL 3: DİSCORD PROFİL SORGULAMA -->
-            <div class="slide">
-                <h2 class="panel-title"><i class="fa-solid fa-id-card"></i> Askeri Kimlik Sorgu</h2>
-                <div class="profile-box">
-                    <div class="profile-search">
-                        <input type="text" id="discordIdInput" placeholder="Discord Kullanıcı Adınızı Girin..." style="flex:1; padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; color: #fff;">
-                        <button onclick="loadProfile()" class="btn"><i class="fa-solid fa-magnifying-glass"></i> Sorgula</button>
-                    </div>
-
-                    <!-- Profil Kartı -->
-                    <div class="profile-card" id="profileCard">
-                        <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="avatar" id="userAvatar" alt="Avatar">
-                        <div class="profile-info">
-                            <h3 id="userName">Sorgulanmadı</h3>
-                            <p style="color: var(--text-muted); font-size: 0.9rem;" id="userStatus">Discord Bilgisi Bekleniyor...</p>
-                            <div class="roles-container" id="userRoles">
-                                <span class="role-badge" style="border-color: var(--primary);">[Komutanlık]</span>
-                                <span class="role-badge" style="border-color: var(--accent-red);">[Yıldırım Orduları]</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
-        <!-- Alt Sayfa Noktaları -->
-        <div class="dots-container">
-            <div class="dot active" onclick="goToSlide(0)"></div>
-            <div class="dot" onclick="goToSlide(1)"></div>
-            <div class="dot" onclick="goToSlide(2)"></div>
-        </div>
+        <!-- Kaydırılabilir Kartlar -->
+        <div class="cards-viewport">
+            <div class="cards-wrapper" id="cardsWrapper">
+                
+                <!-- KART 1: Yıldırım Orduları -->
+                <div class="card">
+                    <span class="badge blue"><i class="fa-solid fa-bolt"></i> ANA BİRLİK</span>
+                    <h3><i class="fa-solid fa-bolt" style="color: #0052ff;"></i> Yıldırım Orduları</h3>
+                    <p>NATO askeri komutasının öncü taarruz ve savunma gücü. Kara harekatlarının ana omurgasını oluşturur.</p>
+                    <button class="detail-btn">Detayları İncele <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
 
+                <!-- KART 2: Kızıl Sağ El -->
+                <div class="card">
+                    <span class="badge red"><i class="fa-solid fa-hand-fist"></i> ÖZEL KUVVETLER</span>
+                    <h3><i class="fa-solid fa-hand-fist" style="color: #ff3344;"></i> Kızıl Sağ El</h3>
+                    <p>Gizli operasyonlar, keşif ve düşman hattı arkasında görev yapan elit taktik operasyon timi.</p>
+                    <button class="detail-btn">Detayları İncele <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+
+                <!-- KART 3: OMEGA -->
+                <div class="card">
+                    <span class="badge blue"><i class="fa-solid fa-dna"></i> STRATEJİK BİRİM</span>
+                    <h3><i class="fa-solid fa-shield" style="color: #0052ff;"></i> OMEGA</h3>
+                    <p>Yüksek güvenlik, kriz yönetimi ve özel savunma hatlarının inşasından sorumlu üst düzey birim.</p>
+                    <button class="detail-btn">Detayları İncele <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+
+            </div>
+        </div>
     </div>
 
-    <!-- JavaScript Kodları -->
+    <!-- JavaScript Slider Kontrolü -->
     <script>
-        let currentSlide = 0;
-        const totalSlides = 3;
-        const slidesWrapper = document.getElementById('slidesWrapper');
-        const dots = document.querySelectorAll('.dot');
+        let currentIndex = 0;
+        const totalCards = 3;
+        const wrapper = document.getElementById('cardsWrapper');
 
-        function updateSlide() {
-            slidesWrapper.style.transform = `translateX(-${currentSlide * 33.333}%)`;
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentSlide);
-            });
-        }
-
-        function moveSlide(direction) {
-            currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
-            updateSlide();
-        }
-
-        function goToSlide(index) {
-            currentSlide = index;
-            updateSlide();
-        }
-
-        // Destek Formu Gönderimi (Discord Webhook bağlayabilirsin)
-        function handleSupportSubmit(e) {
-            e.preventDefault();
-            alert("Destek talebiniz NATO Komuta Merkezine iletildi Paşam!");
-            document.querySelector('.support-form').reset();
-        }
-
-        // Profil Sorgulama Simülasyonu
-        function loadProfile() {
-            const input = document.getElementById('discordIdInput').value;
-            if(!input) {
-                alert("Lütfen bir kullanıcı adı girin!");
-                return;
-            }
-            
-            document.getElementById('userName').innerText = input;
-            document.getElementById('userStatus').innerText = "NATO Aktif Personeli";
-            document.getElementById('userAvatar').src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(input) + "&background=0088ff&color=fff";
+        function moveCard(direction) {
+            currentIndex = (currentIndex + direction + totalCards) % totalCards;
+            wrapper.style.transform = `translateX(-${currentIndex * 105}%)`;
         }
     </script>
 </body>
-                            </html>
-                            
+</html>
