@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATO</title>
+    <title>NATO Komuta Portalı</title>
     <!-- FontAwesome ve Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
@@ -398,21 +398,23 @@
         <button class="login-btn" onclick="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
     </div>
 
-    <!-- Genel Kullanıma Uygun Doğrulama Modalı -->
+    <!-- Doğrulama Modalı -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-link" style="color: #0052ff;"></i> Hesap Doğrulama (RoVerify)</h3>
+                <h3><i class="fa-solid fa-link" style="color: #0052ff;"></i> Hesap Doğrulama (OAuth2)</h3>
                 <button class="close-modal" onclick="closeLoginModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p style="font-size: 0.85rem; color: #666;">Doğrulama yapmak ve hesabınızı bağlamak için platform seçin:</p>
+            <p style="font-size: 0.85rem; color: #666;">Doğrulama yapmak ve izin vermek için platform seçin:</p>
             
-            <a href="https://discord.com/login" target="_blank" class="login-option-btn btn-discord" onclick="completeAuth('Discord')">
-                <i class="fa-brands fa-discord" style="font-size: 1.2rem;"></i> Discord ile Giriş Yap
+            <!-- Discord Yetkilendirme Ekranına Yönlendirir (İzin Sayfası) -->
+            <a href="https://discord.com/oauth2/authorize?client_id=123456789012345678&response_type=code&scope=identify%20guilds" target="_blank" class="login-option-btn btn-discord" onclick="completeAuth('Discord')">
+                <i class="fa-brands fa-discord" style="font-size: 1.2rem;"></i> Discord ile Yetkilendir
             </a>
             
-            <a href="https://login.live.com/" target="_blank" class="login-option-btn btn-xbox" onclick="completeAuth('Microsoft / Xbox')">
-                <i class="fa-brands fa-xbox" style="font-size: 1.2rem;"></i> Microsoft / Xbox ile Giriş Yap
+            <!-- Microsoft / Xbox Yetkilendirme Ekranı -->
+            <a href="https://login.live.com/oauth20_authorize.srf?client_id=5c370223-013b-42e8-92c6-c0bde058a04b&response_type=code&scope=XboxLive.signin%20offline_access" target="_blank" class="login-option-btn btn-xbox" onclick="completeAuth('Microsoft / Xbox')">
+                <i class="fa-brands fa-xbox" style="font-size: 1.2rem;"></i> Microsoft / Xbox Yetkilendir
             </a>
         </div>
     </div>
@@ -539,7 +541,7 @@
                 document.getElementById('dcName').innerText = "-";
                 
                 document.getElementById('profileRoles').innerHTML = `
-                    <span class="role-pill" style="background: rgba(255,51,68,0.1); color: #ff3344;">Kayıtsız</span>
+                    <span class="role-pill" style="background: rgba(255,51,68,0.1); color: #ff3344;">Yetkisiz Misafir</span>
                 `;
             }
         }
@@ -548,4 +550,4 @@
     </script>
 </body>
     </html>
-                                                                                                               
+    
