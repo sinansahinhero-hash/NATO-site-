@@ -310,7 +310,7 @@
             color: #0052ff;
         }
 
-        /* Giriş Yap Modal Stilleri */
+        /* Modal Stilleri */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -380,29 +380,18 @@
             align-items: center;
             gap: 12px;
             transition: 0.2s;
-            text-decoration: none;
+            background: #f9fafc;
+            color: #111;
         }
 
-        .btn-discord {
-            background: #5865F2;
-            color: #fff;
-            border-color: #5865F2;
-        }
-        .btn-discord:hover { background: #4752C4; }
+        .login-option-btn:hover { background: #f0f2f5; }
 
-        .btn-xbox {
-            background: #107C10;
-            color: #fff;
-            border-color: #107C10;
+        /* Dahili Şifre Giriş Ekranı Formu */
+        #discordLoginForm {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
         }
-        .btn-xbox:hover { background: #0e6b0e; }
-
-        .btn-microsoft {
-            background: #111111;
-            color: #fff;
-            border-color: #111111;
-        }
-        .btn-microsoft:hover { background: #000000; }
     </style>
 </head>
 <body>
@@ -418,29 +407,48 @@
         <button class="login-btn" onclick="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
     </div>
 
-    <!-- Giriş Yap Modal -->
+    <!-- Giriş Yap Modal (Uygulamaya Atmaz, Site İçinde Çalışır) -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> NATO Oturum Açma</h3>
+                <h3 id="modalTitle"><i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> NATO Oturum Açma</h3>
                 <button class="close-modal" onclick="closeLoginModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p style="font-size: 0.9rem; color: #666;">Hesabınızı bağlamak için platform seçin (Giriş sayfasına yönlendirileceksiniz):</p>
             
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-                <!-- Discord Resmi Giriş Sayfasına Yönlendirir ve Oturum açtırır -->
-                <a href="https://discord.com/login" target="_blank" class="login-option-btn btn-discord" onclick="triggerLogin('Discord')">
+            <!-- Seçenekler Menüsü -->
+            <div id="loginOptions" style="display: flex; flex-direction: column; gap: 12px;">
+                <p style="font-size: 0.9rem; color: #666;">Hesabınızı bağlamak için platform seçin:</p>
+                
+                <button class="login-option-btn" onclick="showDiscordForm()" style="background: #5865F2; color: #fff; border-color: #5865F2;">
                     <i class="fa-brands fa-discord" style="font-size: 1.2rem;"></i> Discord ile Giriş Yap
-                </a>
+                </button>
                 
-                <a href="https://login.live.com/" target="_blank" class="login-option-btn btn-xbox" onclick="triggerLogin('Xbox')">
+                <button class="login-option-btn" onclick="simulateAuth('Xbox')" style="background: #107C10; color: #fff; border-color: #107C10;">
                     <i class="fa-brands fa-xbox" style="font-size: 1.2rem;"></i> Xbox Hesabı ile Bağlan
-                </a>
+                </button>
                 
-                <a href="https://login.microsoftonline.com/" target="_blank" class="login-option-btn btn-microsoft" onclick="triggerLogin('Microsoft')">
+                <button class="login-option-btn" onclick="simulateAuth('Microsoft')" style="background: #111111; color: #fff; border-color: #111111;">
                     <i class="fa-brands fa-microsoft" style="font-size: 1.2rem;"></i> Microsoft Hesabı (PC)
-                </a>
+                </button>
             </div>
+
+            <!-- Site İçi Discord Giriş Formu (Şifre Girme Alanı) -->
+            <div id="discordLoginForm">
+                <p style="font-size: 0.85rem; color: #666;"><i class="fa-brands fa-discord" style="color: #5865F2;"></i> Discord hesap bilgilerinizi girin:</p>
+                <div class="form-group">
+                    <label>E-posta veya Telefon</label>
+                    <input type="text" id="dcEmail" placeholder="ornek@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Şifre</label>
+                    <input type="password" id="dcPassword" placeholder="••••••••">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 5px;">
+                    <button class="action-btn" onclick="backToOptions()" style="background: #6c757d; flex: 1;">Geri</button>
+                    <button class="action-btn" onclick="completeDiscordLogin()" style="background: #5865F2; flex: 2;">Giriş Yap</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -481,7 +489,7 @@
                     <button class="action-btn" onclick="alert('Destek talebiniz iletildi Paşam!')">Destek Talebi Oluştur</button>
                 </div>
 
-                <!-- KART 3: Kişinin NATO Profili (Giriş Durumuna Göre Değişir) -->
+                <!-- KART 3: Kişinin NATO Profili -->
                 <div class="card">
                     <span class="badge blue"><i class="fa-solid fa-id-card"></i> KİMLİK KARTI</span>
                     <h3><i class="fa-solid fa-user-shield" style="color: #0052ff;"></i> Oyuncu Profili</h3>
@@ -528,31 +536,50 @@
             sectionTitle.innerHTML = titles[currentIndex];
         }
 
-        // Modal Fonksiyonları
         function openLoginModal() {
             document.getElementById('loginModal').style.display = 'flex';
+            backToOptions();
         }
 
         function closeLoginModal() {
             document.getElementById('loginModal').style.display = 'none';
         }
 
-        // Kullanıcı giriş butonuna bastığında tarayıcıda oturum açıldığını hafızaya kaydediyoruz
-        function triggerLogin(provider) {
-            closeLoginModal();
-            localStorage.setItem('nato_logged_in', 'true');
-            localStorage.setItem('nato_provider', provider);
-            
-            // Kullanıcı giriş yaptıktan sonra sayfayı simüle edip güncelliyoruz
-            setTimeout(checkLoginStatus, 500);
+        function showDiscordForm() {
+            document.getElementById('loginOptions').style.display = 'none';
+            document.getElementById('discordLoginForm').style.display = 'flex';
+            document.getElementById('modalTitle').innerHTML = '<i class="fa-brands fa-discord" style="color: #5865F2;"></i> Discord Girişi';
         }
 
-        // Sayfa yüklendiğinde veya giriş yapıldığında profili kontrol eden fonksiyon
+        function backToOptions() {
+            document.getElementById('loginOptions').style.display = 'flex';
+            document.getElementById('discordLoginForm').style.display = 'none';
+            document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-shield-halved" style="color: #0052ff;"></i> NATO Oturum Açma';
+        }
+
+        function completeDiscordLogin() {
+            const email = document.getElementById('dcEmail').value;
+            if(!email) {
+                alert("Lütfen bilgileri girin Paşam!");
+                return;
+            }
+            closeLoginModal();
+            localStorage.setItem('nato_logged_in', 'true');
+            checkLoginStatus();
+            alert("Discord hesabı başarıyla bağlandı Paşam!");
+        }
+
+        function simulateAuth(provider) {
+            closeLoginModal();
+            localStorage.setItem('nato_logged_in', 'true');
+            checkLoginStatus();
+            alert(provider + " hesabı başarıyla bağlandı Paşam!");
+        }
+
         function checkLoginStatus() {
             const isLoggedIn = localStorage.getItem('nato_logged_in');
             
             if (isLoggedIn === 'true') {
-                // Giriş yapılmışsa kartı dolduruyoruz
                 document.getElementById('profileName').innerText = "Paşam";
                 document.getElementById('profileRank').innerText = "NATO Aktif Komutanı";
                 document.getElementById('profileAvatar').src = "https://ui-avatars.com/api/?name=Pasam&background=0052ff&color=fff";
@@ -561,35 +588,4 @@
                 
                 document.getElementById('profileRoles').innerHTML = `
                     <span class="role-pill">Kurucu</span>
-                    <span class="role-pill" style="color: #ff3344; background: rgba(255,51,68,0.1);">Yıldırım Orduları</span>
-                `;
-                
-                // Sağ üstteki giriş butonunu "Çıkış Yap" olarak değiştirebiliriz
-                document.querySelector('.login-btn').innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap';
-                document.querySelector('.login-btn').setAttribute('onclick', 'logout()');
-            } else {
-                // Giriş yapılmamışsa varsayılan durum
-                document.getElementById('profileName').innerText = "Giriş Yapılmadı";
-                document.getElementById('profileRank').innerText = "Lütfen sağ üstten giriş yapın";
-                document.getElementById('profileAvatar').src = "https://cdn.discordapp.com/embed/avatars/0.png";
-                document.getElementById('mcName').innerText = "-";
-                document.getElementById('dcName').innerText = "-";
-                
-                document.getElementById('profileRoles').innerHTML = `
-                    <span class="role-pill" style="background: rgba(255,51,68,0.1); color: #ff3344;">Yetkisiz Misafir</span>
-                `;
-            }
-        }
-
-        // Çıkış yapma fonksiyonu
-        function logout() {
-            localStorage.removeItem('nato_logged_in');
-            localStorage.removeItem('nato_provider');
-            location.reload();
-        }
-
-        // Sayfa açıldığında durumu kontrol et
-        window.onload = checkLoginStatus;
-    </script>
-</body>
-</html>
+                    <span class="role-pill" style="color: #ff3344; background: rgba(255
