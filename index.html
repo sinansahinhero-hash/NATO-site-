@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATO</title>
+    <title>NATO Komuta Portalı</title>
     <!-- FontAwesome ve Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
@@ -297,7 +297,7 @@
             display: flex;
             gap: 6px;
             flex-wrap: wrap;
-            margin-top: 2px;
+            margin-top: 4px;
         }
 
         .role-pill {
@@ -380,9 +380,6 @@
 
         .btn-discord { background: #5865F2; }
         .btn-discord:hover { background: #4752C4; }
-
-        .btn-xbox { background: #107C10; }
-        .btn-xbox:hover { background: #0e6b0e; }
     </style>
 </head>
 <body>
@@ -395,31 +392,26 @@
                 <i class="fa-solid fa-globe"></i> NATO
             </div>
         </div>
-        <button class="login-btn" onclick="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
+        <button class="login-btn" id="navLoginBtn" onclick="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
     </div>
 
     <!-- Doğrulama Modalı -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-link" style="color: #0052ff;"></i> Hesap Doğrulama (OAuth2)</h3>
+                <h3><i class="fa-solid fa-link" style="color: #0052ff;"></i> NATO Verification (OAuth2)</h3>
                 <button class="close-modal" onclick="closeLoginModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p style="font-size: 0.85rem; color: #666;">Doğrulama yapmak ve izin vermek için platform seçin:</p>
+            <p style="font-size: 0.85rem; color: #666;">Discord hesabını bağlayarak NATO profilini doğrula:</p>
             
-            <!-- Discord Yetkilendirme Ekranı (Gerçek OAuth2 Linkin) -->
+            <!-- Gerçek Discord OAuth2 Bağlantısı -->
             <a href="https://discord.com/oauth2/authorize?client_id=1539374890405204070&response_type=code&redirect_uri=https%3A%2F%2Fnatox-mauve.vercel.app&scope=identify+email" class="login-option-btn btn-discord">
                 <i class="fa-brands fa-discord" style="font-size: 1.2rem;"></i> Discord ile Yetkilendir
-            </a>
-            
-            <!-- Microsoft / Xbox Yetkilendirme Ekranı -->
-            <a href="https://login.live.com/oauth20_authorize.srf?client_id=5c370223-013b-42e8-92c6-c0bde058a04b&response_type=code&scope=XboxLive.signin%20offline_access" target="_blank" class="login-option-btn btn-xbox" onclick="completeAuth('Microsoft / Xbox')">
-                <i class="fa-brands fa-xbox" style="font-size: 1.2rem;"></i> Microsoft / Xbox Yetkilendir
             </a>
         </div>
     </div>
 
-    <!-- Ana Kaydırılabilir Kartlar Alanı -->
+    <!-- Ana İçerik Alanı -->
     <main class="main-container">
         <div class="section-header">
             <div class="section-title" id="sectionTitle">
@@ -478,6 +470,16 @@
                             <span><i class="fa-brands fa-discord" style="color: #5865F2;"></i> DC: <strong id="dcName">-</strong></span>
                         </div>
                     </div>
+
+                    <!-- Minecraft Kullanıcı Adı Eşleme Formu -->
+                    <div class="form-group" id="mcSection" style="margin-top: 5px;">
+                        <label><i class="fa-solid fa-cube" style="color: #107C10;"></i> Minecraft Oyuncu Adın (Nick):</label>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="text" id="mcInput" placeholder="Örn: Steve_NATO" style="flex: 1;">
+                            <button class="action-btn" onclick="saveMinecraftNick()" style="padding: 10px 15px;">Eşle</button>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
@@ -511,25 +513,29 @@
             document.getElementById('loginModal').style.display = 'none';
         }
 
-        function completeAuth(provider) {
-            closeLoginModal();
-            localStorage.setItem('nato_logged_in', 'true');
-            localStorage.setItem('nato_provider', provider);
+        // Minecraft Nickini Kaydetme
+        function saveMinecraftNick() {
+            const nick = document.getElementById('mcInput').value.trim();
+            if (!nick) {
+                alert("Lütfen geçerli bir Minecraft kullanıcı adı girin!");
+                return;
+            }
+            localStorage.setItem('nato_mc_nick', nick);
+            alert("Minecraft nickiniz (" + nick + ") Discord hesabınızla başarıyla eşleştirildi!");
             checkLoginStatus();
         }
 
-        // Sayfa yüklendiğinde Discord OAuth2 kodunu veya kayıtlı oturumu kontrol et
+        // Sayfa Yüklendiğinde Oturum ve Parametre Kontrolü
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get('code');
 
             if (code) {
-                // Discord'dan başarıyla dönüldü, tarayıcı hafızasına kayıt atalım
+                // Discord OAuth2'den dönüldü
                 localStorage.setItem('nato_logged_in', 'true');
-                localStorage.setItem('nato_provider', 'Discord');
                 localStorage.setItem('discord_code', code);
                 
-                // URL'yi temizle (adres çubuğundaki code parametresini kalabalık yapmasın diye siler)
+                // URL'deki code parametresini temizle
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
@@ -538,23 +544,33 @@
 
         function checkLoginStatus() {
             const isLoggedIn = localStorage.getItem('nato_logged_in');
-            const provider = localStorage.getItem('nato_provider') || 'Discord';
+            const mcNick = localStorage.getItem('nato_mc_nick') || "Henüz Girilmedi";
             
             if (isLoggedIn === 'true') {
-                document.getElementById('profileName').innerText = "NATO Komutanı";
-                document.getElementById('profileRank').innerText = "Onaylı Oyuncu (" + provider + ")";
-                document.getElementById('profileAvatar').src = "https://ui-avatars.com/api/?name=NATO+User&background=5865F2&color=fff";
-                document.getElementById('mcName').innerText = "Bağlı";
-                document.getElementById('dcName').innerText = "Doğrulandı";
+                document.getElementById('navLoginBtn').innerHTML = '<i class="fa-solid fa-user-check"></i> Doğrulandı';
+                document.getElementById('navLoginBtn').style.background = '#107C10';
                 
+                document.getElementById('profileName').innerText = "NATO Komutanı";
+                document.getElementById('profileRank').innerText = "Discord Doğrulandı";
+                document.getElementById('profileAvatar').src = "https://ui-avatars.com/api/?name=NATO+User&background=5865F2&color=fff";
+                
+                document.getElementById('dcName').innerText = "Doğrulandı";
+                document.getElementById('mcName').innerText = mcNick;
+                
+                // Oyuncu Rolleri
                 document.getElementById('profileRoles').innerHTML = `
-                    <span class="role-pill">Aktif Üye</span>
-                    <span class="role-pill" style="color: #0052ff; background: rgba(0,82,255,0.1);">Yetkili Komutan</span>
+                    <span class="role-pill"><i class="fa-solid fa-check"></i> Verified</span>
+                    <span class="role-pill" style="color: #0052ff; background: rgba(0,82,255,0.1);">Yıldırım Orduları</span>
+                    <span class="role-pill" style="color: #ff3344; background: rgba(255,51,68,0.1);">OMEGA</span>
                 `;
             } else {
+                document.getElementById('navLoginBtn').innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Giriş Yap';
+                document.getElementById('navLoginBtn').style.background = '#0052ff';
+
                 document.getElementById('profileName').innerText = "Giriş Yapılmadı";
                 document.getElementById('profileRank').innerText = "Lütfen hesap doğrulayın";
                 document.getElementById('profileAvatar').src = "https://cdn.discordapp.com/embed/avatars/0.png";
+                
                 document.getElementById('mcName').innerText = "-";
                 document.getElementById('dcName').innerText = "-";
                 
@@ -565,4 +581,5 @@
         }
     </script>
 </body>
-</html>
+                                      </html>
+                                                                               
