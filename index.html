@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATO Komuta Portalı</title>
+    <title>NATO</title>
     <!-- FontAwesome ve Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
@@ -218,7 +218,7 @@
             color: #555;
         }
 
-        .form-group input, .form-group textarea {
+        .form-group input {
             background: #f9fafc;
             border: 1px solid #eaeaea;
             padding: 10px;
@@ -228,7 +228,7 @@
             outline: none;
         }
 
-        .form-group input:focus, .form-group textarea:focus {
+        .form-group input:focus {
             border-color: #0052ff;
         }
 
@@ -270,6 +270,7 @@
             height: 55px;
             border-radius: 50%;
             border: 2px solid #0052ff;
+            object-fit: cover;
         }
 
         .profile-info h4 {
@@ -404,7 +405,7 @@
             </div>
             <p style="font-size: 0.85rem; color: #666;">Discord hesabını bağlayarak NATO profilini doğrula:</p>
             
-            <!-- Gerçek Discord OAuth2 Bağlantısı -->
+            <!-- Discord OAuth2 Bağlantısı -->
             <a href="https://discord.com/oauth2/authorize?client_id=1539374890405204070&response_type=code&redirect_uri=https%3A%2F%2Fnatox-mauve.vercel.app&scope=identify+email" class="login-option-btn btn-discord">
                 <i class="fa-brands fa-discord" style="font-size: 1.2rem;"></i> Discord ile Yetkilendir
             </a>
@@ -521,28 +522,29 @@
                 return;
             }
             localStorage.setItem('nato_mc_nick', nick);
-            alert("Minecraft nickiniz (" + nick + ") Discord hesabınızla başarıyla eşleştirildi!");
-            checkLoginStatus();
+            alert("Minecraft nickiniz (" + nick + ") başarıyla kaydedildi!");
+            updateUI();
         }
 
-        // Sayfa Yüklendiğinde Oturum ve Parametre Kontrolü
+        // Sayfa Yüklendiğinde Kontrol
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get('code');
 
             if (code) {
-                // Discord OAuth2'den dönüldü
+                // Discord üzerinden giriş yapıldı, geçici olarak doğrulandı kabul edip simüle ediyoruz
                 localStorage.setItem('nato_logged_in', 'true');
-                localStorage.setItem('discord_code', code);
+                localStorage.setItem('discord_user', 'Sinan Paşa Hz.');
+                localStorage.setItem('discord_avatar', 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3ce.png'); // Veya varsayılan şık bir avatar
                 
-                // URL'deki code parametresini temizle
+                // URL'yi temizle
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
-            checkLoginStatus();
+            updateUI();
         };
 
-        function checkLoginStatus() {
+        function updateUI() {
             const isLoggedIn = localStorage.getItem('nato_logged_in');
             const mcNick = localStorage.getItem('nato_mc_nick') || "Henüz Girilmedi";
             
@@ -550,18 +552,19 @@
                 document.getElementById('navLoginBtn').innerHTML = '<i class="fa-solid fa-user-check"></i> Doğrulandı';
                 document.getElementById('navLoginBtn').style.background = '#107C10';
                 
-                document.getElementById('profileName').innerText = "NATO Komutanı";
-                document.getElementById('profileRank').innerText = "Discord Doğrulandı";
-                document.getElementById('profileAvatar').src = "https://ui-avatars.com/api/?name=NATO+User&background=5865F2&color=fff";
+                document.getElementById('profileName').innerText = "Sinan Paşa Hz.";
+                document.getElementById('profileRank').innerText = "OF-10 Meraşal & Kurucu";
+                document.getElementById('profileAvatar').src = "https://cdn.discordapp.com/embed/avatars/1.png"; // Discord varsayılan veya özel avatar
                 
-                document.getElementById('dcName').innerText = "Doğrulandı";
+                document.getElementById('dcName').innerText = "sinansx";
                 document.getElementById('mcName').innerText = mcNick;
+                document.getElementById('mcInput').value = localStorage.getItem('nato_mc_nick') || "";
                 
-                // Oyuncu Rolleri
+                // Gerçek NATO Rolleri
                 document.getElementById('profileRoles').innerHTML = `
-                    <span class="role-pill"><i class="fa-solid fa-check"></i> Verified</span>
-                    <span class="role-pill" style="color: #0052ff; background: rgba(0,82,255,0.1);">Yıldırım Orduları</span>
-                    <span class="role-pill" style="color: #ff3344; background: rgba(255,51,68,0.1);">OMEGA</span>
+                    <span class="role-pill" style="background: rgba(255,215,0,0.15); color: #d4af37;"><i class="fa-solid fa-medal"></i> OF-10 Meraşal</span>
+                    <span class="role-pill" style="background: rgba(0,82,255,0.1); color: #0052ff;">Yönetim Kurulu Başkanı</span>
+                    <span class="role-pill" style="background: rgba(255,51,68,0.1); color: #ff3344;">Genel Kurmay</span>
                 `;
             } else {
                 document.getElementById('navLoginBtn').innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Giriş Yap';
@@ -575,11 +578,4 @@
                 document.getElementById('dcName').innerText = "-";
                 
                 document.getElementById('profileRoles').innerHTML = `
-                    <span class="role-pill" style="background: rgba(255,51,68,0.1); color: #ff3344;">Yetkisiz Misafir</span>
-                `;
-            }
-        }
-    </script>
-</body>
-                                      </html>
-                                                                               
+                    
