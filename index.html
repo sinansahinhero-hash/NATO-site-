@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATO Komuta Portalı</title>
+    <title>NATO</title>
     <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -67,7 +67,14 @@
             background: #5865F2; color: #ffffff; border: none; padding: 14px;
             border-radius: 14px; font-weight: 700; font-size: 0.95rem; cursor: pointer;
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            transition: 0.2s; text-decoration: none;
+            transition: 0.2s; text-decoration: none; width: 100%;
+        }
+
+        .btn-xbox {
+            background: #107C10; color: #ffffff; border: none; padding: 14px;
+            border-radius: 14px; font-weight: 700; font-size: 0.95rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: 0.2s; text-decoration: none; width: 100%;
         }
 
         .btn-ta-secondary {
@@ -92,15 +99,22 @@
         <button class="nav-menu-btn" onclick="toggleModal()"><i class="fa-solid fa-bars"></i></button>
     </div>
 
-    <!-- Giriş Modalı -->
+    <!-- Giriş ve Bağlantı Modalı -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content">
-            <h3 style="font-size: 1.2rem; font-weight: 800;">Discord Doğrulama</h3>
-            <p style="font-size: 0.85rem; color: #64748b;">Giriş yapmak için Discord hesabını bağla:</p>
-            <!-- Implicit Grant Flow (token direkt URL'ye gelir) -->
+            <h3 style="font-size: 1.2rem; font-weight: 800;">Hesap Bağlama & Giriş</h3>
+            <p style="font-size: 0.85rem; color: #64748b;">İşlem yapmak istediğin platformu seç:</p>
+            
+            <!-- Discord Girişi -->
             <a href="https://discord.com/oauth2/authorize?client_id=1539374890405204070&response_type=token&redirect_uri=https%3A%2F%2Fnatox-mauve.vercel.app&scope=identify+email" class="btn-ta-primary">
                 <i class="fa-brands fa-discord"></i> Discord ile Giriş Yap
             </a>
+
+            <!-- Xbox / Microsoft Girişi / Bağlantısı -->
+            <button class="btn-xbox" onclick="openXboxPrompt()">
+                <i class="fa-brands fa-xbox"></i> Xbox / Microsoft Hesabı Bağla
+            </button>
+
             <button class="btn-ta-secondary" onclick="toggleModal()">Kapat</button>
         </div>
     </div>
@@ -128,12 +142,12 @@
         </div>
 
         <div class="info-box">
-            <div class="info-box-title">DİSCORD ID</div>
-            <div class="info-box-value" id="discordId">-</div>
+            <div class="info-box-title">XBOX / MİCROSOFT OYUNCU ETİKETİ (GAMERTAG)</div>
+            <div class="info-box-value" id="xboxTag" style="color: #107C10;">Bağlanmadı</div>
         </div>
 
         <div class="info-box" style="gap: 8px;">
-            <div class="info-box-title">MINECRAFT OYUNCU ADI (IGN)</div>
+            <div class="info-box-title">MİNECRAFT OYUNCU ADI (IGN)</div>
             <div style="display: flex; gap: 8px;">
                 <input type="text" id="mcInput" placeholder="Minecraft Nickiniz" style="flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #cbd5e1; outline: none; font-weight: 600;">
                 <button onclick="saveMc()" style="background: #0f172a; color: white; border: none; padding: 0 16px; border-radius: 10px; font-weight: 700; cursor: pointer;">Kaydet</button>
@@ -142,11 +156,11 @@
 
         <div class="action-buttons">
             <button class="btn-ta-primary" onclick="toggleModal()" id="loginActionBtn">
-                <i class="fa-brands fa-discord"></i> Discord ile Bağlan / Giriş Yap
+                <i class="fa-solid fa-link"></i> Hesapları Yönet / Bağlan
             </button>
             
             <button class="btn-ta-secondary" onclick="logout()">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i> Siteden Çıkış Yap
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Siteden Çıkış Yap / Sıfırla
             </button>
         </div>
     </main>
@@ -155,6 +169,16 @@
         function toggleModal() {
             const m = document.getElementById('loginModal');
             m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function openXboxPrompt() {
+            const xboxName = prompt("Xbox / Microsoft Gamertag (Oyuncu Etiketi) adınızı girin:");
+            if (xboxName && xboxName.trim() !== "") {
+                localStorage.setItem('nato_xbox', xboxName.trim());
+                alert("Xbox hesabınız (" + xboxName.trim() + ") başarıyla bağlandı!");
+                toggleModal();
+                updateUI();
+            }
         }
 
         function saveMc() {
@@ -171,13 +195,11 @@
         }
 
         window.onload = async function() {
-            // URL içindeki access_token kontrolü (Discord yanıtı)
             const fragment = new URLSearchParams(window.location.hash.slice(1));
             const accessToken = fragment.get('access_token');
 
             if (accessToken) {
                 try {
-                    // Doğrudan Discord API'sine kullanıcının profilini soruyoruz
                     const res = await fetch('https://discord.com/api/users/@me', {
                         headers: { authorization: `Bearer ${accessToken}` }
                     });
@@ -201,7 +223,6 @@
                 } catch (err) {
                     console.error("Discord profil çekme hatası:", err);
                 }
-                // URL'deki karmakarışık token kısmını temizle
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
@@ -212,36 +233,26 @@
             const isLoggedIn = localStorage.getItem('nato_logged_in');
             const userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
             const savedMc = localStorage.getItem('nato_mc_nick') || '';
+            const savedXbox = localStorage.getItem('nato_xbox') || '';
 
-            if (savedMc) {
-                document.getElementById('mcInput').value = savedMc;
-            }
+            if (savedMc) document.getElementById('mcInput').value = savedMc;
+            if (savedXbox) document.getElementById('xboxTag').innerText = savedXbox;
 
             if (isLoggedIn === 'true' && userData.username) {
                 document.getElementById('userAvatar').src = userData.avatarUrl;
                 document.getElementById('topBadge').innerText = 'Doğrulanmış';
                 document.getElementById('displayName').innerText = userData.global_name;
                 document.getElementById('usernameTag').innerText = `@${userData.username}`;
-                document.getElementById('userDesc').innerText = 'Topluluğa aktif NATO Üyesi olarak katkı sağlıyor.';
-                document.getElementById('discordId').innerText = userData.id;
+                document.getElementById('userDesc').innerText = 'NATO Aslanı.';
 
                 document.getElementById('rolesList').innerHTML = '<span class="role-pill-ta" style="background:#0052ff; color:#fff;">ONAYLI ÜYE</span> <span class="role-pill-ta">NATO ASKERİ</span>';
+            }
 
-                const btn = document.getElementById('loginActionBtn');
-                btn.innerHTML = '<i class="fa-solid fa-user-check"></i> Doğrulandı (Giriş Yapıldı)';
-                btn.style.background = '#107C10';
-                btn.onclick = () => alert('Zaten giriş yaptınız Paşam!');
-
-            } else {
-                document.getElementById('userAvatar').src = 'https://cdn.discordapp.com/embed/avatars/0.png';
-                document.getElementById('topBadge').innerText = 'Misafir';
-                document.getElementById('displayName').innerText = 'Giriş Yapılmadı';
-                document.getElementById('usernameTag').innerText = '@misafir';
-                document.getElementById('userDesc').innerText = 'Topluluğa henüz giriş yapılmadı.';
-                document.getElementById('rolesList').innerHTML = '<span class="role-pill-ta" style="color:#ff3344;">Yetkisiz Misafir</span>';
-                document.getElementById('discordId').innerText = '-';
+            if (savedXbox) {
+                document.getElementById('xboxTag').innerText = savedXbox;
             }
         }
     </script>
 </body>
-</html>
+                    </html>
+                    
