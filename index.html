@@ -33,20 +33,41 @@
             display: flex; flex-direction: column; gap: 18px;
         }
 
-        .avatar-container { position: relative; width: 100px; height: 100px; }
+        /* Avatar & Durum Balonu Header */
+        .avatar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar-container { position: relative; width: 85px; height: 85px; flex-shrink: 0; }
         .avatar-img { width: 100%; height: 100%; border-radius: 24px; object-fit: cover; border: 1px solid #e2e8f0; }
         
         .role-badge-overlay {
             position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
             background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155;
-            font-size: 0.75rem; font-weight: 700; padding: 3px 12px; border-radius: 12px; white-space: nowrap;
+            font-size: 0.7rem; font-weight: 700; padding: 2px 10px; border-radius: 10px; white-space: nowrap;
         }
 
-        .section-sub { font-size: 0.9rem; font-weight: 700; color: #64748b; margin-top: 10px; }
+        /* Discord Özel Durum Balonu */
+        .status-bubble {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 10px 14px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #334155;
+            line-height: 1.35;
+            width: 100%;
+            display: none; /* Varsayılan gizli, veri varsa görünecek */
+        }
+
+        .section-sub { font-size: 0.85rem; font-weight: 700; color: #64748b; margin-top: 5px; }
         .user-title-area { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-        .user-title-area h2 { font-size: 1.5rem; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; }
-        .user-title-area .username-tag { font-size: 1rem; font-weight: 600; color: #64748b; }
-        .user-description { font-size: 0.95rem; color: #475569; font-weight: 500; word-break: break-word; }
+        .user-title-area h2 { font-size: 1.4rem; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; }
+        .user-title-area .username-tag { font-size: 0.95rem; font-weight: 600; color: #64748b; }
+        .user-description { font-size: 0.9rem; color: #334155; font-weight: 600; word-break: break-word; line-height: 1.4; }
 
         .roles-list { display: flex; gap: 8px; flex-wrap: wrap; }
         .role-pill-ta {
@@ -68,13 +89,6 @@
             border-radius: 14px; font-weight: 700; font-size: 0.95rem; cursor: pointer;
             display: flex; align-items: center; justify-content: center; gap: 8px;
             transition: 0.2s; text-decoration: none; width: 100%;
-        }
-
-        .btn-edit {
-            background: #ff758c; background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
-            color: #ffffff; border: none; padding: 14px; border-radius: 14px;
-            font-weight: 700; font-size: 0.95rem; cursor: pointer; display: flex;
-            align-items: center; justify-content: center; gap: 8px; transition: 0.2s; width: 100%;
         }
 
         .btn-mc {
@@ -109,14 +123,9 @@
     <!-- Hesap Yönetim Modalı -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content">
-            <h3 style="font-size: 1.2rem; font-weight: 800;">Hesap & Profil Yönetimi</h3>
-            <p style="font-size: 0.85rem; color: #64748b;">Aşağıdaki seçeneklerden düzenleme yapın:</p>
+            <h3 style="font-size: 1.2rem; font-weight: 800;">Hesap Yönetimi & Bağlantılar</h3>
+            <p style="font-size: 0.85rem; color: #64748b;">Gerekli bağlantı işlemlerini seçin:</p>
             
-            <!-- Özel Biyografi / Rozet Düzenleme -->
-            <button class="btn-edit" onclick="openBioPrompt()">
-                <i class="fa-solid fa-wand-magic-sparkles"></i> Biyografi ve Rozeti Düzenle
-            </button>
-
             <!-- Discord Girişi -->
             <a href="https://discord.com/oauth2/authorize?client_id=1539374890405204070&response_type=token&redirect_uri=https%3A%2F%2Fnatox-mauve.vercel.app&scope=identify+email" class="btn-ta-primary" style="background:#5865F2;">
                 <i class="fa-brands fa-discord"></i> Discord Hesabı Bağla
@@ -132,22 +141,33 @@
     </div>
 
     <main class="profile-card">
-        <div class="avatar-container">
-            <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="avatar-img" id="userAvatar" alt="Avatar">
-            <div class="role-badge-overlay" id="topBadge">Doğrulanmış</div>
+        
+        <!-- Üst Avatar ve Özel Durum Balonu -->
+        <div class="avatar-header">
+            <div class="avatar-container">
+                <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="avatar-img" id="userAvatar" alt="Avatar">
+                <div class="role-badge-overlay" id="topBadge">Misafir</div>
+            </div>
+            <!-- Discord Özel Durum Balonu (Canlı) -->
+            <div class="status-bubble" id="statusBubble"></div>
         </div>
 
         <div class="section-sub">Üye Profili</div>
 
+        <!-- Kullanıcı İsimleri ve Biyografi -->
         <div>
             <div class="user-title-area">
                 <h2 id="displayName">Giriş Yapılmadı</h2>
                 <span class="username-tag" id="usernameTag">@misafir</span>
             </div>
-            <!-- Dinamik Biyografi Alanı -->
-            <p class="user-description" id="userDesc" style="margin-top: 8px;">
-                NATO Aslanı.
-            </p>
+            
+            <!-- Canlı Biyografi Alanı -->
+            <div style="margin-top: 10px;">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">BİYOGRAFİ</span>
+                <p class="user-description" id="userDesc" style="margin-top: 2px;">
+                    Topluluğa henüz giriş yapılmadı.
+                </p>
+            </div>
         </div>
 
         <div class="roles-list" id="rolesList">
@@ -162,7 +182,7 @@
 
         <div class="action-buttons">
             <button class="btn-ta-primary" onclick="toggleModal()" id="loginActionBtn">
-                <i class="fa-solid fa-link"></i> Hesapları Yönet / Düzenle
+                <i class="fa-solid fa-link"></i> Hesapları Yönet / Bağlan
             </button>
             
             <button class="btn-ta-secondary" onclick="logout()">
@@ -175,23 +195,6 @@
         function toggleModal() {
             const m = document.getElementById('loginModal');
             m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
-        }
-
-        // Biyografi ve Rozet Değiştirme Fonksiyonu
-        function openBioPrompt() {
-            const newBio = prompt("Yeni Biyografinizi (Hakkımda yazısını) girin:", localStorage.getItem('nato_bio') || "NATO Aslanı.");
-            if (newBio !== null && newBio.trim() !== "") {
-                localStorage.setItem('nato_bio', newBio.trim());
-            }
-
-            const newBadge = prompt("Profil fotoğrafı altındaki Rozet yazısını girin (Örn: Lider, Subay, Doğrulanmış):", localStorage.getItem('nato_badge') || "Doğrulanmış");
-            if (newBadge !== null && newBadge.trim() !== "") {
-                localStorage.setItem('nato_badge', newBadge.trim());
-            }
-
-            alert("Profil bilgileriniz başarıyla güncellendi!");
-            toggleModal();
-            updateUI();
         }
 
         function openMcPrompt() {
@@ -229,7 +232,8 @@
                             id: userData.id,
                             username: userData.username,
                             global_name: userData.global_name || userData.username,
-                            avatarUrl: avatarUrl
+                            avatarUrl: avatarUrl,
+                            bio: userData.bio || ""
                         };
 
                         localStorage.setItem('nato_user', JSON.stringify(userObj));
@@ -248,12 +252,6 @@
             const isLoggedIn = localStorage.getItem('nato_logged_in');
             const userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
             const savedMc = localStorage.getItem('nato_mc_nick') || '';
-            const savedBio = localStorage.getItem('nato_bio') || 'NATO Aslanı.';
-            const savedBadge = localStorage.getItem('nato_badge') || 'Doğrulanmış';
-
-            // Özel Yazılar ve Biyografi Güncellemesi
-            document.getElementById('userDesc').innerText = savedBio;
-            document.getElementById('topBadge').innerText = savedBadge;
 
             if (savedMc) {
                 document.getElementById('mcTag').innerText = savedMc;
@@ -263,10 +261,25 @@
 
             if (isLoggedIn === 'true' && userData.username) {
                 document.getElementById('userAvatar').src = userData.avatarUrl;
+                document.getElementById('topBadge').innerText = 'Doğrulanmış';
                 document.getElementById('displayName').innerText = userData.global_name;
                 document.getElementById('usernameTag').innerText = `@${userData.username}`;
+                
+                // Discord Biyografisi Varsa Göster
+                if (userData.bio && userData.bio.trim() !== "") {
+                    document.getElementById('userDesc').innerText = userData.bio;
+                } else {
+                    document.getElementById('userDesc').innerText = "Henüz bir biyografi ayarlanmamış.";
+                }
 
                 document.getElementById('rolesList').innerHTML = '<span class="role-pill-ta" style="background:#0052ff; color:#fff;">ONAYLI ÜYE</span> <span class="role-pill-ta">NATO ASKERİ</span>';
+            } else {
+                document.getElementById('userAvatar').src = 'https://cdn.discordapp.com/embed/avatars/0.png';
+                document.getElementById('topBadge').innerText = 'Misafir';
+                document.getElementById('displayName').innerText = 'Giriş Yapılmadı';
+                document.getElementById('usernameTag').innerText = '@misafir';
+                document.getElementById('userDesc').innerText = 'Topluluğa henüz giriş yapılmadı.';
+                document.getElementById('rolesList').innerHTML = '<span class="role-pill-ta" style="color:#ff3344;">Yetkisiz Misafir</span>';
             }
         }
     </script>
