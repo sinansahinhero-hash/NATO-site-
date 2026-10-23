@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATO Komuta Portalı</title>
+    <title>NATO</title>
     <!-- FontAwesome ve Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
@@ -407,8 +407,8 @@
             </div>
             <p style="font-size: 0.85rem; color: #666;">Doğrulama yapmak ve izin vermek için platform seçin:</p>
             
-            <!-- Discord Yetkilendirme Ekranına Yönlendirir (İzin Sayfası) -->
-            <a href="https://discord.com/oauth2/authorize?client_id=123456789012345678&response_type=code&scope=identify%20guilds" target="_blank" class="login-option-btn btn-discord" onclick="completeAuth('Discord')">
+            <!-- Discord Yetkilendirme Ekranı (Gerçek OAuth2 Linkin) -->
+            <a href="https://discord.com/oauth2/authorize?client_id=1539374890405204070&response_type=code&redirect_uri=https%3A%2F%2Fnatox-mauve.vercel.app&scope=identify+email" class="login-option-btn btn-discord">
                 <i class="fa-brands fa-discord" style="font-size: 1.2rem;"></i> Discord ile Yetkilendir
             </a>
             
@@ -518,20 +518,38 @@
             checkLoginStatus();
         }
 
+        // Sayfa yüklendiğinde Discord OAuth2 kodunu veya kayıtlı oturumu kontrol et
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+
+            if (code) {
+                // Discord'dan başarıyla dönüldü, tarayıcı hafızasına kayıt atalım
+                localStorage.setItem('nato_logged_in', 'true');
+                localStorage.setItem('nato_provider', 'Discord');
+                localStorage.setItem('discord_code', code);
+                
+                // URL'yi temizle (adres çubuğundaki code parametresini kalabalık yapmasın diye siler)
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
+            checkLoginStatus();
+        };
+
         function checkLoginStatus() {
             const isLoggedIn = localStorage.getItem('nato_logged_in');
             const provider = localStorage.getItem('nato_provider') || 'Discord';
             
             if (isLoggedIn === 'true') {
-                document.getElementById('profileName').innerText = "Kullanıcı";
-                document.getElementById('profileRank').innerText = "NATO Onaylı Oyuncu (" + provider + ")";
-                document.getElementById('profileAvatar').src = "https://ui-avatars.com/api/?name=User&background=0052ff&color=fff";
-                document.getElementById('mcName').innerText = "Doğrulandı";
+                document.getElementById('profileName').innerText = "NATO Komutanı";
+                document.getElementById('profileRank').innerText = "Onaylı Oyuncu (" + provider + ")";
+                document.getElementById('profileAvatar').src = "https://ui-avatars.com/api/?name=NATO+User&background=5865F2&color=fff";
+                document.getElementById('mcName').innerText = "Bağlı";
                 document.getElementById('dcName').innerText = "Doğrulandı";
                 
                 document.getElementById('profileRoles').innerHTML = `
                     <span class="role-pill">Aktif Üye</span>
-                    <span class="role-pill" style="color: #0052ff; background: rgba(0,82,255,0.1);">Doğrulanmış Hesap</span>
+                    <span class="role-pill" style="color: #0052ff; background: rgba(0,82,255,0.1);">Yetkili Komutan</span>
                 `;
             } else {
                 document.getElementById('profileName').innerText = "Giriş Yapılmadı";
@@ -545,9 +563,6 @@
                 `;
             }
         }
-
-        window.onload = checkLoginStatus;
     </script>
 </body>
-    </html>
-    
+</html>
