@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATO Komuta Portalı</title>
+    <title>NATO</title>
     <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -70,8 +70,8 @@
             transition: 0.2s; text-decoration: none; width: 100%;
         }
 
-        .btn-xbox {
-            background: #107C10; color: #ffffff; border: none; padding: 14px;
+        .btn-mc {
+            background: #0f172a; color: #ffffff; border: none; padding: 14px;
             border-radius: 14px; font-weight: 700; font-size: 0.95rem; cursor: pointer;
             display: flex; align-items: center; justify-content: center; gap: 8px;
             transition: 0.2s; text-decoration: none; width: 100%;
@@ -89,7 +89,7 @@
             background: rgba(15, 23, 42, 0.4); display: none;
             align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px);
         }
-        .modal-content { background: #ffffff; width: 90%; max-width: 400px; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 15px; }
+        .modal-content { background: #ffffff; width: 90%; max-width: 400px; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 12px; }
     </style>
 </head>
 <body>
@@ -103,19 +103,19 @@
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content">
             <h3 style="font-size: 1.2rem; font-weight: 800;">Hesap Yönetimi & Bağlantılar</h3>
-            <p style="font-size: 0.85rem; color: #64748b;">Aşağıdaki butonları kullanarak hesaplarını bağla:</p>
+            <p style="font-size: 0.85rem; color: #64748b;">Gerekli bağlantı işlemlerini seçin:</p>
             
             <!-- Discord Girişi -->
             <a href="https://discord.com/oauth2/authorize?client_id=1539374890405204070&response_type=token&redirect_uri=https%3A%2F%2Fnatox-mauve.vercel.app&scope=identify+email" class="btn-ta-primary">
                 <i class="fa-brands fa-discord"></i> Discord Hesabı Bağla
             </a>
 
-            <!-- Xbox / Microsoft Hesabı Bağlama -->
-            <button class="btn-xbox" onclick="openXboxPrompt()">
-                <i class="fa-brands fa-xbox"></i> Xbox / Microsoft Hesabı Bağla
+            <!-- Minecraft Nick Değiştirme -->
+            <button class="btn-mc" onclick="openMcPrompt()">
+                <i class="fa-solid fa-cube"></i> Minecraft Oyuncu Adını Ayarla
             </button>
 
-            <button class="btn-ta-secondary" onclick="toggleModal()">Kapat</button>
+            <button class="btn-ta-secondary" onclick="toggleModal()" style="margin-top: 5px;">Kapat</button>
         </div>
     </div>
 
@@ -141,23 +141,14 @@
             <span class="role-pill-ta" style="color: #ff3344;">Yetkisiz Misafir</span>
         </div>
 
-        <!-- Xbox Gamertag Kutusu -->
-        <div class="info-box">
-            <div class="info-box-title">XBOX / MİCROSOFT OYUNCU ETİKETİ (GAMERTAG)</div>
-            <div class="info-box-value" id="xboxTag" style="color: #107C10;">Henüz Bağlanmadı</div>
-        </div>
-
         <!-- Minecraft IGN Kutusu -->
-        <div class="info-box" style="gap: 8px;">
+        <div class="info-box">
             <div class="info-box-title">MİNECRAFT OYUNCU ADI (IGN)</div>
-            <div style="display: flex; gap: 8px;">
-                <input type="text" id="mcInput" placeholder="Minecraft Oyuncu Adınız" style="flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #cbd5e1; outline: none; font-weight: 600;">
-                <button onclick="saveMc()" style="background: #0f172a; color: white; border: none; padding: 0 16px; border-radius: 10px; font-weight: 700; cursor: pointer;">Kaydet</button>
-            </div>
+            <div class="info-box-value" id="mcTag" style="color: #0f172a;">Henüz Girilmedi</div>
         </div>
 
         <div class="action-buttons">
-            <button class="btn-ta-primary" onclick="toggleModal()" id="loginActionBtn">
+            <button class="btn-ta-primary" onclick="toggleModal()" id="loginActionBtn" style="background: #0052ff;">
                 <i class="fa-solid fa-link"></i> Hesapları Yönet / Bağlan
             </button>
             
@@ -173,21 +164,13 @@
             m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        function openXboxPrompt() {
-            const xboxName = prompt("Xbox / Microsoft Gamertag adınızı girin:");
-            if (xboxName && xboxName.trim() !== "") {
-                localStorage.setItem('nato_xbox_tag', xboxName.trim());
-                alert("Xbox hesabınız (" + xboxName.trim() + ") kaydedildi!");
+        function openMcPrompt() {
+            const mcName = prompt("Minecraft Oyuncu Adınızı (IGN) girin:");
+            if (mcName && mcName.trim() !== "") {
+                localStorage.setItem('nato_mc_nick', mcName.trim());
+                alert("Minecraft nickiniz (" + mcName.trim() + ") kaydedildi!");
                 toggleModal();
                 updateUI();
-            }
-        }
-
-        function saveMc() {
-            const v = document.getElementById('mcInput').value.trim();
-            if(v) {
-                localStorage.setItem('nato_mc_nick', v);
-                alert('Minecraft adınız (' + v + ') başarıyla kaydedildi!');
             }
         }
 
@@ -235,14 +218,11 @@
             const isLoggedIn = localStorage.getItem('nato_logged_in');
             const userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
             const savedMc = localStorage.getItem('nato_mc_nick') || '';
-            const savedXbox = localStorage.getItem('nato_xbox_tag') || '';
 
-            if (savedMc) document.getElementById('mcInput').value = savedMc;
-            
-            if (savedXbox) {
-                document.getElementById('xboxTag').innerText = savedXbox;
+            if (savedMc) {
+                document.getElementById('mcTag').innerText = savedMc;
             } else {
-                document.getElementById('xboxTag').innerText = "Henüz Bağlanmadı";
+                document.getElementById('mcTag').innerText = "Henüz Girilmedi";
             }
 
             if (isLoggedIn === 'true' && userData.username) {
