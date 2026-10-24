@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATO</title>
+    <title>NATO Komuta Portalı</title>
     <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -24,9 +24,9 @@
         .nav-home-btn {
             background: #f8fafc; border: 1px solid #e2e8f0; width: 38px; height: 38px;
             border-radius: 12px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; color: #334155; font-size: 1.1rem; text-decoration: none; transition: 0.2s;
+            cursor: pointer; color: #334155; font-size: 1.1rem; transition: 0.2s;
         }
-        .nav-home-btn:hover { background: #f1f5f9; }
+        .nav-home-btn:active { transform: scale(0.95); background: #e2e8f0; }
 
         /* NATO Özel Amblem Alanı */
         .logo-area { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.1rem; color: #0f172a; }
@@ -37,12 +37,12 @@
             border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer;
             display: flex; align-items: center; gap: 6px; transition: 0.2s; text-decoration: none;
         }
-        .btn-login-header:hover { background: #0040cc; }
+        .btn-login-header:active { transform: scale(0.98); }
 
         /* Kart Konteyneri ve Slider Alanı */
         .slider-container {
             width: 100%; max-width: 480px; position: relative; overflow: hidden;
-            display: flex; flex-direction: column; gap: 15px;
+            display: flex; flex-direction: column; gap: 15px; z-index: 10;
         }
 
         .cards-wrapper {
@@ -52,7 +52,7 @@
         .card-item {
             min-width: 100%; background: #ffffff; border-radius: 24px;
             padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid #f1f5f9;
-            display: flex; flex-direction: column; gap: 16px;
+            display: flex; flex-direction: column; gap: 16px; box-sizing: border-box;
         }
 
         /* Slider Kontrol Şeridi */
@@ -68,7 +68,7 @@
             border-radius: 10px; display: flex; align-items: center; justify-content: center;
             cursor: pointer; color: #334155; font-size: 0.9rem; transition: 0.2s;
         }
-        .slide-btn:hover { background: #e2e8f0; }
+        .slide-btn:active { transform: scale(0.95); background: #e2e8f0; }
 
         /* Kart İçi Elementler */
         .badge-kurumsal { background: #eff6ff; color: #1d4ed8; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; width: fit-content; }
@@ -81,7 +81,7 @@
             display: flex; align-items: center; justify-content: center; gap: 8px;
             text-decoration: none; transition: 0.2s; width: 100%;
         }
-        .btn-action-card:hover { background: #dbeafe; }
+        .btn-action-card:active { transform: scale(0.98); }
 
         /* Profil Kartı Özelleri */
         .avatar-container { position: relative; width: 90px; height: 90px; }
@@ -146,38 +146,36 @@
     <!-- Üst Navbar -->
     <div class="navbar">
         <div class="nav-left">
-            <button class="nav-home-btn" onclick="openRightDrawer()"><i class="fa-solid fa-house"></i></button>
+            <button class="nav-home-btn" id="btnOpenDrawer"><i class="fa-solid fa-house"></i></button>
             <div class="logo-area">
-                <!-- İstediğin Alevli NATO Logosu -->
                 <img src="https://i.ibb.co/68vXjQ1/1000018162.jpg" class="nato-logo-img" alt="NATO Logo">
-                <span>NATO</span>
+                <span>NATO Komuta</span>
             </div>
         </div>
-        <!-- Üst Buton: Discord İsmi Yazmaz, Sabit Kalır -->
-        <button class="btn-login-header" onclick="openLoginModal()" id="headerLoginBtn">
+        <button class="btn-login-header" id="btnHeaderLogin">
             <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
         </button>
     </div>
 
     <!-- Sağ Yandan Açılan Menü (Drawer) -->
-    <div class="drawer-overlay" id="drawerOverlay" onclick="closeRightDrawer()"></div>
+    <div class="drawer-overlay" id="drawerOverlay"></div>
     <div class="right-drawer" id="rightDrawer">
         <div class="drawer-header">
             <h3 style="font-weight: 800; font-size: 1.1rem;"><i class="fa-solid fa-compass" style="color:#0052ff;"></i> Bölümler</h3>
-            <button onclick="closeRightDrawer()" style="background:none; border:none; font-size: 1.2rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+            <button id="btnCloseDrawer" style="background:none; border:none; font-size: 1.2rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="drawer-item" onclick="goToSlide(0); closeRightDrawer();">
+        <div class="drawer-item" id="drawerSlide0">
             <i class="fa-solid fa-globe" style="color:#0052ff;"></i> 1. NATO Tanıtım
         </div>
-        <div class="drawer-item" onclick="goToSlide(1); closeRightDrawer();">
+        <div class="drawer-item" id="drawerSlide1">
             <i class="fa-solid fa-headset" style="color:#dc2626;"></i> 2. Destek Sistemi
         </div>
-        <div class="drawer-item" onclick="goToSlide(2); closeRightDrawer();">
+        <div class="drawer-item" id="drawerSlide2">
             <i class="fa-solid fa-id-card" style="color:#16a34a;"></i> 3. Kimlik / Profil
         </div>
         
         <!-- Yalnızca Senin (Paşam) Erişebildiğin Özel Yüksek Komuta Bölümü -->
-        <div class="drawer-item" id="adminDrawerBtn" style="display:none; background:#fef2f2; border-color:#fca5a5; color:#dc2626;" onclick="openAdminModal(); closeRightDrawer();">
+        <div class="drawer-item" id="adminDrawerBtn" style="display:none; background:#fef2f2; border-color:#fca5a5; color:#dc2626;">
             <i class="fa-solid fa-user-shield"></i> Yüksek Komuta & Talepler
         </div>
     </div>
@@ -191,8 +189,8 @@
                 <i class="fa-solid fa-shield-halved" style="color:#0052ff;"></i> NATO Tanıtım
             </div>
             <div class="slider-btns">
-                <button class="slide-btn" onclick="prevCard()"><i class="fa-solid fa-chevron-left"></i></button>
-                <button class="slide-btn" onclick="nextCard()"><i class="fa-solid fa-chevron-right"></i></button>
+                <button class="slide-btn" id="btnPrevCard"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="slide-btn" id="btnNextCard"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
         </div>
 
@@ -218,7 +216,7 @@
                 <p class="card-text">Talep veya şikayetinizi kısaca belirtin, yetkili kadromuz size dönüş yapsın.</p>
                 <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 5px;">
                     <input type="text" id="supportTopic" class="support-input" placeholder="Kısaca konuyu belirtin...">
-                    <button class="btn-action-card" style="background:#dc2626; color:#ffffff;" onclick="createSupportTicket()">
+                    <button class="btn-action-card" style="background:#dc2626; color:#ffffff;" id="btnCreateTicket">
                         Destek Talebi Oluştur <i class="fa-solid fa-paper-plane"></i>
                     </button>
                 </div>
@@ -250,10 +248,10 @@
                 </div>
 
                 <div style="display: flex; gap: 8px;">
-                    <button class="btn-action-card" onclick="openLoginModal()" style="flex: 1;">
+                    <button class="btn-action-card" id="btnCardLogin" style="flex: 1;">
                         <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
                     </button>
-                    <button class="btn-action-card" onclick="setMcNameManually()" style="flex: 1; background:#0f172a; color:#fff;">
+                    <button class="btn-action-card" id="btnSetMc" style="flex: 1; background:#0f172a; color:#fff;">
                         <i class="fa-solid fa-cube"></i> Nick Ayarla
                     </button>
                 </div>
@@ -272,15 +270,15 @@
                 <i class="fa-brands fa-discord"></i> Discord ile Giriş Yap
             </a>
 
-            <button class="btn-action-card" style="background:#0f172a; color:#fff;" onclick="setMcNameManually(); toggleModal('loginModal');">
+            <button class="btn-action-card" style="background:#0f172a; color:#fff;" id="btnModalSetMc">
                 <i class="fa-solid fa-cube"></i> Minecraft Nickini Gir
             </button>
 
-            <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top: 5px;" onclick="toggleModal('loginModal')">Kapat</button>
+            <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top: 5px;" id="btnCloseLogin">Kapat</button>
         </div>
     </div>
 
-    <!-- Yüksek Komuta & Talepler Masası Modal (Sadece Senin Discord ID'n ile açılır) -->
+    <!-- Yüksek Komuta & Talepler Masası Modal -->
     <div class="modal-overlay" id="adminModal">
         <div class="modal-content">
             <h3 style="font-size: 1.2rem; font-weight: 800; color:#dc2626;"><i class="fa-solid fa-user-shield"></i> Yüksek Komuta Yönetim Paneli</h3>
@@ -288,96 +286,87 @@
             <div style="display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
                 <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">DESTEK TALEPLERİNE BAKABİLECEK YETKİLİ DİSCORD ID'LERİ</label>
                 <input type="text" id="staffIdsInput" class="support-input" placeholder="Örn: 12345678, 87654321">
-                <button class="btn-action-card" style="background:#0052ff; color:#fff; padding: 8px;" onclick="saveStaffList()">Yetkili Listesini Kaydet</button>
+                <button class="btn-action-card" style="background:#0052ff; color:#fff; padding: 8px;" id="btnSaveStaff">Yetkili Listesini Kaydet</button>
             </div>
 
             <h4 style="font-size: 1rem; font-weight: 800; margin-top: 5px;"><i class="fa-solid fa-list-check"></i> Gelen Destek Talepleri</h4>
             <div id="ticketsListArea" style="display: flex; flex-direction: column; gap: 8px;"></div>
 
-            <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top: 5px;" onclick="toggleModal('adminModal')">Kapat</button>
+            <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top: 5px;" id="btnCloseAdmin">Kapat</button>
         </div>
     </div>
 
     <script>
-        // SENİN DİSCORD ID'N (Yüksek Komuta Yetkilisi - Kendi ID'ni buraya yazabilirsin)
-        const authorizedAdminID = "1539374890405204070"; 
+        document.addEventListener('DOMContentLoaded', function() {
+            // SENİN DİSCORD ID'N
+            const authorizedAdminID = "1539374890405204070"; 
 
-        // Slider Mantığı
-        let currentSlide = 0;
-        const totalSlides = 3;
-        const titles = [
-            '<i class="fa-solid fa-shield-halved" style="color:#0052ff;"></i> NATO Tanıtım',
-            '<i class="fa-solid fa-headset" style="color:#dc2626;"></i> NATO Destek Sistemi',
-            '<i class="fa-solid fa-id-card" style="color:#16a34a;"></i> Kişisel Profil'
-        ];
+            let currentSlide = 0;
+            const totalSlides = 3;
+            const titles = [
+                '<i class="fa-solid fa-shield-halved" style="color:#0052ff;"></i> NATO Tanıtım',
+                '<i class="fa-solid fa-headset" style="color:#dc2626;"></i> NATO Destek Sistemi',
+                '<i class="fa-solid fa-id-card" style="color:#16a34a;"></i> Kişisel Profil'
+            ];
 
-        function updateSlider() {
-            document.getElementById('cardsWrapper').style.transform = `translateX(-${currentSlide * 100}%)`;
-            document.getElementById('sliderTitleIndicator').innerHTML = titles[currentSlide];
-        }
-
-        function goToSlide(index) {
-            currentSlide = index;
-            updateSlider();
-        }
-
-        function nextCard() {
-            currentSlide = (currentSlide + 1) % totalSlides;
-            updateSlider();
-        }
-
-        function prevCard() {
-            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-            updateSlider();
-        }
-
-        // Sağ Yandan Açılan Çekmece (Drawer) Kontrolleri
-        function openRightDrawer() {
-            document.getElementById('rightDrawer').classList.add('open');
-            document.getElementById('drawerOverlay').style.display = 'block';
-        }
-
-        function closeRightDrawer() {
-            document.getElementById('rightDrawer').classList.remove('open');
-            document.getElementById('drawerOverlay').style.display = 'none';
-        }
-
-        // Modallar
-        function openLoginModal() {
-            document.getElementById('loginModal').style.display = 'flex';
-        }
-
-        function openAdminModal() {
-            loadAdminPanelData();
-            document.getElementById('adminModal').style.display = 'flex';
-        }
-
-        function toggleModal(modalId) {
-            const m = document.getElementById(modalId);
-            m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
-        }
-
-        // Manuel Nick Ayarlama
-        function setMcNameManually() {
-            const nick = prompt("Lütfen Minecraft Oyuncu Adınızı (IGN) giriniz:");
-            if (nick && nick.trim() !== "") {
-                localStorage.setItem('nato_mc_nick', nick.trim());
-                alert("Minecraft nickiniz (" + nick.trim() + ") kaydedildi!");
-                updateUI();
-            }
-        }
-
-        // Destek Talebi Oluşturma
-        function createSupportTicket() {
-            const topic = document.getElementById('supportTopic').value.trim();
-            if(!topic) {
-                alert("Lütfen destek talebiniz için kısa bir konu belirtin!");
-                return;
+            function updateSlider() {
+                const wrapper = document.getElementById('cardsWrapper');
+                const indicator = document.getElementById('sliderTitleIndicator');
+                if(wrapper && indicator) {
+                    wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+                    indicator.innerHTML = titles[currentSlide];
+                }
             }
 
-            const userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
-            const isLoggedIn = localStorage.getItem('nato_logged_in');
+            function goToSlide(index) {
+                currentSlide = index;
+                updateSlider();
+            }
 
-            if (isLoggedIn === 'true' && userData.id) {
-                let existingTickets = JSON.parse(localStorage.getItem('nato_tickets') || '[]');
-              
+            // Slider Butonları
+            document.getElementById('btnNextCard').addEventListener('click', function() {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateSlider();
+            });
+
+            document.getElementById('btnPrevCard').addEventListener('click', function() {
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                updateSlider();
+            });
+
+            // Sağ Yandan Açılan Çekmece (Drawer)
+            const drawer = document.getElementById('rightDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+
+            function openDrawer() {
+                drawer.classList.add('open');
+                overlay.style.display = 'block';
+            }
+
+            function closeDrawer() {
+                drawer.classList.remove('open');
+                overlay.style.display = 'none';
+            }
+
+            document.getElementById('btnOpenDrawer').addEventListener('click', openDrawer);
+            document.getElementById('btnCloseDrawer').addEventListener('click', closeDrawer);
+            overlay.addEventListener('click', closeDrawer);
+
+            document.getElementById('drawerSlide0').addEventListener('click', function() { goToSlide(0); closeDrawer(); });
+            document.getElementById('drawerSlide1').addEventListener('click', function() { goToSlide(1); closeDrawer(); });
+            document.getElementById('drawerSlide2').addEventListener('click', function() { goToSlide(2); closeDrawer(); });
+
+            // Modallar
+            const loginModal = document.getElementById('loginModal');
+            const adminModal = document.getElementById('adminModal');
+
+            document.getElementById('btnHeaderLogin').addEventListener('click', function() { loginModal.style.display = 'flex'; });
+            document.getElementById('btnCardLogin').addEventListener('click', function() { loginModal.style.display = 'flex'; });
+            document.getElementById('btnCloseLogin').addEventListener('click', function() { loginModal.style.display = 'none'; });
+
+            document.getElementById('btnCloseAdmin').addEventListener('click', function() { adminModal.style.display = 'none'; });
+
+            document.getElementById('adminDrawerBtn').addEventListener('click', function() {
+                closeDrawer();
+                loadAdminData();
+                adminModal.style
