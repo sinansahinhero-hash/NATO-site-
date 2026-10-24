@@ -10,7 +10,7 @@
     
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px 15px; }
+        body { background-color: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px 15px; overflow-x: hidden; }
 
         /* Üst Şerit Navbar */
         .navbar {
@@ -19,23 +19,22 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 20px; border: 1px solid #f1f5f9;
         }
 
-        .nav-left { display: flex; align-items: center; gap: 10px; }
+        .nav-left { display: flex; align-items: center; gap: 12px; }
         .nav-home-btn {
             background: #f8fafc; border: 1px solid #e2e8f0; width: 38px; height: 38px;
             border-radius: 12px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; color: #334155; font-size: 1.1rem; text-decoration: none; transition: 0.2s;
+            cursor: pointer; color: #334155; font-size: 1.1rem; border: none;
         }
-        .nav-home-btn:hover { background: #f1f5f9; }
 
-        .logo-area { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.2rem; color: #0f172a; }
-        .logo-area span.badge-ta { background: linear-gradient(135deg, #0052ff, #0040cc); color: white; padding: 3px 8px; border-radius: 6px; font-size: 0.85rem; }
+        /* NATO Özel Amblem Alanı */
+        .logo-area { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; color: #0f172a; }
+        .nato-logo-img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid #dc2626; box-shadow: 0 0 8px rgba(220,38,38,0.3); }
 
         .btn-login-header {
             background: #0052ff; color: #ffffff; border: none; padding: 8px 16px;
             border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer;
-            display: flex; align-items: center; gap: 6px; transition: 0.2s; text-decoration: none;
+            display: flex; align-items: center; gap: 6px; text-decoration: none;
         }
-        .btn-login-header:hover { background: #0040cc; }
 
         /* Kart Konteyneri ve Slider Alanı */
         .slider-container {
@@ -50,7 +49,7 @@
         .card-item {
             min-width: 100%; background: #ffffff; border-radius: 24px;
             padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid #f1f5f9;
-            display: flex; flex-direction: column; gap: 16px;
+            display: flex; flex-direction: column; gap: 16px; box-sizing: border-box;
         }
 
         /* Slider Kontrol Şeridi */
@@ -66,7 +65,6 @@
             border-radius: 10px; display: flex; align-items: center; justify-content: center;
             cursor: pointer; color: #334155; font-size: 0.9rem; transition: 0.2s;
         }
-        .slide-btn:hover { background: #e2e8f0; }
 
         /* Kart İçi Elementler */
         .badge-kurumsal { background: #eff6ff; color: #1d4ed8; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; width: fit-content; }
@@ -77,9 +75,8 @@
             background: #eff6ff; color: #0052ff; border: none; padding: 12px;
             border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer;
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            text-decoration: none; transition: 0.2s; width: 100%;
+            text-decoration: none; width: 100%;
         }
-        .btn-action-card:hover { background: #dbeafe; }
 
         /* Profil Kartı Özelleri */
         .avatar-container { position: relative; width: 90px; height: 90px; }
@@ -104,32 +101,78 @@
         .info-box-title { font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase; }
         .info-box-value { font-size: 1rem; font-weight: 800; color: #0f172a; }
 
-        /* Destek Sistemi Alanı */
         .support-input {
             width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #cbd5e1;
             outline: none; font-weight: 600; font-size: 0.9rem; background: #f8fafc;
         }
 
+        /* Sağ Taraf Yandan Açılan Ev (Menü) Çekmecesi (Drawer) */
+        .drawer-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.4); display: none; z-index: 999; backdrop-filter: blur(3px);
+        }
+        .right-drawer {
+            position: fixed; top: 0; right: -300px; width: 280px; height: 100%;
+            background: #ffffff; z-index: 1000; transition: right 0.3s ease-in-out;
+            padding: 25px 20px; display: flex; flex-direction: column; gap: 15px; box-shadow: -5px 0 25px rgba(0,0,0,0.08);
+        }
+        .right-drawer.open { right: 0; }
+        .drawer-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; }
+        .drawer-item {
+            display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px;
+            background: #f8fafc; color: #0f172a; font-weight: 700; font-size: 0.9rem;
+            cursor: pointer; border: 1px solid #e2e8f0; transition: 0.2s;
+        }
+        .drawer-item:hover { background: #e2e8f0; }
+
         /* Modal Pencereler */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(15, 23, 42, 0.4); display: none;
-            align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px);
+            align-items: center; justify-content: center; z-index: 1001; backdrop-filter: blur(4px);
         }
-        .modal-content { background: #ffffff; width: 90%; max-width: 400px; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+        .modal-content { background: #ffffff; width: 90%; max-width: 420px; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 12px; max-height: 85vh; overflow-y: auto; }
+        .ticket-card-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; font-size: 0.85rem; display: flex; flex-direction: column; gap: 4px; }
     </style>
 </head>
 <body>
 
-    <!-- Üst Navbar -->
+    <!-- Üst Navbar (Logolu & Buton Değişmeyen) -->
     <div class="navbar">
         <div class="nav-left">
-            <a href="#" class="nav-home-btn" onclick="openMenuModal()"><i class="fa-solid fa-house"></i></a>
-            <div class="logo-area"><span class="badge-ta">NATO</span> Komuta</div>
+            <button class="nav-home-btn" onclick="openRightDrawer()"><i class="fa-solid fa-house"></i></button>
+            <div class="logo-area">
+                <!-- Sürüklenen Özel NATO Alevli Amblemi -->
+                <img src="https://i.ibb.co/68vXjQ1/1000018162.jpg" class="nato-logo-img" alt="NATO Logo">
+                <span>NATO Komuta</span>
+            </div>
         </div>
         <button class="btn-login-header" onclick="openLoginModal()" id="headerLoginBtn">
             <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
         </button>
+    </div>
+
+    <!-- Sağ Yandan Açılan Menü (Drawer) -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeRightDrawer()"></div>
+    <div class="right-drawer" id="rightDrawer">
+        <div class="drawer-header">
+            <h3 style="font-weight: 800; font-size: 1.1rem;"><i class="fa-solid fa-compass" style="color:#0052ff;"></i> Bölümler</h3>
+            <button onclick="closeRightDrawer()" style="background:none; border:none; font-size: 1.2rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="drawer-item" onclick="goToSlide(0); closeRightDrawer();">
+            <i class="fa-solid fa-globe" style="color:#0052ff;"></i> 1. NATO Tanıtım
+        </div>
+        <div class="drawer-item" onclick="goToSlide(1); closeRightDrawer();">
+            <i class="fa-solid fa-headset" style="color:#dc2626;"></i> 2. Destek Sistemi
+        </div>
+        <div class="drawer-item" onclick="goToSlide(2); closeRightDrawer();">
+            <i class="fa-solid fa-id-card" style="color:#16a34a;"></i> 3. Kimlik / Profil
+        </div>
+        
+        <!-- Yalnızca Senin (Paşam) Erişebildiği Özel Komuta Bölümü -->
+        <div class="drawer-item" id="adminDrawerBtn" style="display:none; background:#fef2f2; border-color:#fca5a5; color:#dc2626;" onclick="openAdminModal(); closeRightDrawer();">
+            <i class="fa-solid fa-user-shield"></i> Yüksek Komuta & Talepler
+        </div>
     </div>
 
     <!-- Ana Slider Kartlar Alanı -->
@@ -212,7 +255,7 @@
         </div>
     </div>
 
-    <!-- Giriş / Kimlik Modal Penceresi -->
+    <!-- Giriş Modal Penceresi -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content">
             <h3 style="font-size: 1.2rem; font-weight: 800;">NATO Oturum Açma</h3>
@@ -230,27 +273,30 @@
         </div>
     </div>
 
-    <!-- Sağ Üst / Ev Menü Modal -->
-    <div class="modal-overlay" id="menuModal">
+    <!-- Sadece Senin Erişebildiğin Yüksek Komuta & Talepler Masası Modal -->
+    <div class="modal-overlay" id="adminModal">
         <div class="modal-content">
-            <h3 style="font-size: 1.2rem; font-weight: 800;"><i class="fa-solid fa-compass" style="color:#0052ff;"></i> Komuta Menüsü</h3>
-            <p style="font-size: 0.85rem; color: #64748b;">Görüntülemek istediğiniz bölümü seçin:</p>
+            <h3 style="font-size: 1.2rem; font-weight: 800; color:#dc2626;"><i class="fa-solid fa-user-shield"></i> Yüksek Komuta Yönetim Paneli</h3>
             
-            <button class="btn-action-card" style="justify-content: flex-start;" onclick="alert('Branşlar: Piyade, Zırhlı Birlikler, Özel Harekat')">
-                <i class="fa-solid fa-shield-cat"></i> Branşlar & Birlikler
-            </button>
-            <button class="btn-action-card" style="justify-content: flex-start;" onclick="alert('Alt Gruplar: Yıldırım Orduları, Kızıl Sağ El, OMEGA')">
-                <i class="fa-solid fa-users-rectangle"></i> Özel Gruplar
-            </button>
-            <button class="btn-action-card" style="justify-content: flex-start;" onclick="alert('Emeği Geçenler: Sinan Paşa Hz. ve Destek Ekibi')">
-                <i class="fa-solid fa-award"></i> Emeği Geçenler & Kurucu
-            </button>
+            <div style="display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
+                <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">DESTEK TALEPLERİNE BAKABİLECEK YETKİLİ DISCORD ID'LERİ (Virgülle Ayırın)</label>
+                <input type="text" id="staffIdsInput" class="support-input" placeholder="Örn: 12345678, 87654321">
+                <button class="btn-action-card" style="background:#0052ff; color:#fff; padding: 8px;" onclick="saveStaffList()">Yetkili Listesini Kaydet</button>
+            </div>
 
-            <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top: 5px;" onclick="toggleModal('menuModal')">Kapat</button>
+            <h4 style="font-size: 1rem; font-weight: 800; margin-top: 5px;"><i class="fa-solid fa-list-check"></i> Gelen Destek Talepleri</h4>
+            <div id="ticketsListArea" style="display: flex; flex-direction: column; gap: 8px;">
+                <!-- Talepler buraya dinamik listelenecek -->
+            </div>
+
+            <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top: 5px;" onclick="toggleModal('adminModal')">Kapat</button>
         </div>
     </div>
 
     <script>
+        // SENİN DİSCORD ID'N (Yüksek Komuta Yetkilisi)
+        const authorizedAdminID = "1539374890405204070"; 
+
         // Slider Mantığı
         let currentSlide = 0;
         const totalSlides = 3;
@@ -265,6 +311,11 @@
             document.getElementById('sliderTitleIndicator').innerHTML = titles[currentSlide];
         }
 
+        function goToSlide(slideIndex) {
+            currentSlide = slideIndex;
+            updateSlider();
+        }
+
         function nextCard() {
             currentSlide = (currentSlide + 1) % totalSlides;
             updateSlider();
@@ -275,21 +326,26 @@
             updateSlider();
         }
 
+        // Sağ Yandan Açılan Çekmece (Drawer)
+        function openRightDrawer() {
+            document.getElementById('rightDrawer').classList.add('open');
+            document.getElementById('drawerOverlay').style.display = 'block';
+        }
+
+        function closeRightDrawer() {
+            document.getElementById('rightDrawer').classList.remove('open');
+            document.getElementById('drawerOverlay').style.display = 'none';
+        }
+
         // Modallar
-        function openLoginModal() {
-            document.getElementById('loginModal').style.display = 'flex';
-        }
-
-        function openMenuModal() {
-            document.getElementById('menuModal').style.display = 'flex';
-        }
-
+        function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+        function openAdminModal() { loadAdminPanelData(); document.getElementById('adminModal').style.display = 'flex'; }
         function toggleModal(modalId) {
             const m = document.getElementById(modalId);
             m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        // Manuel Minecraft Oyuncu Adı Girme
+        // Manuel Nick
         function setMcNameManually() {
             const nick = prompt("Lütfen Minecraft Oyuncu Adınızı (IGN) giriniz:");
             if (nick && nick.trim() !== "") {
@@ -299,9 +355,7 @@
             }
         }
 
-        // Destek Talebi Yetki Kontrolü
-        const authorizedSupportStaff = ["123456789012345678", "987654321098765432"]; 
-
+        // Destek Talebi Oluşturma & Kaydetme
         function createSupportTicket() {
             const topic = document.getElementById('supportTopic').value.trim();
             if(!topic) {
@@ -313,86 +367,12 @@
             const isLoggedIn = localStorage.getItem('nato_logged_in');
 
             if (isLoggedIn === 'true' && userData.id) {
-                const isStaff = authorizedSupportStaff.includes(userData.id);
-                if (isStaff) {
-                    alert("Destek talebiniz başarıyla oluşturuldu, Komutanım! (Yetkili olarak yetki masasına düştü)");
-                } else {
-                    alert("Destek talebiniz oluşturuldu! Normal personel/üye olarak destek hattına iletildi.");
-                }
-            } else {
-                alert("Destek talebi oluşturmak için önce sağ üstten Giriş Yapmalısınız!");
-                openLoginModal();
-            }
-            document.getElementById('supportTopic').value = "";
-        }
-
-        window.onload = async function() {
-            const fragment = new URLSearchParams(window.location.hash.slice(1));
-            const accessToken = fragment.get('access_token');
-
-            if (accessToken) {
-                try {
-                    const res = await fetch('https://discord.com/api/users/@me', {
-                        headers: { authorization: `Bearer ${accessToken}` }
-                    });
-                    const userData = await res.json();
-
-                    if (userData.id) {
-                        const avatarUrl = userData.avatar 
-                            ? `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png?size=256`
-                            : `https://cdn.discordapp.com/embed/avatars/0.png`;
-
-                        const userObj = {
-                            id: userData.id,
-                            username: userData.username,
-                            global_name: userData.global_name || userData.username,
-                            avatarUrl: avatarUrl
-                        };
-
-                        localStorage.setItem('nato_user', JSON.stringify(userObj));
-                        localStorage.setItem('nato_logged_in', 'true');
-                    }
-                } catch (err) {
-                    console.error("Discord profil hatası:", err);
-                }
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
-
-            updateUI();
-        };
-
-        function updateUI() {
-            const isLoggedIn = localStorage.getItem('nato_logged_in');
-            const userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
-            const savedMc = localStorage.getItem('nato_mc_nick');
-
-            // Minecraft İsmi Güncelleme Kontrolü
-            const mcElement = document.getElementById('mcTag');
-            if (savedMc && savedMc.trim() !== "") {
-                mcElement.innerText = savedMc;
-                mcElement.style.color = "#0f172a";
-                mcElement.style.fontSize = "1.1rem";
-            } else {
-                mcElement.innerText = "Henüz Girilmedi";
-                mcElement.style.color = "#64748b";
-                mcElement.style.fontSize = "0.95rem";
-            }
-
-            if (isLoggedIn === 'true' && userData.username) {
-                document.getElementById('userAvatar').src = userData.avatarUrl;
-                document.getElementById('topBadge').innerText = 'Doğrulanmış';
-                document.getElementById('displayName').innerText = userData.global_name;
-                document.getElementById('usernameTag').innerText = `@${userData.username}`;
-                
-                const headerBtn = document.getElementById('headerLoginBtn');
-                if(headerBtn) {
-                    headerBtn.innerHTML = `<i class="fa-solid fa-user-check"></i> ${userData.global_name}`;
-                }
-                
-                document.getElementById('rolesList').innerHTML = '<span class="role-pill-ta" style="background:#0052ff; color:#fff;">ONAYLI ÜYE</span> <span class="role-pill-ta">NATO ASKERİ</span>';
-            }
-        }
-    </script>
-</body>
-                </html>
-                
+                let existingTickets = JSON.parse(localStorage.getItem('nato_tickets') || '[]');
+                const newTicket = {
+                    user: userData.global_name || userData.username,
+                    userId: userData.id,
+                    topic: topic,
+                    date: new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'})
+                };
+                existingTickets.push(newTicket);
+                localSt
