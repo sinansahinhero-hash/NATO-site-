@@ -174,7 +174,7 @@
                 </div>
             </div>
 
-            <!-- 3. KART: Kişisel Profil Kartı (Nick Ayarla Butonu Kaldırıldı) -->
+            <!-- 3. KART: Kişisel Profil Kartı -->
             <div class="card-item">
                 <div class="badge-kurumsal" style="background:#f0fdf4; color:#16a34a;">KİMLİK KARTI</div>
                 <div class="avatar-header" style="display: flex; align-items: center; gap: 15px;">
@@ -196,18 +196,23 @@
 
                 <div class="info-box">
                     <div class="info-box-title">MİNECRAFT OYUNCU ADI (IGN)</div>
-                    <div class="info-box-value" id="mcTag" style="color: #0f172a;">Bağlantı Bekleniyor</div>
+                    <div class="info-box-value" id="mcTag" style="color: #64748b;">Henüz Girilmedi</div>
                 </div>
 
-                <button class="btn-action-card" onclick="openLoginModal()">
-                    <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap / Hesap Bağla
-                </button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-action-card" onclick="openLoginModal()" style="flex: 1;">
+                        <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
+                    </button>
+                    <button class="btn-action-card" onclick="setMcNameManually()" style="flex: 1; background:#0f172a; color:#fff;">
+                        <i class="fa-solid fa-cube"></i> Nick Ayarla
+                    </button>
+                </div>
             </div>
 
         </div>
     </div>
 
-    <!-- Giriş / Kimlik Modal Penceresi (Gerçek Xbox/Microsoft ve Discord Yönlendirmesi) -->
+    <!-- Giriş / Kimlik Modal Penceresi -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content">
             <h3 style="font-size: 1.2rem; font-weight: 800;">NATO Oturum Açma</h3>
@@ -217,10 +222,9 @@
                 <i class="fa-brands fa-discord"></i> Discord ile Giriş Yap
             </a>
 
-            <!-- Gerçek Xbox / Microsoft Live OAuth2 Giriş Linki -->
-            <a href="https://login.live.com/oauth20_authorize.srf?client_id=00000000402b5328&response_type=token&scope=XboxLive.signin&redirect_uri=https%3A%2F%2Fnatox-mauve.vercel.app" class="btn-action-card" style="background:#107C10; color:#fff;">
-                <i class="fa-brands fa-xbox"></i> Xbox Hesabı ile Bağlan
-            </a>
+            <button class="btn-action-card" style="background:#0f172a; color:#fff;" onclick="setMcNameManually(); toggleModal('loginModal');">
+                <i class="fa-solid fa-cube"></i> Minecraft Nickini Gir
+            </button>
 
             <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top: 5px;" onclick="toggleModal('loginModal')">Kapat</button>
         </div>
@@ -285,6 +289,16 @@
             m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
         }
 
+        // Manuel Minecraft Oyuncu Adı Girme
+        function setMcNameManually() {
+            const nick = prompt("Lütfen Minecraft Oyuncu Adınızı (IGN) giriniz:");
+            if (nick && nick.trim() !== "") {
+                localStorage.setItem('nato_mc_nick', nick.trim());
+                alert("Minecraft nickiniz (" + nick.trim() + ") kaydedildi!");
+                updateUI();
+            }
+        }
+
         // Destek Talebi Yetki Kontrolü
         const authorizedSupportStaff = ["123456789012345678", "987654321098765432"]; 
 
@@ -337,7 +351,6 @@
 
                         localStorage.setItem('nato_user', JSON.stringify(userObj));
                         localStorage.setItem('nato_logged_in', 'true');
-                        localStorage.setItem('nato_mc_nick', userData.global_name || userData.username);
                     }
                 } catch (err) {
                     console.error("Discord profil hatası:", err);
@@ -353,10 +366,16 @@
             const userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
             const savedMc = localStorage.getItem('nato_mc_nick');
 
+            // Minecraft İsmi Güncelleme Kontrolü
+            const mcElement = document.getElementById('mcTag');
             if (savedMc && savedMc.trim() !== "") {
-                document.getElementById('mcTag').innerText = savedMc;
+                mcElement.innerText = savedMc;
+                mcElement.style.color = "#0f172a";
+                mcElement.style.fontSize = "1.1rem";
             } else {
-                document.getElementById('mcTag').innerText = "Bağlantı Bekleniyor";
+                mcElement.innerText = "Henüz Girilmedi";
+                mcElement.style.color = "#64748b";
+                mcElement.style.fontSize = "0.95rem";
             }
 
             if (isLoggedIn === 'true' && userData.username) {
@@ -375,5 +394,5 @@
         }
     </script>
 </body>
-    </html>
-    
+                </html>
+                
