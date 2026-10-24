@@ -17,24 +17,27 @@
             width: 100%; max-width: 480px; background: #ffffff; border-radius: 20px;
             padding: 12px 20px; display: flex; align-items: center; justify-content: space-between;
             box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 20px; border: 1px solid #f1f5f9;
+            position: relative; z-index: 50;
         }
 
-        .nav-left { display: flex; align-items: center; gap: 12px; }
+        .nav-left { display: flex; align-items: center; gap: 10px; }
         .nav-home-btn {
             background: #f8fafc; border: 1px solid #e2e8f0; width: 38px; height: 38px;
             border-radius: 12px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; color: #334155; font-size: 1.1rem; border: none;
+            cursor: pointer; color: #334155; font-size: 1.1rem; text-decoration: none; transition: 0.2s;
         }
+        .nav-home-btn:hover { background: #f1f5f9; }
 
         /* NATO Özel Amblem Alanı */
-        .logo-area { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; color: #0f172a; }
+        .logo-area { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.1rem; color: #0f172a; }
         .nato-logo-img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid #dc2626; box-shadow: 0 0 8px rgba(220,38,38,0.3); }
 
         .btn-login-header {
             background: #0052ff; color: #ffffff; border: none; padding: 8px 16px;
             border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer;
-            display: flex; align-items: center; gap: 6px; text-decoration: none;
+            display: flex; align-items: center; gap: 6px; transition: 0.2s; text-decoration: none;
         }
+        .btn-login-header:hover { background: #0040cc; }
 
         /* Kart Konteyneri ve Slider Alanı */
         .slider-container {
@@ -49,7 +52,7 @@
         .card-item {
             min-width: 100%; background: #ffffff; border-radius: 24px;
             padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid #f1f5f9;
-            display: flex; flex-direction: column; gap: 16px; box-sizing: border-box;
+            display: flex; flex-direction: column; gap: 16px;
         }
 
         /* Slider Kontrol Şeridi */
@@ -65,6 +68,7 @@
             border-radius: 10px; display: flex; align-items: center; justify-content: center;
             cursor: pointer; color: #334155; font-size: 0.9rem; transition: 0.2s;
         }
+        .slide-btn:hover { background: #e2e8f0; }
 
         /* Kart İçi Elementler */
         .badge-kurumsal { background: #eff6ff; color: #1d4ed8; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; width: fit-content; }
@@ -75,8 +79,9 @@
             background: #eff6ff; color: #0052ff; border: none; padding: 12px;
             border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer;
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            text-decoration: none; width: 100%;
+            text-decoration: none; transition: 0.2s; width: 100%;
         }
+        .btn-action-card:hover { background: #dbeafe; }
 
         /* Profil Kartı Özelleri */
         .avatar-container { position: relative; width: 90px; height: 90px; }
@@ -101,12 +106,13 @@
         .info-box-title { font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase; }
         .info-box-value { font-size: 1rem; font-weight: 800; color: #0f172a; }
 
+        /* Destek Sistemi Alanı */
         .support-input {
             width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #cbd5e1;
             outline: none; font-weight: 600; font-size: 0.9rem; background: #f8fafc;
         }
 
-        /* Sağ Taraf Yandan Açılan Ev (Menü) Çekmecesi (Drawer) */
+        /* Sağ Taraf Yandan Açılan Ev (Menü) Çekmecesi */
         .drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(15, 23, 42, 0.4); display: none; z-index: 999; backdrop-filter: blur(3px);
@@ -137,16 +143,17 @@
 </head>
 <body>
 
-    <!-- Üst Navbar (Logolu & Buton Değişmeyen) -->
+    <!-- Üst Navbar -->
     <div class="navbar">
         <div class="nav-left">
             <button class="nav-home-btn" onclick="openRightDrawer()"><i class="fa-solid fa-house"></i></button>
             <div class="logo-area">
-                <!-- Sürüklenen Özel NATO Alevli Amblemi -->
+                <!-- İstediğin Alevli NATO Logosu -->
                 <img src="https://i.ibb.co/68vXjQ1/1000018162.jpg" class="nato-logo-img" alt="NATO Logo">
-                <span>NATO Komuta</span>
+                <span>NATO</span>
             </div>
         </div>
+        <!-- Üst Buton: Discord İsmi Yazmaz, Sabit Kalır -->
         <button class="btn-login-header" onclick="openLoginModal()" id="headerLoginBtn">
             <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
         </button>
@@ -169,7 +176,7 @@
             <i class="fa-solid fa-id-card" style="color:#16a34a;"></i> 3. Kimlik / Profil
         </div>
         
-        <!-- Yalnızca Senin (Paşam) Erişebildiği Özel Komuta Bölümü -->
+        <!-- Yalnızca Senin (Paşam) Erişebildiğin Özel Yüksek Komuta Bölümü -->
         <div class="drawer-item" id="adminDrawerBtn" style="display:none; background:#fef2f2; border-color:#fca5a5; color:#dc2626;" onclick="openAdminModal(); closeRightDrawer();">
             <i class="fa-solid fa-user-shield"></i> Yüksek Komuta & Talepler
         </div>
@@ -197,7 +204,7 @@
                 <div class="badge-kurumsal">KURUMSAL</div>
                 <div class="card-heading"><i class="fa-solid fa-globe" style="color:#0052ff;"></i> NATO Hakkında</div>
                 <p class="card-text">
-                    NATO; disiplin, taktik strateji ve askeri hiyerarşiyi esas alan lider gaming topluluğudur. Minecraft Towny sunucularında ve operasyonlarda hakimiyet kurunuz.
+                    NATO; disiplin, taktik strateji ve hiyerarşiyi esas alan lider gaming topluluğudur. Minecraft Towny sunucularında ve operasyonlarda hakimiyet kurunuz.
                 </p>
                 <a href="https://discord.gg/seninlinkin" target="_blank" class="btn-action-card">
                     Discord Sunucusuna Katıl <i class="fa-solid fa-arrow-right"></i>
@@ -273,28 +280,26 @@
         </div>
     </div>
 
-    <!-- Sadece Senin Erişebildiğin Yüksek Komuta & Talepler Masası Modal -->
+    <!-- Yüksek Komuta & Talepler Masası Modal (Sadece Senin Discord ID'n ile açılır) -->
     <div class="modal-overlay" id="adminModal">
         <div class="modal-content">
             <h3 style="font-size: 1.2rem; font-weight: 800; color:#dc2626;"><i class="fa-solid fa-user-shield"></i> Yüksek Komuta Yönetim Paneli</h3>
             
             <div style="display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
-                <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">DESTEK TALEPLERİNE BAKABİLECEK YETKİLİ DISCORD ID'LERİ (Virgülle Ayırın)</label>
+                <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">DESTEK TALEPLERİNE BAKABİLECEK YETKİLİ DİSCORD ID'LERİ</label>
                 <input type="text" id="staffIdsInput" class="support-input" placeholder="Örn: 12345678, 87654321">
                 <button class="btn-action-card" style="background:#0052ff; color:#fff; padding: 8px;" onclick="saveStaffList()">Yetkili Listesini Kaydet</button>
             </div>
 
             <h4 style="font-size: 1rem; font-weight: 800; margin-top: 5px;"><i class="fa-solid fa-list-check"></i> Gelen Destek Talepleri</h4>
-            <div id="ticketsListArea" style="display: flex; flex-direction: column; gap: 8px;">
-                <!-- Talepler buraya dinamik listelenecek -->
-            </div>
+            <div id="ticketsListArea" style="display: flex; flex-direction: column; gap: 8px;"></div>
 
             <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top: 5px;" onclick="toggleModal('adminModal')">Kapat</button>
         </div>
     </div>
 
     <script>
-        // SENİN DİSCORD ID'N (Yüksek Komuta Yetkilisi)
+        // SENİN DİSCORD ID'N (Yüksek Komuta Yetkilisi - Kendi ID'ni buraya yazabilirsin)
         const authorizedAdminID = "1539374890405204070"; 
 
         // Slider Mantığı
@@ -311,8 +316,8 @@
             document.getElementById('sliderTitleIndicator').innerHTML = titles[currentSlide];
         }
 
-        function goToSlide(slideIndex) {
-            currentSlide = slideIndex;
+        function goToSlide(index) {
+            currentSlide = index;
             updateSlider();
         }
 
@@ -326,7 +331,7 @@
             updateSlider();
         }
 
-        // Sağ Yandan Açılan Çekmece (Drawer)
+        // Sağ Yandan Açılan Çekmece (Drawer) Kontrolleri
         function openRightDrawer() {
             document.getElementById('rightDrawer').classList.add('open');
             document.getElementById('drawerOverlay').style.display = 'block';
@@ -338,14 +343,21 @@
         }
 
         // Modallar
-        function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
-        function openAdminModal() { loadAdminPanelData(); document.getElementById('adminModal').style.display = 'flex'; }
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function openAdminModal() {
+            loadAdminPanelData();
+            document.getElementById('adminModal').style.display = 'flex';
+        }
+
         function toggleModal(modalId) {
             const m = document.getElementById(modalId);
             m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        // Manuel Nick
+        // Manuel Nick Ayarlama
         function setMcNameManually() {
             const nick = prompt("Lütfen Minecraft Oyuncu Adınızı (IGN) giriniz:");
             if (nick && nick.trim() !== "") {
@@ -355,7 +367,7 @@
             }
         }
 
-        // Destek Talebi Oluşturma & Kaydetme
+        // Destek Talebi Oluşturma
         function createSupportTicket() {
             const topic = document.getElementById('supportTopic').value.trim();
             if(!topic) {
@@ -368,11 +380,4 @@
 
             if (isLoggedIn === 'true' && userData.id) {
                 let existingTickets = JSON.parse(localStorage.getItem('nato_tickets') || '[]');
-                const newTicket = {
-                    user: userData.global_name || userData.username,
-                    userId: userData.id,
-                    topic: topic,
-                    date: new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'})
-                };
-                existingTickets.push(newTicket);
-                localSt
+              
