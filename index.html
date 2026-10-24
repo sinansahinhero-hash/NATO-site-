@@ -196,7 +196,7 @@
 
                 <div class="info-box">
                     <div class="info-box-title">MİNECRAFT OYUNCU ADI (IGN)</div>
-                    <div class="info-box-value" id="mcTag" style="color: #0f172a;">Herobrine_sinan</div>
+                    <div class="info-box-value" id="mcTag" style="color: #64748b; font-size: 0.95rem;">Bağlanmadı</div>
                 </div>
 
                 <div style="display: flex; gap: 8px;">
@@ -222,12 +222,9 @@
                 <i class="fa-brands fa-discord"></i> Discord ile Giriş Yap
             </a>
 
-            <button class="btn-action-card" style="background:#107C10; color:#fff;" onclick="alert('Xbox bağlantısı aktif.')">
-                <i class="fa-brands fa-xbox"></i> Xbox Hesabı ile Bağlan
-            </button>
-
-            <button class="btn-action-card" style="background:#00a4ef; color:#fff;" onclick="alert('Microsoft PC bağlantısı aktif.')">
-                <i class="fa-brands fa-windows"></i> Microsoft Hesabı (PC)
+            <!-- Microsoft / Xbox OAuth2 Canlı Oturum Bağlantısı -->
+            <button class="btn-action-card" style="background:#107C10; color:#fff;" onclick="loginWithXbox()">
+                <i class="fa-brands fa-xbox"></i> Xbox / Microsoft Hesabı ile Bağlan
             </button>
 
             <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top: 5px;" onclick="toggleModal('loginModal')">Kapat</button>
@@ -293,8 +290,18 @@
             m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
         }
 
+        // Xbox / Microsoft Oturum Açma
+        function loginWithXbox() {
+            const clientId = "00000000402b5328"; // Xbox Live Client ID
+            const redirectUri = encodeURIComponent(window.location.origin + window.location.pathname);
+            const scope = encodeURIComponent("XboxLive.signin XboxLive.offline_access");
+            
+            // Microsoft OAuth2 Sayfasına Yönlendir
+            const xboxAuthUrl = `https://login.live.com/oauth20_authorize.srf?client_id=${clientId}&response_type=token&scope=${scope}&redirect_uri=${redirectUri}`;
+            window.location.href = xboxAuthUrl;
+        }
+
         // Destek Talebi Yetki Kontrolü
-        // Senin belirleyeceğin yetkili Discord ID'lerini buraya yazabilirsin!
         const authorizedSupportStaff = ["123456789012345678", "987654321098765432"]; 
 
         function createSupportTicket() {
@@ -308,7 +315,6 @@
             const isLoggedIn = localStorage.getItem('nato_logged_in');
 
             if (isLoggedIn === 'true' && userData.id) {
-                // Kullanıcı giriş yapmış, yetkili mi kontrol edelim
                 const isStaff = authorizedSupportStaff.includes(userData.id);
                 if (isStaff) {
                     alert("Destek talebiniz başarıyla oluşturuldu, Komutanım! (Yetkili olarak yetki masasına düştü)");
@@ -335,7 +341,8 @@
             const fragment = new URLSearchParams(window.location.hash.slice(1));
             const accessToken = fragment.get('access_token');
 
-            if (accessToken) {
+            // Discord Giriş Kontrolü
+            if (accessToken && !window.location.hash.includes('xbox')) {
                 try {
                     const res = await fetch('https://discord.com/api/users/@me', {
                         headers: { authorization: `Bearer ${accessToken}` }
@@ -369,20 +376,21 @@
         function updateUI() {
             const isLoggedIn = localStorage.getItem('nato_logged_in');
             const userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
-            const savedMc = localStorage.getItem('nato_mc_nick') || 'Herobrine_sinan';
+            const savedMc = localStorage.getItem('nato_mc_nick');
 
-            document.getElementById('mcTag').innerText = savedMc;
+            // Minecraft İsmi Dinamik Kontrolü
+            const mcElement = document.getElementById('mcTag');
+            if (savedMc && savedMc.trim() !== "") {
+                mcElement.innerText = savedMc;
+                mcElement.style.color = "#0f172a";
+                mcElement.style.fontSize = "1.1rem";
+            } else {
+                mcElement.innerText = "Henüz Bağlanmadı";
+                mcElement.style.color = "#64748b";
+                mcElement.style.fontSize = "0.95rem";
+            }
 
             if (isLoggedIn === 'true' && userData.username) {
                 document.getElementById('userAvatar').src = userData.avatarUrl;
                 document.getElementById('topBadge').innerText = 'Doğrulanmış';
-                document.getElementById('displayName').innerText = userData.global_name;
-                document.getElementById('usernameTag').innerText = `@${userData.username}`;
-                document.getElementById('headerLoginBtninnerHTML').innerHTML = `<i class="fa-solid fa-user-check"></i> ${userData.global_name}`;
-                
-                document.getElementById('rolesList').innerHTML = '<span class="role-pill-ta" style="background:#0052ff; color:#fff;">ONAYLI ÜYE</span> <span class="role-pill-ta">NATO ASKERİ</span>';
-            }
-        }
-    </script>
-</body>
-</html>
+                document.getElementById('disp
