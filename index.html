@@ -4,257 +4,375 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NATO</title>
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px 15px; overflow-x: hidden; }
 
+        /* Üst Şerit Navbar */
         .navbar {
             width: 100%; max-width: 480px; background: #ffffff; border-radius: 20px;
             padding: 12px 20px; display: flex; align-items: center; justify-content: space-between;
             box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 20px; border: 1px solid #f1f5f9;
         }
+
         .nav-left { display: flex; align-items: center; gap: 10px; }
         .nav-home-btn {
             background: #f8fafc; border: 1px solid #e2e8f0; width: 38px; height: 38px;
-            border-radius: 12px; display: flex; align-items: center; justify-content: justify-content;
-            align-items: center; justify-content: center; cursor: pointer; color: #334155; font-size: 1.1rem; border: none;
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; color: #334155; font-size: 1.1rem; text-decoration: none; transition: 0.2s;
         }
+        .nav-home-btn:hover { background: #f1f5f9; }
 
-        .logo-area { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.1rem; color: #0f172a; }
-        .nato-logo-img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid #dc2626; }
+        /* Kırmızı Alevli NATO Logo Tasarımı */
+        .logo-area { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.2rem; color: #0f172a; }
+        .nato-fire-icon {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: radial-gradient(circle, #ff4d4d 0%, #990000 100%);
+            display: flex; align-items: center; justify-content: center;
+            color: #ffffff; font-size: 0.9rem; border: 2px solid #ff1a1a;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
 
         .btn-login-header {
             background: #0052ff; color: #ffffff; border: none; padding: 8px 16px;
             border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer;
+            display: flex; align-items: center; gap: 6px; transition: 0.2s; text-decoration: none;
+        }
+        .btn-login-header:hover { background: #0040cc; }
+
+        /* Kart Konteyneri ve Slider Alanı */
+        .slider-container {
+            width: 100%; max-width: 480px; position: relative; overflow: hidden;
+            display: flex; flex-direction: column; gap: 15px;
         }
 
-        .slider-container { width: 100%; max-width: 480px; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 15px; }
-        .cards-wrapper { display: flex; transition: transform 0.3s ease-in-out; width: 100%; }
-        .card-item { min-width: 100%; background: #ffffff; border-radius: 24px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 16px; box-sizing: border-box; }
+        .cards-wrapper {
+            display: flex; transition: transform 0.3s ease-in-out; width: 100%;
+        }
 
-        .slider-nav-bar { display: flex; align-items: center; justify-content: space-between; background: #ffffff; border: 1px solid #f1f5f9; border-radius: 16px; padding: 10px 16px; }
-        .slider-title-tag { font-size: 0.9rem; font-weight: 800; color: #0f172a; }
+        .card-item {
+            min-width: 100%; background: #ffffff; border-radius: 24px;
+            padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid #f1f5f9;
+            display: flex; flex-direction: column; gap: 16px;
+        }
+
+        /* Slider Kontrol Şeridi */
+        .slider-nav-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            background: #ffffff; border: 1px solid #f1f5f9; border-radius: 16px;
+            padding: 10px 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+        .slider-title-tag { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 800; color: #0f172a; }
         .slider-btns { display: flex; gap: 6px; }
-        .slide-btn { background: #f8fafc; border: 1px solid #e2e8f0; width: 36px; height: 36px; border-radius: 10px; cursor: pointer; font-weight: 800; }
+        .slide-btn {
+            background: #f8fafc; border: 1px solid #e2e8f0; width: 34px; height: 34px;
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; color: #334155; font-size: 0.9rem; transition: 0.2s;
+        }
+        .slide-btn:hover { background: #e2e8f0; }
 
+        /* Kart İçi Elementler */
         .badge-kurumsal { background: #eff6ff; color: #1d4ed8; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; width: fit-content; }
-        .card-heading { font-size: 1.25rem; font-weight: 800; color: #0f172a; }
+        .card-heading { font-size: 1.25rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px; }
         .card-text { font-size: 0.9rem; color: #475569; font-weight: 500; line-height: 1.5; }
 
-        .btn-action-card { background: #eff6ff; color: #0052ff; border: none; padding: 12px; border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer; text-decoration: none; width: 100%; text-align: center; }
+        .btn-action-card {
+            background: #eff6ff; color: #0052ff; border: none; padding: 12px;
+            border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            text-decoration: none; transition: 0.2s; width: 100%;
+        }
+        .btn-action-card:hover { background: #dbeafe; }
 
-        .avatar-container { position: relative; width: 80px; height: 80px; }
+        /* Profil Kartı Özelleri (Videodaki Düzen) */
+        .avatar-container { position: relative; width: 70px; height: 70px; }
         .avatar-img { width: 100%; height: 100%; border-radius: 20px; object-fit: cover; border: 1px solid #e2e8f0; }
-        .info-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px 16px; }
-        .support-input { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #cbd5e1; outline: none; font-weight: 600; font-size: 0.9rem; background: #f8fafc; }
+        .role-badge-overlay {
+            position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%);
+            background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155;
+            font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 8px; white-space: nowrap;
+        }
+        .user-title-area h2 { font-size: 1.1rem; font-weight: 800; color: #0f172a; }
+        .username-tag { font-size: 0.85rem; font-weight: 600; color: #64748b; }
 
-        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); display: none; z-index: 999; }
-        .right-drawer { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: #ffffff; z-index: 1000; transition: right 0.3s ease-in-out; padding: 25px 20px; display: flex; flex-direction: column; gap: 15px; }
-        .right-drawer.open { right: 0; }
-        .drawer-item { padding: 12px; border-radius: 12px; background: #f8fafc; color: #0f172a; font-weight: 700; font-size: 0.9rem; cursor: pointer; border: 1px solid #e2e8f0; }
+        .profile-tags-grid { display: flex; gap: 10px; margin-top: 5px; }
+        .profile-tag-box {
+            flex: 1; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
+            padding: 10px; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 700;
+        }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); display: none; align-items: center; justify-content: center; z-index: 1001; }
+        /* Destek Sistemi Alanı */
+        .support-input {
+            width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #cbd5e1;
+            outline: none; font-weight: 600; font-size: 0.9rem; background: #f8fafc;
+        }
+
+        /* Modal Pencereler */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.4); display: none;
+            align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px);
+        }
         .modal-content { background: #ffffff; width: 90%; max-width: 400px; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+        .ticket-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; font-size: 0.85rem; }
     </style>
 </head>
 <body>
 
+    <!-- Üst Navbar -->
     <div class="navbar">
         <div class="nav-left">
-            <button class="nav-home-btn" onclick="openDrawer()">🏠</button>
+            <a href="#" class="nav-home-btn" onclick="openMenuModal()"><i class="fa-solid fa-house"></i></a>
             <div class="logo-area">
-                <img src="https://i.ibb.co/68vXjQ1/1000018162.jpg" class="nato-logo-img" alt="NATO Logo">
+                <!-- Asla Kırılmayan Gömülü Alevli NATO İkonu -->
+                <div class="nato-fire-icon"><i class="fa-solid fa-crosshairs"></i></div>
                 <span>NATO Komuta</span>
             </div>
         </div>
-        <button class="btn-login-header" onclick="openModal('loginModal')" id="headerLoginBtn">Giriş Yap</button>
+        <button class="btn-login-header" onclick="openLoginModal()" id="headerLoginBtn">
+            <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
+        </button>
     </div>
 
-    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
-    <div class="right-drawer" id="rightDrawer">
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:10px;">
-            <h3>Bölümler</h3>
-            <button onclick="closeDrawer()" style="border:none; background:none; font-size:1.2rem; cursor:pointer;">✕</button>
-        </div>
-        <div class="drawer-item" onclick="goToSlide(0); closeDrawer();">1. NATO Tanıtım</div>
-        <div class="drawer-item" onclick="goToSlide(1); closeDrawer();">2. Destek Sistemi</div>
-        <div class="drawer-item" onclick="goToSlide(2); closeDrawer();">3. Kimlik / Profil</div>
-        <div class="drawer-item" id="adminDrawerBtn" style="display:none; background:#fef2f2; border-color:#fca5a5; color:#dc2626;" onclick="openAdminModal(); closeDrawer();">Yüksek Komuta & Talepler</div>
-    </div>
-
+    <!-- Ana Slider Kartlar Alanı -->
     <div class="slider-container">
+        
+        <!-- Kart Kontrol Üst Şeridi -->
         <div class="slider-nav-bar">
-            <div class="slider-title-tag" id="sliderTitleIndicator">NATO Tanıtım</div>
+            <div class="slider-title-tag" id="sliderTitleIndicator">
+                <i class="fa-solid fa-shield-halved" style="color:#0052ff;"></i> NATO Tanıtım
+            </div>
             <div class="slider-btns">
-                <button class="slide-btn" onclick="prevCard()">&lt;</button>
-                <button class="slide-btn" onclick="nextCard()">&gt;</button>
+                <button class="slide-btn" onclick="prevCard()"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="slide-btn" onclick="nextCard()"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
         </div>
 
+        <!-- Kaydırılabilir Kartlar (Videodaki Yapı) -->
         <div class="cards-wrapper" id="cardsWrapper">
-            <!-- Kart 1 -->
+            
+            <!-- 1. KART: NATO Tanıtım -->
             <div class="card-item">
-                <div class="badge-kurumsal">KURUMSAL</div>
-                <div class="card-heading">NATO Hakkında</div>
-                <p class="card-text">NATO; disiplin, taktik strateji ve hiyerarşiyi esas alan lider gaming topluluğudur.</p>
-                <a href="https://discord.gg/seninlinkin" target="_blank" class="btn-action-card">Discord Sunucusuna Katıl</a>
+                <div class="badge-kurumsal"><i class="fa-solid fa-circle-info"></i> KURUMSAL</div>
+                <div class="card-heading"><i class="fa-solid fa-globe" style="color:#0052ff;"></i> NATO Hakkında</div>
+                <p class="card-text">
+                    NATO; disiplin, taktik strateji ve askeri hiyerarşiyi esas alan lider gaming topluluğudur. Minecraft Towny sunucularında ve operasyonlarda hakimiyet kurunuz.
+                </p>
+                <a href="https://discord.gg/seninlinkin" target="_blank" class="btn-action-card">
+                    Discord Sunucusuna Katıl <i class="fa-solid fa-arrow-right"></i>
+                </a>
             </div>
 
-            <!-- Kart 2 -->
+            <!-- 2. KART: NATO Destek Sistemi -->
             <div class="card-item">
-                <div class="badge-kurumsal" style="background:#fef2f2; color:#dc2626;">YARDIM MASASI</div>
-                <div class="card-heading">NATO Destek Sistemi</div>
-                <p class="card-text">Talep veya şikayetinizi kısaca belirtin.</p>
-                <input type="text" id="supportTopic" class="support-input" placeholder="Konuyu belirtin...">
-                <button class="btn-action-card" style="background:#dc2626; color:#ffffff;" onclick="createSupportTicket()">Destek Talebi Oluştur</button>
+                <div class="badge-kurumsal" style="background:#fef2f2; color:#dc2626;"><i class="fa-solid fa-headset"></i> YARDIM MASASI</div>
+                <div class="card-heading"><i class="fa-solid fa-comments" style="color:#dc2626;"></i> NATO Destek Sistemi</div>
+                <p class="card-text">Talep veya şikayetinizi kısaca belirtin, yetkili kadromuz size dönüş yapsın.</p>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 5px;">
+                    <input type="text" id="supportTopic" class="support-input" placeholder="Kısaca konuyu belirtin...">
+                    <button class="btn-action-card" style="background:#dc2626; color:#ffffff;" onclick="createSupportTicket()">
+                        Destek Talebi Oluştur <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
             </div>
 
-            <!-- Kart 3 -->
+            <!-- 3. KART: Kişisel Profil Kartı (Videodaki Birebir Yapı) -->
             <div class="card-item">
-                <div class="badge-kurumsal" style="background:#f0fdf4; color:#16a34a;">KİMLİK KARTI</div>
-                <div style="display:flex; align-items:center; gap:15px;">
+                <div class="badge-kurumsal" style="background:#f0fdf4; color:#16a34a;"><i class="fa-solid fa-id-card"></i> KİMLİK KARTI</div>
+                
+                <div style="display: flex; align-items: center; gap: 15px;">
                     <div class="avatar-container">
                         <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="avatar-img" id="userAvatar" alt="Avatar">
+                        <div class="role-badge-overlay" id="topBadge">Misafir</div>
                     </div>
                     <div>
-                        <h2 id="displayName" style="font-size:1.1rem;">Giriş Yapılmadı</h2>
-                        <span id="usernameTag" style="font-size:0.85rem; color:#64748b;">@misafir</span>
+                        <div class="user-title-area">
+                            <h2 id="displayName">Giriş Yapılmadı</h2>
+                            <span class="username-tag" id="usernameTag">Lütfen sağ üstten giriş yapın</span>
+                        </div>
                     </div>
                 </div>
-                <div class="info-box">
-                    <div style="font-size:0.7rem; font-weight:700; color:#64748b;">MİNECRAFT NİCK</div>
-                    <div id="mcTag" style="font-weight:800; color:#0f172a;">Henüz Girilmedi</div>
+
+                <div class="profile-tags-grid">
+                    <div class="profile-tag-box">
+                        <i class="fa-solid fa-cube" style="color:#107C10;"></i> MC: <span id="mcTag" style="font-weight:800; color:#0f172a;">-</span>
+                    </div>
+                    <div class="profile-tag-box">
+                        <i class="fa-brands fa-discord" style="color:#5865F2;"></i> DC: <span id="dcTag" style="font-weight:800; color:#0f172a;">-</span>
+                    </div>
                 </div>
-                <div style="display:flex; gap:8px;">
-                    <button class="btn-action-card" onclick="openModal('loginModal')">Giriş Yap</button>
-                    <button class="btn-action-card" style="background:#0f172a; color:#fff;" onclick="setMcNameManually()">Nick Ayarla</button>
+
+                <div style="display: flex; gap: 8px; margin-top: 5px;">
+                    <button class="btn-action-card" onclick="openLoginModal()" style="flex: 1;">
+                        <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
+                    </button>
+                    <button class="btn-action-card" onclick="setMcNameManually()" style="flex: 1; background:#0f172a; color:#fff;">
+                        <i class="fa-solid fa-cube"></i> Nick Ayarla
+                    </button>
                 </div>
             </div>
+
         </div>
     </div>
 
-    <!-- Modallar -->
+    <!-- Giriş Modal Penceresi -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content">
-            <h3>NATO Oturum Açma</h3>
-            <button class="btn-action-card" style="background:#5865F2; color:#fff;" onclick="loginDiscord()">Discord ile Giriş Yap</button>
-            <button class="btn-action-card" style="background:#0f172a; color:#fff;" onclick="setMcNameManually(); closeModal('loginModal');">Minecraft Nickini Gir</button>
-            <button class="btn-action-card" style="background:#f1f5f9; color:#334155;" onclick="closeModal('loginModal')">Kapat</button>
+            <h3 style="font-size: 1.2rem; font-weight: 800;">NATO Oturum Açma</h3>
+            <p style="font-size: 0.85rem; color: #64748b;">Platform seçimi yapın:</p>
+            
+            <a href="https://discord.com/oauth2/authorize?client_id=1539374890405204070&response_type=token&redirect_uri=https%3A%2F%2Fnatox-mauve.vercel.app&scope=identify+email" class="btn-action-card" style="background:#5865F2; color:#fff;">
+                <i class="fa-brands fa-discord"></i> Discord ile Giriş Yap
+            </a>
+
+            <button class="btn-action-card" style="background:#0f172a; color:#fff;" onclick="setMcNameManually(); toggleModal('loginModal');">
+                <i class="fa-solid fa-cube"></i> Minecraft Nickini Gir
+            </button>
+
+            <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top: 5px;" onclick="toggleModal('loginModal')">Kapat</button>
         </div>
     </div>
 
+    <!-- Sol Üst Ev Menü Modal -->
+    <div class="modal-overlay" id="menuModal">
+        <div class="modal-content">
+            <h3 style="font-size: 1.2rem; font-weight: 800;"><i class="fa-solid fa-compass" style="color:#0052ff;"></i> Komuta Menüsü</h3>
+            <p style="font-size: 0.85rem; color: #64748b;">Gitmek istediğiniz kartı seçin:</p>
+            
+            <button class="btn-action-card" style="justify-content: flex-start;" onclick="goToSlide(0); toggleModal('menuModal');">
+                <i class="fa-solid fa-globe" style="color:#0052ff;"></i> 1. NATO Tanıtım
+            </button>
+            <button class="btn-action-card" style="justify-content: flex-start;" onclick="goToSlide(1); toggleModal('menuModal');">
+                <i class="fa-solid fa-headset" style="color:#dc2626;"></i> 2. Destek Sistemi
+            </button>
+            <button class="btn-action-card" style="justify-content: flex-start;" onclick="goToSlide(2); toggleModal('menuModal');">
+                <i class="fa-solid fa-id-card" style="color:#16a34a;"></i> 3. Kimlik / Profil
+            </button>
+
+            <!-- Yalnızca Senin ID'n İçin Özel Yönetim Paneli -->
+            <button class="btn-action-card" id="adminMenuBtn" style="display:none; justify-content: flex-start; background:#fef2f2; color:#dc2626;" onclick="openAdminModal(); toggleModal('menuModal');">
+                <i class="fa-solid fa-user-shield"></i> Yüksek Komuta & Talepler
+            </button>
+
+            <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top: 5px;" onclick="toggleModal('menuModal')">Kapat</button>
+        </div>
+    </div>
+
+    <!-- Özel Yönetim & Talepler Modalı -->
     <div class="modal-overlay" id="adminModal">
         <div class="modal-content">
-            <h3 style="color:#dc2626;">Yüksek Komuta Paneli</h3>
-            <input type="text" id="staffIdsInput" class="support-input" placeholder="Yetkili Discord ID'leri">
-            <button class="btn-action-card" style="background:#0052ff; color:#fff;" onclick="saveStaffList()">Kaydet</button>
-            <h4>Gelen Talepler</h4>
-            <div id="ticketsListArea"></div>
-            <button class="btn-action-card" style="background:#f1f5f9; color:#334155;" onclick="closeModal('adminModal')">Kapat</button>
+            <h3 style="font-size: 1.2rem; font-weight: 800; color:#dc2626;"><i class="fa-solid fa-user-shield"></i> Yüksek Komuta Paneli</h3>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
+                <label style="font-size: 0.75rem; font-weight: 700; color: #64748b;">YETKİLİ DİSCORD ID'LERİ</label>
+                <input type="text" id="staffIdsInput" class="support-input" placeholder="Örn: 12345678, 87654321">
+                <button class="btn-action-card" style="background:#0052ff; color:#fff; padding: 8px;" onclick="saveStaffList()">Kaydet</button>
+            </div>
+
+            <h4 style="font-size: 1rem; font-weight: 800; margin-top: 5px;"><i class="fa-solid fa-list-check"></i> Gelen Destek Talepleri</h4>
+            <div id="ticketsListArea" style="display: flex; flex-direction: column; gap: 8px;"></div>
+
+            <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top: 5px;" onclick="toggleModal('adminModal')">Kapat</button>
         </div>
     </div>
 
     <script>
-        var authorizedAdminID = "1539374890405204070";
-        var currentSlide = 0;
-        var titles = ["NATO Tanıtım", "NATO Destek Sistemi", "Kişisel Profil"];
+        const authorizedAdminID = "1539374890405204070"; 
+
+        // Videodaki Slider Mantığı
+        let currentSlide = 0;
+        const totalSlides = 3;
+        const titles = [
+            '<i class="fa-solid fa-shield-halved" style="color:#0052ff;"></i> NATO Tanıtım',
+            '<i class="fa-solid fa-headset" style="color:#dc2626;"></i> NATO Destek Sistemi',
+            '<i class="fa-solid fa-id-card" style="color:#16a34a;"></i> Kişisel Profil'
+        ];
 
         function updateSlider() {
-            document.getElementById('cardsWrapper').style.transform = "translateX(-" + (currentSlide * 100) + "%)";
-            document.getElementById('sliderTitleIndicator').innerText = titles[currentSlide];
+            document.getElementById('cardsWrapper').style.transform = `translateX(-${currentSlide * 100}%)`;
+            document.getElementById('sliderTitleIndicator').innerHTML = titles[currentSlide];
         }
 
-        function goToSlide(idx) { currentSlide = idx; updateSlider(); }
-        function nextCard() { currentSlide = (currentSlide + 1) % 3; updateSlider(); }
-        function prevCard() { currentSlide = (currentSlide - 1 + 3) % 3; updateSlider(); }
-
-        function openDrawer() { document.getElementById('rightDrawer').classList.add('open'); document.getElementById('drawerOverlay').style.display = 'block'; }
-        function closeDrawer() { document.getElementById('rightDrawer').classList.remove('open'); document.getElementById('drawerOverlay').style.display = 'none'; }
-
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function openAdminModal() { loadAdminPanelData(); openModal('adminModal'); }
-
-        function loginDiscord() {
-            var redirect = encodeURIComponent(window.location.origin + window.location.pathname);
-            window.location.href = "https://discord.com/oauth2/authorize?client_id=1539374890405204070&response_type=token&redirect_uri=" + redirect + "&scope=identify+email";
+        function goToSlide(idx) {
+            currentSlide = idx;
+            updateSlider();
         }
 
+        function nextCard() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlider();
+        }
+
+        function prevCard() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlider();
+        }
+
+        // Modallar
+        function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+        function openMenuModal() { document.getElementById('menuModal').style.display = 'flex'; }
+        function openAdminModal() { loadAdminPanelData(); document.getElementById('adminModal').style.display = 'flex'; }
+        
+        function toggleModal(modalId) {
+            const m = document.getElementById(modalId);
+            m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // Nick Ayarlama
         function setMcNameManually() {
-            var nick = prompt("Minecraft Oyuncu Adınızı giriniz:");
+            const nick = prompt("Lütfen Minecraft Oyuncu Adınızı (IGN) giriniz:");
             if (nick && nick.trim() !== "") {
                 localStorage.setItem('nato_mc_nick', nick.trim());
-                alert("Kaydedildi!");
+                alert("Minecraft nickiniz (" + nick.trim() + ") kaydedildi!");
                 updateUI();
             }
         }
 
+        // Destek Talebi
         function createSupportTicket() {
-            var topic = document.getElementById('supportTopic').value.trim();
-            if(!topic) return alert("Lütfen konu belirtin!");
-            var userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
-            if (localStorage.getItem('nato_logged_in') === 'true' && userData.id) {
-                var tickets = JSON.parse(localStorage.getItem('nato_tickets') || '[]');
-                tickets.push({ user: userData.global_name || userData.username, topic: topic, date: new Date().toLocaleTimeString() });
-                localStorage.setItem('nato_tickets', JSON.stringify(tickets));
-                alert("Talep iletildi!");
+            const topic = document.getElementById('supportTopic').value.trim();
+            if(!topic) {
+                alert("Lütfen destek talebiniz için kısa bir konu belirtin!");
+                return;
+            }
+
+            const userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
+            const isLoggedIn = localStorage.getItem('nato_logged_in');
+
+            if (isLoggedIn === 'true' && userData.id) {
+                let existingTickets = JSON.parse(localStorage.getItem('nato_tickets') || '[]');
+                existingTickets.push({
+                    user: userData.global_name || userData.username,
+                    userId: userData.id,
+                    topic: topic,
+                    date: new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'})
+                });
+                localStorage.setItem('nato_tickets', JSON.stringify(existingTickets));
+                alert("Destek talebiniz iletildi!");
             } else {
-                alert("Önce giriş yapmalısınız!");
-                openModal('loginModal');
+                alert("Destek talebi oluşturmak için önce sağ üstten Giriş Yapmalısınız!");
+                openLoginModal();
             }
             document.getElementById('supportTopic').value = "";
         }
 
+        // Admin Panel
         function saveStaffList() {
             localStorage.setItem('nato_staff_list', document.getElementById('staffIdsInput').value);
-            alert("Kaydedildi!");
+            alert("Yetkili kadrosu başarıyla güncellendi.");
         }
 
         function loadAdminPanelData() {
             document.getElementById('staffIdsInput').value = localStorage.getItem('nato_staff_list') || authorizedAdminID;
-            var tickets = JSON.parse(localStorage.getItem('nato_tickets') || '[]');
-            var area = document.getElementById('ticketsListArea');
-            if(tickets.length === 0) { area.innerHTML = "Bekleyen talep yok."; }
-            else {
-                area.innerHTML = tickets.map(function(t){ return "<div style='background:#f1f5f9; padding:8px; margin-top:5px; border-radius:8px;'><b>"+t.user+"</b>: "+t.topic+"</div>"; }).join('');
-            }
-        }
-
-        window.onload = function() {
-            var fragment = new URLSearchParams(window.location.hash.slice(1));
-            var accessToken = fragment.get('access_token');
-            if (accessToken) {
-                fetch('https://discord.com/api/users/@me', { headers: { authorization: "Bearer " + accessToken } })
-                .then(function(res){ return res.json(); })
-                .then(function(userData){
-                    if (userData.id) {
-                        var avatarUrl = userData.avatar ? "https://cdn.discordapp.com/avatars/" + userData.id + "/" + userData.avatar + ".png" : "https://cdn.discordapp.com/embed/avatars/0.png";
-                        localStorage.setItem('nato_user', JSON.stringify({ id: userData.id, username: userData.username, global_name: userData.global_name || userData.username, avatarUrl: avatarUrl }));
-                        localStorage.setItem('nato_logged_in', 'true');
-                        updateUI();
-                    }
-                });
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
-            updateUI();
-        };
-
-        function updateUI() {
-            var isLoggedIn = localStorage.getItem('nato_logged_in');
-            var userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
-            var savedMc = localStorage.getItem('nato_mc_nick');
-
-            if (savedMc) { document.getElementById('mcTag').innerText = savedMc; }
-            if (isLoggedIn === 'true' && userData.username) {
-                document.getElementById('userAvatar').src = userData.avatarUrl;
-                document.getElementById('displayName').innerText = userData.global_name;
-                document.getElementById('usernameTag').innerText = "@" + userData.username;
-                document.getElementById('headerLoginBtn').innerText = "Giriş Yapıldı";
-                if (userData.id === authorizedAdminID) { document.getElementById('adminDrawerBtn').style.display = 'block'; }
-            }
-        }
-    </script>
-</body>
-                                                                                                                                                                      </html>
-                                                                                              
+            const tickets = JSON.parse(localStorage.getItem('nato_tickets') || '[]');
+            const listArea = document.getElementById('ticketsListArea');
+            if (tickets.length === 0) {
+                listArea.innerHTML = '<div style="font-size:0.85rem; color:#64748b;">Henüz bekleyen talep yok.</div>';
+            } else {
+                listArea.innerHTML = tickets.map(t => `
+                    <div class="ticket-item">
+        
