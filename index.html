@@ -174,7 +174,7 @@
                 </div>
             </div>
 
-            <!-- 3. KART: Kişisel Profil Kartı -->
+            <!-- 3. KART: Kişisel Profil Kartı (Nick Ayarla Butonu Kaldırıldı) -->
             <div class="card-item">
                 <div class="badge-kurumsal" style="background:#f0fdf4; color:#16a34a;">KİMLİK KARTI</div>
                 <div class="avatar-header" style="display: flex; align-items: center; gap: 15px;">
@@ -196,23 +196,18 @@
 
                 <div class="info-box">
                     <div class="info-box-title">MİNECRAFT OYUNCU ADI (IGN)</div>
-                    <div class="info-box-value" id="mcTag" style="color: #0f172a;">Henüz Ayarlanmadı</div>
+                    <div class="info-box-value" id="mcTag" style="color: #0f172a;">Bağlantı Bekleniyor</div>
                 </div>
 
-                <div style="display: flex; gap: 8px;">
-                    <button class="btn-action-card" onclick="openLoginModal()" style="flex: 1;">
-                        <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
-                    </button>
-                    <button class="btn-action-card" onclick="openMcPrompt()" style="flex: 1; background:#0f172a; color:#fff;">
-                        <i class="fa-solid fa-cube"></i> Nick Ayarla
-                    </button>
-                </div>
+                <button class="btn-action-card" onclick="openLoginModal()">
+                    <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap / Hesap Bağla
+                </button>
             </div>
 
         </div>
     </div>
 
-    <!-- Giriş / Kimlik Modal Penceresi -->
+    <!-- Giriş / Kimlik Modal Penceresi (Gerçek Xbox/Microsoft ve Discord Yönlendirmesi) -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content">
             <h3 style="font-size: 1.2rem; font-weight: 800;">NATO Oturum Açma</h3>
@@ -222,19 +217,16 @@
                 <i class="fa-brands fa-discord"></i> Discord ile Giriş Yap
             </a>
 
-            <button class="btn-action-card" style="background:#107C10; color:#fff;" onclick="alert('Xbox bağlantısı aktif.')">
+            <!-- Gerçek Xbox / Microsoft Live OAuth2 Giriş Linki -->
+            <a href="https://login.live.com/oauth20_authorize.srf?client_id=00000000402b5328&response_type=token&scope=XboxLive.signin&redirect_uri=https%3A%2F%2Fnatox-mauve.vercel.app" class="btn-action-card" style="background:#107C10; color:#fff;">
                 <i class="fa-brands fa-xbox"></i> Xbox Hesabı ile Bağlan
-            </button>
-
-            <button class="btn-action-card" style="background:#00a4ef; color:#fff;" onclick="alert('Microsoft PC bağlantısı aktif.')">
-                <i class="fa-brands fa-windows"></i> Microsoft Hesabı (PC)
-            </button>
+            </a>
 
             <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top: 5px;" onclick="toggleModal('loginModal')">Kapat</button>
         </div>
     </div>
 
-    <!-- Sağ Üst / Ev Menü Modal (Branşlar, Gruplar, Emeği Geçenler) -->
+    <!-- Sağ Üst / Ev Menü Modal -->
     <div class="modal-overlay" id="menuModal">
         <div class="modal-content">
             <h3 style="font-size: 1.2rem; font-weight: 800;"><i class="fa-solid fa-compass" style="color:#0052ff;"></i> Komuta Menüsü</h3>
@@ -293,7 +285,7 @@
             m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        // Destek Talebi Yetki Kontrolü (Senin Discord ID'ni buraya ekleyebilirsin)
+        // Destek Talebi Yetki Kontrolü
         const authorizedSupportStaff = ["123456789012345678", "987654321098765432"]; 
 
         function createSupportTicket() {
@@ -318,15 +310,6 @@
                 openLoginModal();
             }
             document.getElementById('supportTopic').value = "";
-        }
-
-        function openMcPrompt() {
-            const mcName = prompt("Minecraft Oyuncu Adınızı (IGN) girin:");
-            if (mcName && mcName.trim() !== "") {
-                localStorage.setItem('nato_mc_nick', mcName.trim());
-                alert("Minecraft nickiniz (" + mcName.trim() + ") kaydedildi!");
-                updateUI();
-            }
         }
 
         window.onload = async function() {
@@ -354,6 +337,7 @@
 
                         localStorage.setItem('nato_user', JSON.stringify(userObj));
                         localStorage.setItem('nato_logged_in', 'true');
+                        localStorage.setItem('nato_mc_nick', userData.global_name || userData.username);
                     }
                 } catch (err) {
                     console.error("Discord profil hatası:", err);
@@ -369,11 +353,10 @@
             const userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
             const savedMc = localStorage.getItem('nato_mc_nick');
 
-            // Minecraft İsmi Güncelleme Kontrolü
             if (savedMc && savedMc.trim() !== "") {
                 document.getElementById('mcTag').innerText = savedMc;
             } else {
-                document.getElementById('mcTag').innerText = "Henüz Ayarlanmadı";
+                document.getElementById('mcTag').innerText = "Bağlantı Bekleniyor";
             }
 
             if (isLoggedIn === 'true' && userData.username) {
@@ -382,7 +365,6 @@
                 document.getElementById('displayName').innerText = userData.global_name;
                 document.getElementById('usernameTag').innerText = `@${userData.username}`;
                 
-                // Hatalı olan innerHTML yazımı düzeltildi
                 const headerBtn = document.getElementById('headerLoginBtn');
                 if(headerBtn) {
                     headerBtn.innerHTML = `<i class="fa-solid fa-user-check"></i> ${userData.global_name}`;
