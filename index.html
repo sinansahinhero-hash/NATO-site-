@@ -185,7 +185,7 @@
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // Discord Oturum Açma
+        // Discord Oturum Açma (Otomatik Doğru Siteye Yönlendirir)
         function loginDiscord() {
             var redirect = encodeURIComponent(window.location.origin + window.location.pathname);
             window.location.href = "https://discord.com/oauth2/authorize?client_id=1539374890405204070&response_type=token&redirect_uri=" + redirect + "&scope=identify+email";
@@ -257,7 +257,6 @@
                 document.getElementById('mcTag').innerText = savedMc;
                 document.getElementById('mcTag').style.color = "#0052ff";
                 
-                // Butonları kilitli hale getir
                 var btn1 = document.getElementById('btnSetMc');
                 var btn2 = document.getElementById('btnModalSetMc');
                 if(btn1) { btn1.innerText = "Nick Kilitlendi"; btn1.disabled = true; }
