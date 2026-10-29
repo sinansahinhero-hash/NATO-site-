@@ -191,13 +191,11 @@
     </div>
 
     <script>
-        // Webhook Linkin Entegre Edilmiştir
         var DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1565443830595977298/3IRqOLIUWF5RMyIEGQZN3oo0S3weWOs2BVPFL1Td934HpKgVkgcPksRAUQmS_0V2-1Y9";
 
         var currentSlide = 0;
         var titles = ["1. NATO Tanıtım", "2. NATO Destek Sistemi", "3. Kişisel Profil"];
 
-        // Sağdan Sola Çekmece Aç/Kapa
         function openDrawer() {
             document.getElementById('rightDrawer').classList.add('open');
             document.getElementById('drawerOverlay').style.display = 'block';
@@ -207,7 +205,6 @@
             document.getElementById('drawerOverlay').style.display = 'none';
         }
 
-        // Branşları ve Birimleri Ekrana Getirme
         function showBranchDetails(branchName) {
             closeDrawer();
             document.getElementById('cardsWrapper').style.display = 'none';
@@ -247,7 +244,6 @@
             document.querySelector('.slider-nav-bar').style.display = 'flex';
         }
 
-        // Başvuruyu Discord Webhook'a Gönderme
         function submitBranchApplication(branchName) {
             var userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
             var isLoggedIn = localStorage.getItem('nato_logged_in');
@@ -265,7 +261,7 @@
                     title: "🪖 Yeni Branş Katılım Talebi!",
                     color: 3447003,
                     fields: [
-                        { name: "👤 Başvuran", value: "<@" + userData.id + "> (" + userData.global_name + ")", inline: true },
+                        { name: "👤 Başvuran", value: "<@" + userData.id + "> (" + (userData.global_name || userData.username) + ")", inline: true },
                         { name: "🎮 Minecraft IGN", value: "`" + savedMc + "`", inline: true },
                         { name: "🎖️ Talep Edilen Branş", value: "**" + branchName + "**", inline: false }
                     ],
@@ -288,7 +284,6 @@
             });
         }
 
-        // Slider Kontrolleri
         function updateSlider() {
             document.getElementById('cardsWrapper').style.transform = "translateX(-" + (currentSlide * 100) + "%)";
             document.getElementById('sliderTitleIndicator').innerText = titles[currentSlide];
@@ -300,13 +295,11 @@
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // Discord Oturum Açma
         function loginDiscord() {
             var redirect = encodeURIComponent(window.location.origin + window.location.pathname);
             window.location.href = "https://discord.com/oauth2/authorize?client_id=1539374890405204070&response_type=token&redirect_uri=" + redirect + "&scope=identify+email";
         }
 
-        // Minecraft Nick Girme (1 KEZ GİRİLİR, KİLİTLENİR)
         function setMcNameManually() {
             var existingMc = localStorage.getItem('nato_mc_nick');
             if (existingMc && existingMc.trim() !== "") {
@@ -322,7 +315,6 @@
             }
         }
 
-        // Destek Talebi
         function createSupportTicket() {
             var topic = document.getElementById('supportTopic').value.trim();
             if(!topic) return alert("Lütfen konu belirtin!");
@@ -340,14 +332,20 @@
             document.getElementById('supportTopic').value = "";
         }
 
-        // Sayfa Yüklendiğinde
-        window.onload = function() {
-            var fragment = new URLSearchParams(window.location.hash.slice(1));
-            var accessToken = fragment.get('access_token');
+        function updateUI() {
+            var isLoggedIn = localStorage.getItem('nato_logged_in');
+            var userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
+            var savedMc = localStorage.getItem('nato_mc_nick');
 
-            if (accessToken) {
-                fetch('https://discord.com/api/users/@me', { headers: { authorization: "Bearer " + accessToken } })
-                .then(function(res){ return res.json(); })
-                .then(function(userData){
-                    if (userData.id) {
-                        var avatarUrl = userData.avatar ? "https://cdn.discordapp.com/avatars/" + userData.id + "/" + u
+            if (isLoggedIn === 'true' && userData.username) {
+                document.getElementById('displayName').innerText = userData.global_name || userData.username;
+                document.getElementById('usernameTag').innerText = "@" + userData.username;
+                if(userData.avatar) {
+                    document.getElementById('userAvatar').src = "https://cdn.discordapp.com/avatars/" + userData.id + "/" + userData.avatar + ".png";
+                }
+                document.getElementById('headerLoginBtn').innerText = "Hesap Açık";
+            }
+
+            if (savedMc) {
+                document.getElementById('mcTag').innerText = savedMc;
+      
