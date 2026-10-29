@@ -86,36 +86,36 @@
     <!-- Üst Navbar -->
     <div class="navbar">
         <div class="nav-left">
-            <button class="nav-home-btn" onclick="openDrawer()">🏠</button>
+            <button type="button" class="nav-home-btn" id="btnOpenDrawer">🏠</button>
             <div class="logo-area">
                 <span class="badge-ta">NATO</span> Komuta
             </div>
         </div>
-        <button class="btn-login-header" onclick="openModal('loginModal')" id="headerLoginBtn">Giriş Yap</button>
+        <button type="button" class="btn-login-header" id="headerLoginBtn">Giriş Yap</button>
     </div>
 
-    <!-- Sağdan Sola Kayarak Açılan Çekmece (Drawer) -->
-    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+    <!-- Sağdan Sola Açılan Çekmece (Drawer) -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
     <div class="right-drawer" id="rightDrawer">
         <div class="drawer-header">
             <h3 style="font-size: 1.1rem; font-weight: 800;">Komuta Branşları</h3>
-            <button class="drawer-close-btn" onclick="closeDrawer()">✕</button>
+            <button type="button" class="drawer-close-btn" id="btnCloseDrawer">✕</button>
         </div>
         
-        <button class="menu-list-btn" onclick="showBranchDetails('Kara Kuvvetleri')">🪖 Kara Kuvvetleri</button>
-        <button class="menu-list-btn" onclick="showBranchDetails('Özel Kuvvetler')">⚡ Özel Kuvvetler</button>
-        <button class="menu-list-btn" onclick="showBranchDetails('Askeri İnzibat')">🛡️ Askeri İnzibat</button>
-        <button class="menu-list-btn" onclick="showBranchDetails('Sınır Müfettişleri')">🎯 Sınır Müfettişleri</button>
+        <button type="button" class="menu-list-btn" id="btnBranch1">🪖 Kara Kuvvetleri</button>
+        <button type="button" class="menu-list-btn" id="btnBranch2">⚡ Özel Kuvvetler</button>
+        <button type="button" class="menu-list-btn" id="btnBranch3">🛡️ Askeri İnzibat</button>
+        <button type="button" class="menu-list-btn" id="btnBranch4">🎯 Sınır Müfettişleri</button>
     </div>
 
     <!-- Ana Slider Kartlar Alanı -->
     <div class="slider-container">
         <!-- Kart Kontrol Üst Şeridi -->
-        <div class="slider-nav-bar">
+        <div class="slider-nav-bar" id="sliderNavBar">
             <div class="slider-title-tag" id="sliderTitleIndicator">1. NATO Tanıtım</div>
             <div class="slider-btns">
-                <button class="slide-btn" onclick="prevCard()">&lt;</button>
-                <button class="slide-btn" onclick="nextCard()">&gt;</button>
+                <button type="button" class="slide-btn" id="btnPrevCard">&lt;</button>
+                <button type="button" class="slide-btn" id="btnNextCard">&gt;</button>
             </div>
         </div>
 
@@ -138,7 +138,7 @@
                 <div class="card-heading">NATO Destek Sistemi</div>
                 <p class="card-text">Talep veya şikayetinizi kısaca belirtin, yetkili kadromuz size dönüş yapsın.</p>
                 <input type="text" id="supportTopic" class="support-input" placeholder="Konuyu kısaca belirtin...">
-                <button class="btn-action-card" style="background:#dc2626; color:#ffffff;" onclick="createSupportTicket()">Destek Talebi Oluştur</button>
+                <button type="button" class="btn-action-card" style="background:#dc2626; color:#ffffff;" id="btnCreateTicket">Destek Talebi Oluştur</button>
             </div>
 
             <!-- 3. KART: Kişisel Discord / Oyuncu Profili -->
@@ -160,8 +160,8 @@
                 </div>
 
                 <div style="display: flex; gap: 8px;">
-                    <button class="btn-action-card" onclick="openModal('loginModal')">Giriş Yap</button>
-                    <button class="btn-action-card" style="background:#0f172a; color:#fff;" id="btnSetMc" onclick="setMcNameManually()">Nick Gir</button>
+                    <button type="button" class="btn-action-card" id="btnCardLogin">Giriş Yap</button>
+                    <button type="button" class="btn-action-card" style="background:#0f172a; color:#fff;" id="btnSetMc">Nick Gir</button>
                 </div>
             </div>
 
@@ -173,8 +173,8 @@
                 <div class="badge-kurumsal" id="branchBadge">BRANŞ</div>
                 <div class="card-heading" id="branchTitle">Branş Adı</div>
                 <div class="card-text" id="branchUnits">Birimler...</div>
-                <button class="btn-action-card" style="background:#0052ff; color:#fff; margin-top:10px;" id="applyBranchBtn" onclick="">Bu Branşa Başvur / Katıl</button>
-                <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top:5px;" onclick="closeBranchDetails()">Ana Sayfaya Dön</button>
+                <button type="button" class="btn-action-card" style="background:#0052ff; color:#fff; margin-top:10px;" id="applyBranchBtn">Bu Branşa Başvur / Katıl</button>
+                <button type="button" class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top:5px;" id="btnCloseBranchDetails">Ana Sayfaya Dön</button>
             </div>
         </div>
     </div>
@@ -184,9 +184,9 @@
         <div class="modal-content">
             <h3 style="font-size: 1.2rem; font-weight: 800;">NATO Oturum Açma</h3>
             <p style="font-size: 0.85rem; color: #64748b;">Hesabınızı bağlamak için giriş yapın:</p>
-            <button class="btn-action-card" style="background:#5865F2; color:#fff;" onclick="loginDiscord()">Discord ile Giriş Yap</button>
-            <button class="btn-action-card" style="background:#0f172a; color:#fff;" id="btnModalSetMc" onclick="setMcNameManually(); closeModal('loginModal');">Minecraft Nickini Gir</button>
-            <button class="btn-action-card" style="background:#f1f5f9; color:#334155;" onclick="closeModal('loginModal')">Kapat</button>
+            <button type="button" class="btn-action-card" style="background:#5865F2; color:#fff;" id="btnModalDiscordLogin">Discord ile Giriş Yap</button>
+            <button type="button" class="btn-action-card" style="background:#0f172a; color:#fff;" id="btnModalSetMc">Minecraft Nickini Gir</button>
+            <button type="button" class="btn-action-card" style="background:#f1f5f9; color:#334155;" id="btnCloseModal">Kapat</button>
         </div>
     </div>
 
@@ -195,7 +195,9 @@
 
         var currentSlide = 0;
         var titles = ["1. NATO Tanıtım", "2. NATO Destek Sistemi", "3. Kişisel Profil"];
+        var selectedBranchName = "";
 
+        // Çekmece Kontrolleri
         function openDrawer() {
             document.getElementById('rightDrawer').classList.add('open');
             document.getElementById('drawerOverlay').style.display = 'block';
@@ -205,19 +207,30 @@
             document.getElementById('drawerOverlay').style.display = 'none';
         }
 
+        // Modallar
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        // Slider Kontrolleri
+        function updateSlider() {
+            document.getElementById('cardsWrapper').style.transform = "translateX(-" + (currentSlide * 100) + "%)";
+            document.getElementById('sliderTitleIndicator').innerText = titles[currentSlide];
+        }
+        function nextCard() { currentSlide = (currentSlide + 1) % 3; updateSlider(); }
+        function prevCard() { currentSlide = (currentSlide - 1 + 3) % 3; updateSlider(); }
+
+        // Branş Detayı Gösterme
         function showBranchDetails(branchName) {
+            selectedBranchName = branchName;
             closeDrawer();
+            
             document.getElementById('cardsWrapper').style.display = 'none';
-            document.querySelector('.slider-nav-bar').style.display = 'none';
-            var area = document.getElementById('branchDetailArea');
-            area.style.display = 'block';
+            document.getElementById('sliderNavBar').style.display = 'none';
+            document.getElementById('branchDetailArea').style.display = 'block';
 
             var b = document.getElementById('branchBadge');
             var t = document.getElementById('branchTitle');
             var units = document.getElementById('branchUnits');
-            var applyBtn = document.getElementById('applyBranchBtn');
-
-            applyBtn.setAttribute('onclick', "submitBranchApplication('" + branchName + "')");
 
             if(branchName === 'Kara Kuvvetleri') {
                 b.innerText = "KARA KUVVETLERİ BRANŞI";
@@ -241,10 +254,34 @@
         function closeBranchDetails() {
             document.getElementById('branchDetailArea').style.display = 'none';
             document.getElementById('cardsWrapper').style.display = 'flex';
-            document.querySelector('.slider-nav-bar').style.display = 'flex';
+            document.getElementById('sliderNavBar').style.display = 'flex';
         }
 
-        function submitBranchApplication(branchName) {
+        // Discord Oturum Açma
+        function loginDiscord() {
+            var redirect = encodeURIComponent(window.location.origin + window.location.pathname);
+            window.location.href = "https://discord.com/oauth2/authorize?client_id=1539374890405204070&response_type=token&redirect_uri=" + redirect + "&scope=identify+email";
+        }
+
+        // Minecraft Nick Girme (1 KEZ)
+        function setMcNameManually() {
+            var existingMc = localStorage.getItem('nato_mc_nick');
+            if (existingMc && existingMc.trim() !== "") {
+                alert("Minecraft nickiniz zaten kaydedilmiş (" + existingMc + ") ve değiştirilemez!");
+                return;
+            }
+
+            var nick = prompt("Lütfen Minecraft Oyuncu Adınızı (IGN) giriniz:\n(Not: Bir kez girilebilir, sonradan değiştirilemez!)");
+            if (nick && nick.trim() !== "") {
+                localStorage.setItem('nato_mc_nick', nick.trim());
+                alert("Minecraft nickiniz (" + nick.trim() + ") kilitlendi ve kaydedildi!");
+                updateUI();
+            }
+        }
+
+        // Webhook Başvuru Gönderimi
+        function submitBranchApplication() {
+            if(!selectedBranchName) return;
             var userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
             var isLoggedIn = localStorage.getItem('nato_logged_in');
             var savedMc = localStorage.getItem('nato_mc_nick') || "Girilmedi";
@@ -261,9 +298,9 @@
                     title: "🪖 Yeni Branş Katılım Talebi!",
                     color: 3447003,
                     fields: [
-                        { name: "👤 Başvuran", value: "<@" + userData.id + "> (" + (userData.global_name || userData.username) + ")", inline: true },
+                        { name: "👤 Başvuran", value: "<@" + userData.id + "> (" + userData.global_name + ")", inline: true },
                         { name: "🎮 Minecraft IGN", value: "`" + savedMc + "`", inline: true },
-                        { name: "🎖️ Talep Edilen Branş", value: "**" + branchName + "**", inline: false }
+                        { name: "🎖️ Talep Edilen Branş", value: "**" + selectedBranchName + "**", inline: false }
                     ],
                     timestamp: new Date().toISOString()
                 }]
@@ -275,7 +312,7 @@
                 body: JSON.stringify(payload)
             }).then(function(res) {
                 if(res.ok) {
-                    alert(branchName + " için katılım talebiniz yetkili komuta kanalına iletildi, Paşam!");
+                    alert(selectedBranchName + " için katılım talebiniz yetkili komuta kanalına iletildi, Paşam!");
                 } else {
                     alert("Gönderim başarısız oldu.");
                 }
@@ -284,37 +321,7 @@
             });
         }
 
-        function updateSlider() {
-            document.getElementById('cardsWrapper').style.transform = "translateX(-" + (currentSlide * 100) + "%)";
-            document.getElementById('sliderTitleIndicator').innerText = titles[currentSlide];
-        }
-
-        function nextCard() { currentSlide = (currentSlide + 1) % 3; updateSlider(); }
-        function prevCard() { currentSlide = (currentSlide - 1 + 3) % 3; updateSlider(); }
-
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-        function loginDiscord() {
-            var redirect = encodeURIComponent(window.location.origin + window.location.pathname);
-            window.location.href = "https://discord.com/oauth2/authorize?client_id=1539374890405204070&response_type=token&redirect_uri=" + redirect + "&scope=identify+email";
-        }
-
-        function setMcNameManually() {
-            var existingMc = localStorage.getItem('nato_mc_nick');
-            if (existingMc && existingMc.trim() !== "") {
-                alert("Minecraft nickiniz zaten kaydedilmiş (" + existingMc + ") ve değiştirilemez!");
-                return;
-            }
-
-            var nick = prompt("Lütfen Minecraft Oyuncu Adınızı (IGN) giriniz:\n(Not: Bir kez girilebilir, sonradan değiştirilemez!)");
-            if (nick && nick.trim() !== "") {
-                localStorage.setItem('nato_mc_nick', nick.trim());
-                alert("Minecraft nickiniz (" + nick.trim() + ") kilitlendi ve kaydedildi!");
-                updateUI();
-            }
-        }
-
+        // Destek Talebi
         function createSupportTicket() {
             var topic = document.getElementById('supportTopic').value.trim();
             if(!topic) return alert("Lütfen konu belirtin!");
@@ -332,20 +339,20 @@
             document.getElementById('supportTopic').value = "";
         }
 
+        // UI Güncelleme
         function updateUI() {
             var isLoggedIn = localStorage.getItem('nato_logged_in');
             var userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
             var savedMc = localStorage.getItem('nato_mc_nick');
 
-            if (isLoggedIn === 'true' && userData.username) {
-                document.getElementById('displayName').innerText = userData.global_name || userData.username;
-                document.getElementById('usernameTag').innerText = "@" + userData.username;
-                if(userData.avatar) {
-                    document.getElementById('userAvatar').src = "https://cdn.discordapp.com/avatars/" + userData.id + "/" + userData.avatar + ".png";
-                }
-                document.getElementById('headerLoginBtn').innerText = "Hesap Açık";
+            if (savedMc && savedMc.trim() !== "") {
+                document.getElementById('mcTag').innerText = savedMc;
+                document.getElementById('mcTag').style.color = "#0052ff";
+                
+                var btn1 = document.getElementById('btnSetMc');
+                var btn2 = document.getElementById('btnModalSetMc');
+                if(btn1) { btn1.innerText = "Nick Kilitlendi"; btn1.disabled = true; }
+                if(btn2) { btn2.innerText = "Nick Kilitlendi"; btn2.disabled = true; }
             }
 
-            if (savedMc) {
-                document.getElementById('mcTag').innerText = savedMc;
-      
+            if (isLoggedIn === 'true' 
