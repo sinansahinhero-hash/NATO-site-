@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATO</title>
+    <title>NATO Komuta Portalı</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -30,6 +30,29 @@
             border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer;
         }
 
+        /* Sağdan Sola Açılan Çekmece (Drawer) */
+        .drawer-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.4); display: none; z-index: 999;
+            backdrop-filter: blur(2px);
+        }
+        .right-drawer {
+            position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
+            background: #ffffff; z-index: 1000; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 25px 20px; display: flex; flex-direction: column; gap: 12px;
+            box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+        }
+        .right-drawer.open { right: 0; }
+        .drawer-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 5px; }
+        .drawer-close-btn { background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 10px; font-weight: 800; cursor: pointer; color: #64748b; }
+
+        .menu-list-btn {
+            background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px;
+            border-radius: 14px; text-align: left; font-weight: 700; color: #0f172a;
+            cursor: pointer; font-size: 0.95rem; width: 100%; transition: 0.2s;
+        }
+        .menu-list-btn:active { background: #e2e8f0; }
+
         /* Slider Konteyneri */
         .slider-container { width: 100%; max-width: 480px; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 15px; }
         .cards-wrapper { display: flex; transition: transform 0.3s ease-in-out; width: 100%; }
@@ -40,7 +63,7 @@
         .slider-btns { display: flex; gap: 6px; }
         .slide-btn { background: #f8fafc; border: 1px solid #e2e8f0; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; font-weight: 800; font-size: 1rem; }
 
-        /* Kart İçi Elementler */
+        /* Kart Elemanları */
         .badge-kurumsal { background: #eff6ff; color: #1d4ed8; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; width: fit-content; }
         .card-heading { font-size: 1.25rem; font-weight: 800; color: #0f172a; }
         .card-text { font-size: 0.9rem; color: #475569; font-weight: 500; line-height: 1.5; }
@@ -53,10 +76,9 @@
         .info-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px 16px; }
         .support-input { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #cbd5e1; outline: none; font-weight: 600; font-size: 0.9rem; background: #f8fafc; }
 
-        /* Modal Pencereler */
+        /* Giriş Modalı */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); display: none; align-items: center; justify-content: center; z-index: 1001; }
         .modal-content { background: #ffffff; width: 90%; max-width: 400px; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 12px; }
-        .menu-list-btn { background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 12px; text-align: left; font-weight: 700; color: #0f172a; cursor: pointer; font-size: 0.95rem; width: 100%; }
     </style>
 </head>
 <body>
@@ -64,12 +86,26 @@
     <!-- Üst Navbar -->
     <div class="navbar">
         <div class="nav-left">
-            <button class="nav-home-btn" onclick="openModal('menuModal')">🏠</button>
+            <button class="nav-home-btn" onclick="openDrawer()">🏠</button>
             <div class="logo-area">
                 <span class="badge-ta">NATO</span> Komuta
             </div>
         </div>
         <button class="btn-login-header" onclick="openModal('loginModal')" id="headerLoginBtn">Giriş Yap</button>
+    </div>
+
+    <!-- Sağdan Sola Kayarak Açılan Bölümler Menüsü -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+    <div class="right-drawer" id="rightDrawer">
+        <div class="drawer-header">
+            <h3 style="font-size: 1.1rem; font-weight: 800;">Komuta Bölümleri</h3>
+            <button class="drawer-close-btn" onclick="closeDrawer()">✕</button>
+        </div>
+        
+        <button class="menu-list-btn" onclick="showSectionContent('groupsContent')">👥 Gruplar</button>
+        <button class="menu-list-btn" onclick="showSectionContent('branchesContent')">🎖️ Branşlar</button>
+        <button class="menu-list-btn" onclick="showSectionContent('formsContent')">📋 Formlar</button>
+        <button class="menu-list-btn" onclick="showSectionContent('creditsContent')">⭐ Emeği Geçenler</button>
     </div>
 
     <!-- Ana Slider Kartlar Alanı -->
@@ -83,7 +119,7 @@
             </div>
         </div>
 
-        <!-- Kaydırılabilir 3 Kart -->
+        <!-- Kaydırılabilir 3 Ana Kart -->
         <div class="cards-wrapper" id="cardsWrapper">
             
             <!-- 1. KART: NATO Tanıtım -->
@@ -130,6 +166,16 @@
             </div>
 
         </div>
+
+        <!-- Menüden Seçilen Bölümlerin Doğrudan Sitede Göründüğü Özel Alan -->
+        <div id="dynamicSectionArea" style="display: none; width: 100%;">
+            <div class="card-item">
+                <div class="badge-kurumsal" id="dynamicBadge">BÖLÜM</div>
+                <div class="card-heading" id="dynamicTitle">Başlık</div>
+                <div class="card-text" id="dynamicBody">İçerik...</div>
+                <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top:10px;" onclick="closeDynamicSection()">Geri Dön</button>
+            </div>
+        </div>
     </div>
 
     <!-- Giriş Modal Penceresi -->
@@ -143,36 +189,58 @@
         </div>
     </div>
 
-    <!-- Ev İkonuna Basınca Açılan Bölümler Modalı -->
-    <div class="modal-overlay" id="menuModal">
-        <div class="modal-content">
-            <h3 style="font-size: 1.2rem; font-weight: 800; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">Komuta Bölümleri</h3>
-            
-            <button class="menu-list-btn" onclick="alert('Birlikler & Gruplar: Yıldırım Orduları, Kızıl Sağ El, OMEGA'); closeModal('menuModal');">
-                👥 Gruplar
-            </button>
-            
-            <button class="menu-list-btn" onclick="alert('Branşlar: Piyade, Zırhlı Birlikler, Özel Harekat'); closeModal('menuModal');">
-                🎖️ Branşlar
-            </button>
-            
-            <button class="menu-list-btn" onclick="alert('Formlar: Katılım Başvuru Formu, Şikayet Formu'); closeModal('menuModal');">
-                📋 Formlar
-            </button>
-            
-            <button class="menu-list-btn" onclick="alert('Emeği Geçenler: Sinan Paşa Hz. ve Komuta Ekibi'); closeModal('menuModal');">
-                ⭐ Emeği Geçenler
-            </button>
-
-            <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top: 5px;" onclick="closeModal('menuModal')">Kapat</button>
-        </div>
-    </div>
-
     <script>
         var currentSlide = 0;
         var titles = ["1. NATO Tanıtım", "2. NATO Destek Sistemi", "3. Kişisel Profil"];
 
-        // Kart Kaydırma Mantığı
+        // Sağdan Sola Çekmece Aç/Kapa
+        function openDrawer() {
+            document.getElementById('rightDrawer').classList.add('open');
+            document.getElementById('drawerOverlay').style.display = 'block';
+        }
+        function closeDrawer() {
+            document.getElementById('rightDrawer').classList.remove('open');
+            document.getElementById('drawerOverlay').style.display = 'none';
+        }
+
+        // Bölüm İçeriklerini Ekrana Yazı (Alert) Vermeden Doğrudan Sitede Gösterme
+        function showSectionContent(type) {
+            closeDrawer();
+            document.getElementById('cardsWrapper').style.display = 'none';
+            document.querySelector('.slider-nav-bar').style.display = 'none';
+            var area = document.getElementById('dynamicSectionArea');
+            area.style.display = 'block';
+
+            var b = document.getElementById('dynamicBadge');
+            var t = document.getElementById('dynamicTitle');
+            var body = document.getElementById('dynamicBody');
+
+            if(type === 'groupsContent') {
+                b.innerText = "BİRLİKLER";
+                t.innerText = "👥 NATO Grupları";
+                body.innerHTML = "• <b>Yıldırım Orduları</b> (Ana Komuta Kademesi)<br>• <b>Kızıl Sağ El</b> (Özel Operasyon Birlikleri)<br>• <b>OMEGA</b> (Lojistik ve Destek Ekibi)";
+            } else if(type === 'branchesContent') {
+                b.innerText = "BRANŞLAR";
+                t.innerText = "🎖️ Askeri Branşlar";
+                body.innerHTML = "• <b>Piyade Birlikleri</b>: Ön cephe savunma ve alan hakimiyeti.<br>• <b>Zırhlı Birlikler</b>: Ağır kuşatma ve alan temizliği.<br>• <b>Özel Harekat</b>: Taktiksel sızma ve operasyon birimi.";
+            } else if(type === 'formsContent') {
+                b.innerText = "FORM VE BAŞVURU";
+                t.innerText = "📋 Resmi Formlar";
+                body.innerHTML = "• <b>Birlik Katılım Formu</b>: Sunuculara katılım için onay.<br>• <b>Şikayet Formu</b>: Kural ihlali yapan personeli bildirin.";
+            } else if(type === 'creditsContent') {
+                b.innerText = "TEŞEKKÜRLER";
+                t.innerText = "⭐ Emeği Geçenler";
+                body.innerHTML = "• <b>Sinan Paşa Hz.</b> (NATO Yüksek Komutanı)<br>• <b>Yıldırım Orduları Komuta Ekibi</b>";
+            }
+        }
+
+        function closeDynamicSection() {
+            document.getElementById('dynamicSectionArea').style.display = 'none';
+            document.getElementById('cardsWrapper').style.display = 'flex';
+            document.querySelector('.slider-nav-bar').style.display = 'flex';
+        }
+
+        // Slider Kontrolleri
         function updateSlider() {
             document.getElementById('cardsWrapper').style.transform = "translateX(-" + (currentSlide * 100) + "%)";
             document.getElementById('sliderTitleIndicator').innerText = titles[currentSlide];
@@ -181,11 +249,10 @@
         function nextCard() { currentSlide = (currentSlide + 1) % 3; updateSlider(); }
         function prevCard() { currentSlide = (currentSlide - 1 + 3) % 3; updateSlider(); }
 
-        // Modal Açma / Kapama
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // Discord Oturum Açma (Otomatik Doğru Siteye Yönlendirir)
+        // Discord Oturum Açma
         function loginDiscord() {
             var redirect = encodeURIComponent(window.location.origin + window.location.pathname);
             window.location.href = "https://discord.com/oauth2/authorize?client_id=1539374890405204070&response_type=token&redirect_uri=" + redirect + "&scope=identify+email";
@@ -252,7 +319,6 @@
             var userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
             var savedMc = localStorage.getItem('nato_mc_nick');
 
-            // Minecraft İsmi ve Buton Kilit Durumu
             if (savedMc && savedMc.trim() !== "") {
                 document.getElementById('mcTag').innerText = savedMc;
                 document.getElementById('mcTag').style.color = "#0052ff";
@@ -263,7 +329,6 @@
                 if(btn2) { btn2.innerText = "Nick Kilitlendi"; btn2.disabled = true; }
             }
 
-            // Oturum Açılmışsa
             if (isLoggedIn === 'true' && userData.username) {
                 document.getElementById('userAvatar').src = userData.avatarUrl;
                 document.getElementById('displayName').innerText = userData.global_name;
@@ -273,4 +338,5 @@
         }
     </script>
 </body>
-</html>
+                                                                       </html>
+                                                                       
