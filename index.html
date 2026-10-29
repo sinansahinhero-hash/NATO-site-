@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATO Komuta Portalı</title>
+    <title>NATO</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -86,12 +86,12 @@
     <!-- Üst Navbar -->
     <div class="navbar">
         <div class="nav-left">
-            <button class="nav-home-btn" onclick="openDrawer()">🏠</button>
+            <button type="button" class="nav-home-btn" onclick="openDrawer()">🏠</button>
             <div class="logo-area">
                 <span class="badge-ta">NATO</span> Komuta
             </div>
         </div>
-        <button class="btn-login-header" onclick="openModal('loginModal')" id="headerLoginBtn">Giriş Yap</button>
+        <button type="button" class="btn-login-header" onclick="openModal('loginModal')" id="headerLoginBtn">Giriş Yap</button>
     </div>
 
     <!-- Sağdan Sola Kayarak Açılan Komuta Menüsü -->
@@ -99,13 +99,13 @@
     <div class="right-drawer" id="rightDrawer">
         <div class="drawer-header">
             <h3 style="font-size: 1.1rem; font-weight: 800;">Komuta Branşları</h3>
-            <button class="drawer-close-btn" onclick="closeDrawer()">✕</button>
+            <button type="button" class="drawer-close-btn" onclick="closeDrawer()">✕</button>
         </div>
         
-        <button class="menu-list-btn" onclick="showBranchDetails('Kara Kuvvetleri')">🪖 Kara Kuvvetleri</button>
-        <button class="menu-list-btn" onclick="showBranchDetails('Özel Kuvvetler')">⚡ Özel Kuvvetler</button>
-        <button class="menu-list-btn" onclick="showBranchDetails('Askeri İnzibat')">🛡️ Askeri İnzibat</button>
-        <button class="menu-list-btn" onclick="showBranchDetails('Sınır Müfettişleri')">🎯 Sınır Müfettişleri</button>
+        <button type="button" class="menu-list-btn" onclick="showBranchDetails('Kara Kuvvetleri')">🪖 Kara Kuvvetleri</button>
+        <button type="button" class="menu-list-btn" onclick="showBranchDetails('Özel Kuvvetler')">⚡ Özel Kuvvetler</button>
+        <button type="button" class="menu-list-btn" onclick="showBranchDetails('Askeri İnzibat')">🛡️ Askeri İnzibat</button>
+        <button type="button" class="menu-list-btn" onclick="showBranchDetails('Sınır Müfettişleri')">🎯 Sınır Müfettişleri</button>
     </div>
 
     <!-- Ana Slider Kartlar Alanı -->
@@ -114,8 +114,8 @@
         <div class="slider-nav-bar">
             <div class="slider-title-tag" id="sliderTitleIndicator">1. NATO Tanıtım</div>
             <div class="slider-btns">
-                <button class="slide-btn" onclick="prevCard()">&lt;</button>
-                <button class="slide-btn" onclick="nextCard()">&gt;</button>
+                <button type="button" class="slide-btn" onclick="prevCard()">&lt;</button>
+                <button type="button" class="slide-btn" onclick="nextCard()">&gt;</button>
             </div>
         </div>
 
@@ -138,7 +138,7 @@
                 <div class="card-heading">NATO Destek Sistemi</div>
                 <p class="card-text">Talep veya şikayetinizi kısaca belirtin, yetkili kadromuz size dönüş yapsın.</p>
                 <input type="text" id="supportTopic" class="support-input" placeholder="Konuyu kısaca belirtin...">
-                <button class="btn-action-card" style="background:#dc2626; color:#ffffff;" onclick="createSupportTicket()">Destek Talebi Oluştur</button>
+                <button type="button" class="btn-action-card" style="background:#dc2626; color:#ffffff;" onclick="createSupportTicket()">Destek Talebi Oluştur</button>
             </div>
 
             <!-- 3. KART: Kişisel Discord / Oyuncu Profili -->
@@ -160,8 +160,8 @@
                 </div>
 
                 <div style="display: flex; gap: 8px;">
-                    <button class="btn-action-card" onclick="openModal('loginModal')">Giriş Yap</button>
-                    <button class="btn-action-card" style="background:#0f172a; color:#fff;" id="btnSetMc" onclick="setMcNameManually()">Nick Gir</button>
+                    <button type="button" class="btn-action-card" onclick="openModal('loginModal')">Giriş Yap</button>
+                    <button type="button" class="btn-action-card" style="background:#0f172a; color:#fff;" id="btnSetMc" onclick="setMcNameManually()">Nick Gir</button>
                 </div>
             </div>
 
@@ -173,80 +173,93 @@
                 <div class="badge-kurumsal" id="branchBadge">BRANŞ</div>
                 <div class="card-heading" id="branchTitle">Branş Adı</div>
                 <div class="card-text" id="branchUnits">Birimler...</div>
-                <button class="btn-action-card" style="background:#0052ff; color:#fff; margin-top:10px;" id="applyBranchBtn" onclick="">Bu Branşa Başvur / Katıl</button>
-                <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top:5px;" onclick="closeBranchDetails()">Ana Sayfaya Dön</button>
+                <button type="button" class="btn-action-card" style="background:#0052ff; color:#fff; margin-top:10px;" id="applyBranchBtn" onclick="">Bu Branşa Başvur / Katıl</button>
+                <button type="button" class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top:5px;" onclick="closeBranchDetails()">Ana Sayfaya Dön</button>
             </div>
         </div>
     </div>
 
     <!-- Giriş Modal Penceresi -->
-    <div class="modal-overlay" id="loginModal">
+    <div class="modal-overlay" id="loginModal" onclick="if(event.target === this) closeModal('loginModal')">
         <div class="modal-content">
             <h3 style="font-size: 1.2rem; font-weight: 800;">NATO Oturum Açma</h3>
             <p style="font-size: 0.85rem; color: #64748b;">Hesabınızı bağlamak için giriş yapın:</p>
-            <button class="btn-action-card" style="background:#5865F2; color:#fff;" onclick="loginDiscord()">Discord ile Giriş Yap</button>
-            <button class="btn-action-card" style="background:#0f172a; color:#fff;" id="btnModalSetMc" onclick="setMcNameManually(); closeModal('loginModal');">Minecraft Nickini Gir</button>
-            <button class="btn-action-card" style="background:#f1f5f9; color:#334155;" onclick="closeModal('loginModal')">Kapat</button>
+            <button type="button" class="btn-action-card" style="background:#5865F2; color:#fff;" onclick="loginDiscord()">Discord ile Giriş Yap</button>
+            <button type="button" class="btn-action-card" style="background:#0f172a; color:#fff;" id="btnModalSetMc" onclick="setMcNameManually(); closeModal('loginModal');">Minecraft Nickini Gir</button>
+            <button type="button" class="btn-action-card" style="background:#f1f5f9; color:#334155;" onclick="closeModal('loginModal')">Kapat</button>
         </div>
     </div>
 
     <script>
-        // Webhook Linkiniz Entegre Edilmiştir
         var DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1565443830595977298/3IRqOLIUWF5RMyIEGQZN3oo0S3weWOs2BVPFL1Td934HpKgVkgcPksRAUQmS_0V2-1Y9"; 
 
         var currentSlide = 0;
         var titles = ["1. NATO Tanıtım", "2. NATO Destek Sistemi", "3. Kişisel Profil"];
 
         function openDrawer() {
-            document.getElementById('rightDrawer').classList.add('open');
-            document.getElementById('drawerOverlay').style.display = 'block';
+            var drawer = document.getElementById('rightDrawer');
+            var overlay = document.getElementById('drawerOverlay');
+            if(drawer && overlay) {
+                drawer.classList.add('open');
+                overlay.style.display = 'block';
+            }
         }
+        
         function closeDrawer() {
-            document.getElementById('rightDrawer').classList.remove('open');
-            document.getElementById('drawerOverlay').style.display = 'none';
+            var drawer = document.getElementById('rightDrawer');
+            var overlay = document.getElementById('drawerOverlay');
+            if(drawer && overlay) {
+                drawer.classList.remove('open');
+                overlay.style.display = 'none';
+            }
         }
 
-        // Branşları ve Birimleri Ekrana Getirme
         function showBranchDetails(branchName) {
             closeDrawer();
-            document.getElementById('cardsWrapper').style.display = 'none';
-            document.querySelector('.slider-nav-bar').style.display = 'none';
+            var wrapper = document.getElementById('cardsWrapper');
+            var navBar = document.querySelector('.slider-nav-bar');
             var area = document.getElementById('branchDetailArea');
-            area.style.display = 'block';
+
+            if(wrapper) wrapper.style.display = 'none';
+            if(navBar) navBar.style.display = 'none';
+            if(area) area.style.display = 'block';
 
             var b = document.getElementById('branchBadge');
             var t = document.getElementById('branchTitle');
             var units = document.getElementById('branchUnits');
             var applyBtn = document.getElementById('applyBranchBtn');
 
-            applyBtn.setAttribute('onclick', `submitBranchApplication('${branchName}')`);
+            if(applyBtn) applyBtn.setAttribute('onclick', "submitBranchApplication('" + branchName + "')");
 
             if(branchName === 'Kara Kuvvetleri') {
-                b.innerText = "KARA KUVVETLERİ BRANŞI";
-                t.innerText = "🪖 Kara Kuvvetleri";
-                units.innerHTML = "<b>Alt Birimler:</b><br>• BÖRÜ<br>• KHO<br>• MUHABERE<br>• ARAMA KURTARMA";
+                if(b) b.innerText = "KARA KUVVETLERİ BRANŞI";
+                if(t) t.innerText = "🪖 Kara Kuvvetleri";
+                if(units) units.innerHTML = "<b>Alt Birimler:</b><br>• BÖRÜ<br>• KHO<br>• MUHABERE<br>• ARAMA KURTARMA";
             } else if(branchName === 'Özel Kuvvetler') {
-                b.innerText = "ÖZEL KUVVETLER BRANŞI";
-                t.innerText = "⚡ Özel Kuvvetler";
-                units.innerHTML = "<b>Alt Birimler:</b><br>• Keskin Nişancı Timi<br>• Özel Koruma Birliği<br>• Su altı taarruz<br>• OMEGA";
+                if(b) b.innerText = "ÖZEL KUVVETLER BRANŞI";
+                if(t) t.innerText = "⚡ Özel Kuvvetler";
+                if(units) units.innerHTML = "<b>Alt Birimler:</b><br>• Keskin Nişancı Timi<br>• Özel Koruma Birliği<br>• Su altı taarruz<br>• OMEGA";
             } else if(branchName === 'Askeri İnzibat') {
-                b.innerText = "İNZİBAT BRANŞI";
-                t.innerText = "🛡️ Askeri İnzibat";
-                units.innerHTML = "<b>Alt Birimler:</b><br>• Yıldırım Orduları";
+                if(b) b.innerText = "İNZİBAT BRANŞI";
+                if(t) t.innerText = "🛡️ Askeri İnzibat";
+                if(units) units.innerHTML = "<b>Alt Birimler:</b><br>• Yıldırım Orduları";
             } else if(branchName === 'Sınır Müfettişleri') {
-                b.innerText = "MÜFETTİŞLİK BRANŞI";
-                t.innerText = "🎯 Sınır Müfettişleri";
-                units.innerHTML = "<b>Alt Birimler:</b><br>• Gardiyan Muhafızları denetim birimi";
+                if(b) b.innerText = "MÜFETTİŞLİK BRANŞI";
+                if(t) t.innerText = "🎯 Sınır Müfettişleri";
+                if(units) units.innerHTML = "<b>Alt Birimler:</b><br>• Gardiyan Muhafızları denetim birimi";
             }
         }
 
         function closeBranchDetails() {
-            document.getElementById('branchDetailArea').style.display = 'none';
-            document.getElementById('cardsWrapper').style.display = 'flex';
-            document.querySelector('.slider-nav-bar').style.display = 'flex';
+            var area = document.getElementById('branchDetailArea');
+            var wrapper = document.getElementById('cardsWrapper');
+            var navBar = document.querySelector('.slider-nav-bar');
+
+            if(area) area.style.display = 'none';
+            if(wrapper) wrapper.style.display = 'flex';
+            if(navBar) navBar.style.display = 'flex';
         }
 
-        // Başvuruyu Discord'a Gönderme Fonksiyonu
         function submitBranchApplication(branchName) {
             var userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
             var isLoggedIn = localStorage.getItem('nato_logged_in');
@@ -264,9 +277,9 @@
                     title: "🪖 Yeni Branş Katılım Talebi!",
                     color: 3447003,
                     fields: [
-                        { name: "👤 Başvuran", value: `<@${userData.id}> (${userData.global_name})`, inline: true },
-                        { name: "🎮 Minecraft IGN", value: `\`${savedMc}\``, inline: true },
-                        { name: "🎖️ Talep Edilen Branş", value: `**${branchName}**`, inline: false }
+                        { name: "👤 Başvuran", value: "<@" + userData.id + "> (" + userData.global_name + ")", inline: true },
+                        { name: "🎮 Minecraft IGN", value: "`" + savedMc + "`", inline: true },
+                        { name: "🎖️ Talep Edilen Branş", value: "**" + branchName + "**", inline: false }
                     ],
                     timestamp: new Date().toISOString()
                 }]
@@ -278,24 +291,34 @@
                 body: JSON.stringify(payload)
             }).then(function(res) {
                 if(res.ok) {
-                    alert(`${branchName} için katılım talebiniz yetkili komuta kanalına iletildi, Paşam!`);
+                    alert(branchName + " için katılım talebiniz yetkili komuta kanalına iletildi, Paşam!");
                 } else {
                     alert("Gönderim başarısız oldu.");
                 }
+            }).catch(function() {
+                alert("Bağlantı hatası oluştu.");
             });
         }
 
-        // Slider Kontrolleri
         function updateSlider() {
-            document.getElementById('cardsWrapper').style.transform = "translateX(-" + (currentSlide * 100) + "%)";
-            document.getElementById('sliderTitleIndicator').innerText = titles[currentSlide];
+            var wrapper = document.getElementById('cardsWrapper');
+            var indicator = document.getElementById('sliderTitleIndicator');
+            if(wrapper) wrapper.style.transform = "translateX(-" + (currentSlide * 100) + "%)";
+            if(indicator) indicator.innerText = titles[currentSlide];
         }
 
         function nextCard() { currentSlide = (currentSlide + 1) % 3; updateSlider(); }
         function prevCard() { currentSlide = (currentSlide - 1 + 3) % 3; updateSlider(); }
 
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function openModal(id) {
+            var modal = document.getElementById(id);
+            if(modal) modal.style.display = 'flex';
+        }
+        
+        function closeModal(id) {
+            var modal = document.getElementById(id);
+            if(modal) modal.style.display = 'none';
+        }
 
         function loginDiscord() {
             var redirect = encodeURIComponent(window.location.origin + window.location.pathname);
@@ -318,31 +341,17 @@
         }
 
         function createSupportTicket() {
-            var topic = document.getElementById('supportTopic').value.trim();
-            if(!topic) return alert("Lütfen konu belirtin!");
+            var topicInput = document.getElementById('supportTopic');
+            if(!topicInput) return;
+            var topic = topicInput.value.trim();
+            if(!topic) {
+                alert("Lütfen konu belirtin!");
+                return;
+            }
             
             var userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
             if (localStorage.getItem('nato_logged_in') === 'true' && userData.id) {
                 var tickets = JSON.parse(localStorage.getItem('nato_tickets') || '[]');
                 tickets.push({ user: userData.global_name || userData.username, topic: topic, date: new Date().toLocaleTimeString() });
                 localStorage.setItem('nato_tickets', JSON.stringify(tickets));
-                alert("Destek talebiniz komuta masasına iletildi!");
-            } else {
-                alert("Destek talebi oluşturmak için önce Giriş Yapmalısınız!");
-                openModal('loginModal');
-            }
-            document.getElementById('supportTopic').value = "";
-        }
-
-        window.onload = function() {
-            var fragment = new URLSearchParams(window.location.hash.slice(1));
-            var accessToken = fragment.get('access_token');
-
-            if (accessToken) {
-                fetch('https://discord.com/api/users/@me', { headers: { authorization: "Bearer " + accessToken } })
-                .then(function(res){ return res.json(); })
-                .then(function(userData){
-                    if (userData.id) {
-                        var avatarUrl = userData.avatar ? "https://cdn.discordapp.com/avatars/" + userData.id + "/" + userData.avatar + ".png" : "https://cdn.discordapp.com/embed/avatars/0.png";
-                        localStorage.setItem('nato_user', JSON.stringify({ id: userData.id, username: userData.username, global_name: userData.global_name || userData.username, avatarUrl: avatarUrl }));
-                      
+      
