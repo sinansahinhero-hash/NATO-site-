@@ -6,7 +6,7 @@
     <title>NATO</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px 15px; overflow-x: hidden; }
 
         /* Üst Şerit Navbar */
@@ -19,7 +19,7 @@
         .nav-home-btn {
             background: #f8fafc; border: 1px solid #e2e8f0; width: 40px; height: 40px;
             border-radius: 12px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; color: #0f172a; font-size: 1.2rem; border: none; font-weight: 800;
+            cursor: pointer; color: #0f172a; font-size: 1.2rem; font-weight: 800;
         }
 
         .logo-area { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.2rem; color: #0f172a; }
@@ -86,26 +86,26 @@
     <!-- Üst Navbar -->
     <div class="navbar">
         <div class="nav-left">
-            <button type="button" class="nav-home-btn" id="btnOpenDrawer">🏠</button>
+            <button class="nav-home-btn" onclick="openDrawer()">🏠</button>
             <div class="logo-area">
                 <span class="badge-ta">NATO</span> Komuta
             </div>
         </div>
-        <button type="button" class="btn-login-header" id="headerLoginBtn">Giriş Yap</button>
+        <button class="btn-login-header" onclick="openModal('loginModal')" id="headerLoginBtn">Giriş Yap</button>
     </div>
 
     <!-- Sağdan Sola Açılan Çekmece (Drawer) -->
-    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
     <div class="right-drawer" id="rightDrawer">
         <div class="drawer-header">
             <h3 style="font-size: 1.1rem; font-weight: 800;">Komuta Branşları</h3>
-            <button type="button" class="drawer-close-btn" id="btnCloseDrawer">✕</button>
+            <button class="drawer-close-btn" onclick="closeDrawer()">✕</button>
         </div>
         
-        <button type="button" class="menu-list-btn" id="btnBranch1">🪖 Kara Kuvvetleri</button>
-        <button type="button" class="menu-list-btn" id="btnBranch2">⚡ Özel Kuvvetler</button>
-        <button type="button" class="menu-list-btn" id="btnBranch3">🛡️ Askeri İnzibat</button>
-        <button type="button" class="menu-list-btn" id="btnBranch4">🎯 Sınır Müfettişleri</button>
+        <button class="menu-list-btn" onclick="showBranchDetails('Kara Kuvvetleri')">🪖 Kara Kuvvetleri</button>
+        <button class="menu-list-btn" onclick="showBranchDetails('Özel Kuvvetler')">⚡ Özel Kuvvetler</button>
+        <button class="menu-list-btn" onclick="showBranchDetails('Askeri İnzibat')">🛡️ Askeri İnzibat</button>
+        <button class="menu-list-btn" onclick="showBranchDetails('Sınır Müfettişleri')">🎯 Sınır Müfettişleri</button>
     </div>
 
     <!-- Ana Slider Kartlar Alanı -->
@@ -114,8 +114,8 @@
         <div class="slider-nav-bar" id="sliderNavBar">
             <div class="slider-title-tag" id="sliderTitleIndicator">1. NATO Tanıtım</div>
             <div class="slider-btns">
-                <button type="button" class="slide-btn" id="btnPrevCard">&lt;</button>
-                <button type="button" class="slide-btn" id="btnNextCard">&gt;</button>
+                <button class="slide-btn" onclick="prevCard()">&lt;</button>
+                <button class="slide-btn" onclick="nextCard()">&gt;</button>
             </div>
         </div>
 
@@ -138,7 +138,7 @@
                 <div class="card-heading">NATO Destek Sistemi</div>
                 <p class="card-text">Talep veya şikayetinizi kısaca belirtin, yetkili kadromuz size dönüş yapsın.</p>
                 <input type="text" id="supportTopic" class="support-input" placeholder="Konuyu kısaca belirtin...">
-                <button type="button" class="btn-action-card" style="background:#dc2626; color:#ffffff;" id="btnCreateTicket">Destek Talebi Oluştur</button>
+                <button class="btn-action-card" style="background:#dc2626; color:#ffffff;" onclick="createSupportTicket()">Destek Talebi Oluştur</button>
             </div>
 
             <!-- 3. KART: Kişisel Discord / Oyuncu Profili -->
@@ -160,21 +160,21 @@
                 </div>
 
                 <div style="display: flex; gap: 8px;">
-                    <button type="button" class="btn-action-card" id="btnCardLogin">Giriş Yap</button>
-                    <button type="button" class="btn-action-card" style="background:#0f172a; color:#fff;" id="btnSetMc">Nick Gir</button>
+                    <button class="btn-action-card" onclick="openModal('loginModal')">Giriş Yap</button>
+                    <button class="btn-action-card" style="background:#0f172a; color:#fff;" id="btnSetMc" onclick="setMcNameManually()">Nick Gir</button>
                 </div>
             </div>
 
         </div>
 
-        <!-- Menüden Seçilen Branşların Doğrudan Sitede Göründüğü Alan -->
+        <!-- Menüden Seçilen Branşların Göründüğü Alan -->
         <div id="branchDetailArea" style="display: none; width: 100%;">
             <div class="card-item">
                 <div class="badge-kurumsal" id="branchBadge">BRANŞ</div>
                 <div class="card-heading" id="branchTitle">Branş Adı</div>
                 <div class="card-text" id="branchUnits">Birimler...</div>
-                <button type="button" class="btn-action-card" style="background:#0052ff; color:#fff; margin-top:10px;" id="applyBranchBtn">Bu Branşa Başvur / Katıl</button>
-                <button type="button" class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top:5px;" id="btnCloseBranchDetails">Ana Sayfaya Dön</button>
+                <button class="btn-action-card" style="background:#0052ff; color:#fff; margin-top:10px;" onclick="submitBranchApplication()">Bu Branşa Başvur / Katıl</button>
+                <button class="btn-action-card" style="background:#f1f5f9; color:#334155; margin-top:5px;" onclick="closeBranchDetails()">Ana Sayfaya Dön</button>
             </div>
         </div>
     </div>
@@ -184,9 +184,9 @@
         <div class="modal-content">
             <h3 style="font-size: 1.2rem; font-weight: 800;">NATO Oturum Açma</h3>
             <p style="font-size: 0.85rem; color: #64748b;">Hesabınızı bağlamak için giriş yapın:</p>
-            <button type="button" class="btn-action-card" style="background:#5865F2; color:#fff;" id="btnModalDiscordLogin">Discord ile Giriş Yap</button>
-            <button type="button" class="btn-action-card" style="background:#0f172a; color:#fff;" id="btnModalSetMc">Minecraft Nickini Gir</button>
-            <button type="button" class="btn-action-card" style="background:#f1f5f9; color:#334155;" id="btnCloseModal">Kapat</button>
+            <button class="btn-action-card" style="background:#5865F2; color:#fff;" onclick="loginDiscord()">Discord ile Giriş Yap</button>
+            <button class="btn-action-card" style="background:#0f172a; color:#fff;" id="btnModalSetMc" onclick="setMcNameManually(); closeModal('loginModal');">Minecraft Nickini Gir</button>
+            <button class="btn-action-card" style="background:#f1f5f9; color:#334155;" onclick="closeModal('loginModal')">Kapat</button>
         </div>
     </div>
 
@@ -207,11 +207,11 @@
             document.getElementById('drawerOverlay').style.display = 'none';
         }
 
-        // Modallar
+        // Modal Aç/Kapa
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // Slider Kontrolleri
+        // Slider
         function updateSlider() {
             document.getElementById('cardsWrapper').style.transform = "translateX(-" + (currentSlide * 100) + "%)";
             document.getElementById('sliderTitleIndicator').innerText = titles[currentSlide];
@@ -219,7 +219,7 @@
         function nextCard() { currentSlide = (currentSlide + 1) % 3; updateSlider(); }
         function prevCard() { currentSlide = (currentSlide - 1 + 3) % 3; updateSlider(); }
 
-        // Branş Detayı Gösterme
+        // Branş Detayı
         function showBranchDetails(branchName) {
             selectedBranchName = branchName;
             closeDrawer();
@@ -257,13 +257,13 @@
             document.getElementById('sliderNavBar').style.display = 'flex';
         }
 
-        // Discord Oturum Açma
+        // Discord Giriş
         function loginDiscord() {
             var redirect = encodeURIComponent(window.location.origin + window.location.pathname);
             window.location.href = "https://discord.com/oauth2/authorize?client_id=1539374890405204070&response_type=token&redirect_uri=" + redirect + "&scope=identify+email";
         }
 
-        // Minecraft Nick Girme (1 KEZ)
+        // Minecraft Nick
         function setMcNameManually() {
             var existingMc = localStorage.getItem('nato_mc_nick');
             if (existingMc && existingMc.trim() !== "") {
@@ -279,7 +279,7 @@
             }
         }
 
-        // Webhook Başvuru Gönderimi
+        // Başvuru Gönderimi
         function submitBranchApplication() {
             if(!selectedBranchName) return;
             var userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
@@ -352,7 +352,4 @@
                 var btn1 = document.getElementById('btnSetMc');
                 var btn2 = document.getElementById('btnModalSetMc');
                 if(btn1) { btn1.innerText = "Nick Kilitlendi"; btn1.disabled = true; }
-                if(btn2) { btn2.innerText = "Nick Kilitlendi"; btn2.disabled = true; }
-            }
-
-            if (isLoggedIn === 'true' 
+                if(btn2) { btn2.innerText = "Nick Kilitlendi";
