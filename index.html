@@ -19,7 +19,7 @@
         .nav-home-btn {
             background: #f8fafc; border: 1px solid #e2e8f0; width: 40px; height: 40px;
             border-radius: 12px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; color: #0f172a; font-size: 1.2rem; border: none; font-weight: 800;
+            cursor: pointer; color: #0f172a; font-size: 1.2rem; font-weight: 800;
         }
 
         .logo-area { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.2rem; color: #0f172a; }
@@ -29,8 +29,12 @@
             background: #0052ff; color: #ffffff; border: none; padding: 10px 18px;
             border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer;
         }
+        .btn-logout-header {
+            background: #ef4444; color: #ffffff; border: none; padding: 10px 18px;
+            border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: none;
+        }
 
-        /* Sağdan Sola Açılan Çekmece (Drawer) */
+        /* Çekmece (Drawer) */
         .drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(15, 23, 42, 0.4); display: none; z-index: 999;
@@ -92,6 +96,7 @@
             </div>
         </div>
         <button class="btn-login-header" onclick="openModal('loginModal')" id="headerLoginBtn">Giriş Yap</button>
+        <button class="btn-logout-header" onclick="logout()" id="headerLogoutBtn">Çıkış Yap</button>
     </div>
 
     <!-- Sağdan Sola Kayarak Açılan Bölümler Menüsü -->
@@ -106,6 +111,7 @@
         <button class="menu-list-btn" onclick="showSectionContent('branchesContent')">🎖️ Branşlar</button>
         <button class="menu-list-btn" onclick="showSectionContent('formsContent')">📋 Formlar</button>
         <button class="menu-list-btn" onclick="showSectionContent('creditsContent')">⭐ Emeği Geçenler</button>
+        <button class="menu-list-btn" style="background:#fef2f2; color:#dc2626; border-color:#fecaca;" onclick="showSectionContent('adminPanel')">🛡️ Yönetici Paneli</button>
     </div>
 
     <!-- Ana Slider Kartlar Alanı -->
@@ -159,8 +165,13 @@
                     <div id="mcTag" style="font-weight: 800; color: #0f172a; margin-top: 2px;">Henüz Girilmedi</div>
                 </div>
 
+                <div class="info-box" style="margin-top:-8px;">
+                    <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">NATO ASKERİ RÜTBESİ</div>
+                    <div id="userRank" style="font-weight: 800; color: #0052ff; margin-top: 2px;">Er / Yeni Üye</div>
+                </div>
+
                 <div style="display: flex; gap: 8px;">
-                    <button class="btn-action-card" onclick="openModal('loginModal')">Giriş Yap</button>
+                    <button class="btn-action-card" id="cardLoginBtn" onclick="openModal('loginModal')">Giriş Yap</button>
                     <button class="btn-action-card" style="background:#0f172a; color:#fff;" id="btnSetMc" onclick="setMcNameManually()">Nick Gir</button>
                 </div>
             </div>
@@ -190,10 +201,12 @@
     </div>
 
     <script>
+        // DISCORD WEBHOOK URL (Buraya kendi Discord Webhook linkini yapıştırabilirsin)
+        var DISCORD_WEBHOOK_URL = ""; 
+
         var currentSlide = 0;
         var titles = ["1. NATO Tanıtım", "2. NATO Destek Sistemi", "3. Kişisel Profil"];
 
-        // Sağdan Sola Çekmece Aç/Kapa
         function openDrawer() {
             document.getElementById('rightDrawer').classList.add('open');
             document.getElementById('drawerOverlay').style.display = 'block';
@@ -203,7 +216,6 @@
             document.getElementById('drawerOverlay').style.display = 'none';
         }
 
-        // Bölüm İçeriklerini Ekrana Yazı (Alert) Vermeden Doğrudan Sitede Gösterme
         function showSectionContent(type) {
             closeDrawer();
             document.getElementById('cardsWrapper').style.display = 'none';
@@ -230,7 +242,21 @@
             } else if(type === 'creditsContent') {
                 b.innerText = "TEŞEKKÜRLER";
                 t.innerText = "⭐ Emeği Geçenler";
-                body.innerHTML = "• <b>Sinan Paşa Hz.</b> (NATO Yüksek Komutanı)<br>• <b>Yıldırım Orduları Komuta Ekibi</b>";
+                body.innerHTML = "• <b>Paşam / Sinan Paşa Hz.</b> (NATO Yüksek Komutanı)<br>• <b>Yıldırım Orduları Komuta Ekibi</b>";
+            } else if(type === 'adminPanel') {
+                b.innerText = "YÖNETİM";
+                t.innerText = "🛡️ Komuta Masası Talepleri";
+                var tickets = JSON.parse(localStorage.getItem('nato_tickets') || '[]');
+                if(tickets.length === 0) {
+                    body.innerHTML = "<p>Henüz açılmış bir destek talebi yok.</p>";
+                } else {
+                    var html = "<ul style='list-style:none; display:flex; flex-direction:column; gap:8px;'>";
+                    tickets.forEach(function(item, index){
+                        html += "<li style='background:#f8fafc; padding:10px; border-radius:10px; border:1px solid #e2e8f0;'><b>" + item.user + "</b> (" + item.date + "):<br>" + item.topic + "</li>";
+                    });
+                    html += "</ul>";
+                    body.innerHTML = html;
+                }
             }
         }
 
@@ -240,7 +266,6 @@
             document.querySelector('.slider-nav-bar').style.display = 'flex';
         }
 
-        // Slider Kontrolleri
         function updateSlider() {
             document.getElementById('cardsWrapper').style.transform = "translateX(-" + (currentSlide * 100) + "%)";
             document.getElementById('sliderTitleIndicator').innerText = titles[currentSlide];
@@ -252,13 +277,17 @@
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // Discord Oturum Açma
         function loginDiscord() {
             var redirect = encodeURIComponent(window.location.origin + window.location.pathname);
             window.location.href = "https://discord.com/oauth2/authorize?client_id=1539374890405204070&response_type=token&redirect_uri=" + redirect + "&scope=identify+email";
         }
 
-        // Minecraft Nick Girme (1 KEZ GİRİLİR, KİLİTLENİR)
+        function logout() {
+            localStorage.removeItem('nato_logged_in');
+            localStorage.removeItem('nato_user');
+            location.reload();
+        }
+
         function setMcNameManually() {
             var existingMc = localStorage.getItem('nato_mc_nick');
             if (existingMc && existingMc.trim() !== "") {
@@ -274,69 +303,39 @@
             }
         }
 
-        // Destek Talebi
         function createSupportTicket() {
             var topic = document.getElementById('supportTopic').value.trim();
             if(!topic) return alert("Lütfen konu belirtin!");
             
             var userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
+            var mcNick = localStorage.getItem('nato_mc_nick') || 'Girilmedi';
+
             if (localStorage.getItem('nato_logged_in') === 'true' && userData.id) {
                 var tickets = JSON.parse(localStorage.getItem('nato_tickets') || '[]');
-                tickets.push({ user: userData.global_name || userData.username, topic: topic, date: new Date().toLocaleTimeString() });
+                var ticketObj = { user: userData.global_name || userData.username, topic: topic, date: new Date().toLocaleTimeString() };
+                tickets.push(ticketObj);
                 localStorage.setItem('nato_tickets', JSON.stringify(tickets));
+
+                // Eğer Webhook tanımlandıysa Discord'a otomatik bildirim gönderir
+                if(DISCORD_WEBHOOK_URL !== "") {
+                    fetch(DISCORD_WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            embeds: [{
+                                title: "🚨 Yeni NATO Destek Talebi",
+                                color: 14431526,
+                                fields: [
+                                    { name: "Discord Kullanıcısı", value: userData.global_name + " (@" + userData.username + ")", inline: true },
+                                    { name: "Minecraft Nick", value: mcNick, inline: true },
+                                    { name: "Talep Konusu", value: topic }
+                                ],
+                                timestamp: new Date()
+                            }]
+                        })
+                    });
+                }
+
                 alert("Destek talebiniz komuta masasına iletildi!");
             } else {
-                alert("Destek talebi oluşturmak için önce Giriş Yapmalısınız!");
-                openModal('loginModal');
-            }
-            document.getElementById('supportTopic').value = "";
-        }
-
-        // Sayfa Yüklendiğinde
-        window.onload = function() {
-            var fragment = new URLSearchParams(window.location.hash.slice(1));
-            var accessToken = fragment.get('access_token');
-
-            if (accessToken) {
-                fetch('https://discord.com/api/users/@me', { headers: { authorization: "Bearer " + accessToken } })
-                .then(function(res){ return res.json(); })
-                .then(function(userData){
-                    if (userData.id) {
-                        var avatarUrl = userData.avatar ? "https://cdn.discordapp.com/avatars/" + userData.id + "/" + userData.avatar + ".png" : "https://cdn.discordapp.com/embed/avatars/0.png";
-                        localStorage.setItem('nato_user', JSON.stringify({ id: userData.id, username: userData.username, global_name: userData.global_name || userData.username, avatarUrl: avatarUrl }));
-                        localStorage.setItem('nato_logged_in', 'true');
-                        updateUI();
-                    }
-                });
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
-            updateUI();
-        };
-
-        // Arayüz Güncelleme
-        function updateUI() {
-            var isLoggedIn = localStorage.getItem('nato_logged_in');
-            var userData = JSON.parse(localStorage.getItem('nato_user') || '{}');
-            var savedMc = localStorage.getItem('nato_mc_nick');
-
-            if (savedMc && savedMc.trim() !== "") {
-                document.getElementById('mcTag').innerText = savedMc;
-                document.getElementById('mcTag').style.color = "#0052ff";
-                
-                var btn1 = document.getElementById('btnSetMc');
-                var btn2 = document.getElementById('btnModalSetMc');
-                if(btn1) { btn1.innerText = "Nick Kilitlendi"; btn1.disabled = true; }
-                if(btn2) { btn2.innerText = "Nick Kilitlendi"; btn2.disabled = true; }
-            }
-
-            if (isLoggedIn === 'true' && userData.username) {
-                document.getElementById('userAvatar').src = userData.avatarUrl;
-                document.getElementById('displayName').innerText = userData.global_name;
-                document.getElementById('usernameTag').innerText = "@" + userData.username;
-                document.getElementById('headerLoginBtn').innerText = "Oturum Açıldı";
-            }
-        }
-    </script>
-</body>
-                                                                                                                                                        </html>
-    
+                alert("Destek talebi oluşturmak için önce Giriş Yapmalıs
