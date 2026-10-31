@@ -6,8 +6,15 @@
     <title>NATO</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px 15px; overflow-x: hidden; }
+
+        /* Butonlara Basıldığında Görsel Geri Bildirim (Küçülme Efekti) */
+        button:active, .btn-action-card:active, .menu-list-btn:active, .nav-home-btn:active, .slide-btn:active {
+            transform: scale(0.96);
+            opacity: 0.85;
+            transition: transform 0.1s ease;
+        }
 
         /* Üst Şerit Navbar */
         .navbar {
@@ -51,7 +58,6 @@
             border-radius: 14px; text-align: left; font-weight: 700; color: #0f172a;
             cursor: pointer; font-size: 0.95rem; width: 100%; transition: 0.2s;
         }
-        .menu-list-btn:active { background: #e2e8f0; }
 
         /* Slider Konteyneri */
         .slider-container { width: 100%; max-width: 480px; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 15px; }
@@ -127,7 +133,7 @@
                 <div class="badge-kurumsal">KURUMSAL</div>
                 <div class="card-heading">NATO Hakkında</div>
                 <p class="card-text">
-                    NATO; disiplin, taktik strateji ve hiyerarşiyi esas alan lider gaming topluluğudur. Minecraft Towny sunucularında ve operasyonlarda hakimiyet kurunuz.
+                    NATO; disiplin, taktik strateji ve hiyerarşiyi esas alan lider gaming topluluğudur. Minecraft Towny sunucularında ve operasyonlarda hakimiyet kururuz.
                 </p>
                 <a href="https://discord.gg/seninlinkin" target="_blank" class="btn-action-card">Discord Sunucusuna Katıl</a>
             </div>
@@ -350,6 +356,4 @@
                 document.getElementById('mcTag').style.color = "#0052ff";
                 
                 var btn1 = document.getElementById('btnSetMc');
-                var btn2 = document.getElementById('btnModalSetMc');
-                if(btn1) { btn1.innerText = "Nick Kilitlendi"; btn1.disabled = true; }
-                if(btn2) { btn2.innerText = "Nick Kilitlendi";
+        
