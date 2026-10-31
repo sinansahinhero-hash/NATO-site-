@@ -6,14 +6,14 @@
     <title>NATO</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: rgba(0,82,255,0.2); }
         body { background-color: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px 15px; overflow-x: hidden; }
 
-        /* Butonlara Basıldığında Görsel Geri Bildirim (Küçülme Efekti) */
+        /* Butonlara Basıldığında Görsel Tepki (Basılma Hissi) */
         button:active, .btn-action-card:active, .menu-list-btn:active, .nav-home-btn:active, .slide-btn:active {
-            transform: scale(0.96);
-            opacity: 0.85;
-            transition: transform 0.1s ease;
+            transform: scale(0.95);
+            opacity: 0.8;
+            background-color: #e2e8f0 !important;
         }
 
         /* Üst Şerit Navbar */
@@ -56,7 +56,7 @@
         .menu-list-btn {
             background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px;
             border-radius: 14px; text-align: left; font-weight: 700; color: #0f172a;
-            cursor: pointer; font-size: 0.95rem; width: 100%; transition: 0.2s;
+            cursor: pointer; font-size: 0.95rem; width: 100%;
         }
 
         /* Slider Konteyneri */
@@ -133,7 +133,7 @@
                 <div class="badge-kurumsal">KURUMSAL</div>
                 <div class="card-heading">NATO Hakkında</div>
                 <p class="card-text">
-                    NATO; disiplin, taktik strateji ve hiyerarşiyi esas alan lider gaming topluluğudur. Minecraft Towny sunucularında ve operasyonlarda hakimiyet kururuz.
+                    NATO; disiplin, taktik strateji ve hiyerarşiyi esas alan lider gaming topluluğudur. Minecraft Towny sunucularında ve operasyonlarda hakimiyet kurunuz.
                 </p>
                 <a href="https://discord.gg/seninlinkin" target="_blank" class="btn-action-card">Discord Sunucusuna Katıl</a>
             </div>
@@ -337,7 +337,7 @@
                 var tickets = JSON.parse(localStorage.getItem('nato_tickets') || '[]');
                 tickets.push({ user: userData.global_name || userData.username, topic: topic, date: new Date().toLocaleTimeString() });
                 localStorage.setItem('nato_tickets', JSON.stringify(tickets));
-                alert("Destek talebiniz komuta masasına iletildi!");
+                alert("Destek talebiniz iletildi!");
             } else {
                 alert("Destek talebi oluşturmak için önce Giriş Yapmalısınız!");
                 openModal('loginModal');
@@ -355,5 +355,4 @@
                 document.getElementById('mcTag').innerText = savedMc;
                 document.getElementById('mcTag').style.color = "#0052ff";
                 
-                var btn1 = document.getElementById('btnSetMc');
-        
+                var btn1 = document.getElement
