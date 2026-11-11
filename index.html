@@ -327,12 +327,14 @@
             background: rgba(2, 132, 199, 0.15);
             border: 1px solid var(--primary);
             color: #38bdf8;
-            padding: 8px;
+            padding: 10px;
             border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
             margin-top: 1rem;
+            display: inline-block;
+            text-align: center;
         }
 
         .btn-request:hover {
@@ -526,7 +528,6 @@
     <header>
         <div class="header-left">
             <button class="btn-nav-toggle" id="openSidebarBtn" aria-label="Menüyü Aç">
-                <i class="fa-solid " id="menuIcon"></i>
                 <i class="fa-solid fa-house"></i>
             </button>
             <div class="brand-logo">NATO</div>
@@ -572,7 +573,6 @@
 
             <h2 class="section-header"><i class="fa-solid fa-sitemap"></i> Askeri Branşlar ve Birimler</h2>
             <div class="cards-grid">
-                <!-- Kara Kuvvetleri -->
                 <div class="card">
                     <div class="card-title"><i class="fa-solid fa-person-military-rifle"></i> Kara Kuvvetleri</div>
                     <p class="card-desc">Karadan sorumlu askeri branştır. Bölge güvenliğini ve ana muharebe hatlarını korur.</p>
@@ -584,7 +584,6 @@
                     </div>
                 </div>
 
-                <!-- Sınıf Müfettişleri -->
                 <div class="card">
                     <div class="card-title"><i class="fa-solid fa-passport"></i> Sınıf Müfettişleri</div>
                     <p class="card-desc">Sınırdan ve gümrük kontrollerinden sorumlu yetkili branştır.</p>
@@ -594,7 +593,6 @@
                     </div>
                 </div>
 
-                <!-- Özel Kuvvetler -->
                 <div class="card">
                     <div class="card-title"><i class="fa-solid fa-user-ninja"></i> Özel Kuvvetler</div>
                     <p class="card-desc">Özel operasyonlar, sızma ve yüksek riskli görevlerden sorumlu seçkin birim.</p>
@@ -605,7 +603,6 @@
                     </div>
                 </div>
 
-                <!-- Askeri İnzibat -->
                 <div class="card">
                     <div class="card-title"><i class="fa-solid fa-building-shield"></i> Askeri İnzibat</div>
                     <p class="card-desc">Sunucular içi iç düzeni, disiplini ve kuralların uygulanmasını sağlayan birim.</p>
@@ -622,11 +619,8 @@
             <h2 class="section-header"><i class="fa-solid fa-users-line"></i> Gurup İstekleri ve Başvuru</h2>
             <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Branşınıza ait gruba katılım isteği atın. Yetkililer onayladıktan sonra Discord sunucularında <code>/update</code> yazarak rolünüzü alabilirsiniz.</p>
 
-            <div class="cards-grid" id="groupsGrid">
-                <!-- Dinamik Gruplar JS ile dolacak -->
-            </div>
+            <div class="cards-grid" id="groupsGrid"></div>
 
-            <!-- Yetkili Onay Paneli -->
             <div class="admin-box">
                 <div class="admin-title">
                     <i class="fa-solid fa-user-check"></i> Yetkili Onay Paneli (Simülasyon)
@@ -647,4 +641,11 @@
                         <div>
                             <div class="card-title">NATO Bot</div>
                             <p class="card-desc" style="margin-bottom:4px;">Ana sunucu yönetim, otorite ve rol senkronizasyon sistemi.</p>
-                            <div class="bot-status"><span class="sta
+                            <div class="bot-status"><span class="status-dot"></span> Aktif & Çevrimiçi</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="bot-card">
+                        <div class="bot-icon"><i class="fa-sol
