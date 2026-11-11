@@ -42,7 +42,7 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* Ana Sayfa Tanıtım Kartı (Görseldeki Gibi) */
+        /* Ana Sayfa Tanıtım Kartı */
         .hero-card { background: #111827; border: 1px solid #1f2937; border-radius: 16px; padding: 40px 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-top: 4px solid #fbbf24; }
         .hero-card i { font-size: 48px; color: #fbbf24; margin-bottom: 8px; }
         .hero-card h1 { font-size: 26px; color: #fbbf24; font-weight: 800; }
@@ -115,7 +115,7 @@
             </div>
         </section>
 
-        <!-- GRUPLAR BÖLÜMÜ (Sol Menüden Açılır) -->
+        <!-- GRUPLAR BÖLÜMÜ -->
         <section id="gruplar" class="tab-content">
             <h2 class="section-title"><i class="fa-solid fa-sitemap"></i> Branş ve Birlik Grupları</h2>
             <div class="grid">
@@ -227,7 +227,6 @@
             if (element) {
                 element.classList.add('active');
             } else {
-                // NATO başlığına basıldığında ana sayfa menü öğesini aktif yap
                 document.querySelector('.drawer-menu .drawer-item').classList.add('active');
             }
             
@@ -235,5 +234,4 @@
         }
     </script>
 </body>
-                    </html>
-                    
+</html>
