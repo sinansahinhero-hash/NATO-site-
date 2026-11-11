@@ -89,11 +89,12 @@
     <!-- Üst Bar -->
     <header class="navbar">
         <div class="nav-left">
-            <button class="menu-toggle-btn" onclick="toggleSidebar()">
-                <i class="fa-solid fa-bars"></i>
+            <!-- Eksi işareti yerine ev simgesi yapıldı -->
+            <button class="menu-toggle-btn" onclick="toggleSidebar()" title="Menüyü Aç">
+                <i class="fa-solid fa-house"></i>
             </button>
             <div class="brand-container" onclick="switchTab('ev', document.querySelector('.drawer-item'))">
-                <i class="fa-solid fa-house"></i>
+                <i class="fa-solid fa-shield-halved"></i>
                 <div class="brand-title">NATO</div>
             </div>
         </div>
@@ -330,15 +331,14 @@
 
     <script>
         function toggleSidebar() {
-            document.getElementById('sidebarDrawer').classList.toggle('open');
-            document.getElementById('overlay').classList.toggle('open');
+            const drawer = document.getElementById('sidebarDrawer');
+            const overlay = document.getElementById('overlay');
+            drawer.classList.toggle('open');
+            overlay.classList.toggle('open');
         }
 
         function switchTab(tabId, element) {
             // Tüm sekmeleri gizle
-            const contents = document.querySelectorAll('.tab-content');
-            contents.forEach(el => el.classList.remove('active'));
-            
-            // Tüm menü öğelerinin aktiflik sınıfını kaldır
-            const menuItems = document.querySelectorAll('.drawer-item');
-    
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            }
