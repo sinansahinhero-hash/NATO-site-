@@ -3,212 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATO Komuta Kontrol Paneli</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>NATO Komuta Kontrol Merkezi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: #0b1120; color: #f8fafc; display: flex; height: 100vh; overflow: hidden; }
-        
-        /* Sidebar */
-        .sidebar { width: 280px; background: #0f172a; border-right: 1px solid #1e293b; display: flex; flex-direction: column; }
-        .sidebar-brand { padding: 24px; font-size: 22px; font-weight: 700; color: #fbbf24; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #1e293b; letter-spacing: 1px; }
-        .sidebar-menu { padding: 20px 12px; display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
-        .menu-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; color: #94a3b8; text-decoration: none; border-radius: 8px; font-weight: 600; transition: 0.2s; cursor: pointer; }
-        .menu-item:hover, .menu-item.active { background: rgba(251, 191, 36, 0.1); color: #fbbf24; border-left: 4px solid #fbbf24; }
+        body { background-color: #0b1120; color: #f8fafc; overflow-x: hidden; }
 
-        /* Main Content */
-        .main-content { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; }
-        header { padding: 20px 32px; background: #0f172a; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; }
-        .header-title { color: #fbbf24; font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        
-        .user-badge { display: flex; align-items: center; gap: 12px; background: #1e293b; padding: 6px 16px; border-radius: 30px; border: 1px solid #334155; }
-        .user-badge img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+        /* Üst Header Çubuğu (Görseldeki Gibi) */
+        .navbar { background-color: #0f172a; border-bottom: 1px solid #1e293b; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .nav-left { display: flex; align-items: center; gap: 14px; }
+        .menu-toggle-btn { background: #1e293b; border: 1px solid rgba(251, 191, 36, 0.3); color: #fbbf24; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; transition: 0.2s; }
+        .menu-toggle-btn:hover { background: rgba(251, 191, 36, 0.1); }
+        .brand-title { font-size: 22px; font-weight: 800; color: #fbbf24; letter-spacing: 1px; }
 
-        .content-body { padding: 32px; }
+        .login-btn { background: #0284c7; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px; cursor: pointer; text-decoration: none; transition: 0.2s; }
+        .login-btn:hover { background: #0369a1; }
+
+        /* Soldan Sağa Açılan Menü (Drawer) */
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); z-index: 999; display: none; transition: 0.3s; }
+        .sidebar-overlay.open { display: block; }
+
+        .sidebar-drawer { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: #0f172a; border-right: 1px solid #1e293b; z-index: 1000; display: flex; flex-direction: column; transition: left 0.3s ease; box-shadow: 5px 0 25px rgba(0,0,0,0.5); }
+        .sidebar-drawer.open { left: 0; }
+        
+        .drawer-header { padding: 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; }
+        .drawer-header h3 { color: #fbbf24; font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .drawer-close { background: none; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; }
+        .drawer-close:hover { color: #fff; }
+
+        .drawer-menu { padding: 20px 12px; display: flex; flex-direction: column; gap: 8px; }
+        .drawer-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; color: #94a3b8; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s; }
+        .drawer-item:hover, .drawer-item.active { background: rgba(251, 191, 36, 0.1); color: #fbbf24; border-left: 4px solid #fbbf24; }
+
+        /* Ana İçerik Alanı */
+        .main-container { max-width: 1000px; margin: 0 auto; padding: 24px 16px; }
+        
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        h2 { font-size: 22px; margin-bottom: 24px; color: #fbbf24; font-weight: 700; display: flex; align-items: center; gap: 10px; }
-        
-        /* Grid & Cards */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; transition: 0.2s; }
-        .card:hover { border-color: rgba(251, 191, 36, 0.4); }
-        .card h3 { font-size: 18px; margin-bottom: 8px; color: #fbbf24; display: flex; align-items: center; gap: 8px; }
-        .card p { color: #9ca3af; font-size: 14px; margin-bottom: 16px; line-height: 1.5; }
-        
-        .sub-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
-        .tag { background: #1f2937; color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.2); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+        .section-title { font-size: 20px; font-weight: 700; color: #fbbf24; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 
-        .btn { padding: 10px 16px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; text-align: center; text-decoration: none; display: inline-block; font-size: 13px; }
-        .btn-primary { background: #fbbf24; color: #0f172a; }
-        .btn-primary:hover { background: #f59e0b; }
-        .btn-danger { background: #ef4444; color: #fff; }
+        /* Kart Yapıları (Görseldeki Stilde) */
+        .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        @media(min-width: 768px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+
+        .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; transition: 0.2s; }
+        .card:hover { border-color: rgba(251, 191, 36, 0.4); }
+        .card h3 { font-size: 17px; margin-bottom: 8px; color: #fbbf24; display: flex; align-items: center; gap: 8px; }
+        .card p { color: #9ca3af; font-size: 13px; margin-bottom: 16px; line-height: 1.5; }
+
+        /* Alt Etiketler (Börü, Kho vb.) */
+        .sub-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+        .tag { background: #1f2937; color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.25); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+
+        .btn-action { background: #fbbf24; color: #0f172a; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.2s; width: 100%; text-align: center; }
+        .btn-action:hover { background: #f59e0b; }
+
+        /* Hesap ve Bot Stilleri */
+        .account-box { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 16px; max-width: 500px; }
+        .account-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f2937; padding-bottom: 12px; font-size: 14px; }
+        .account-row span:first-child { color: #9ca3af; }
+        .btn-danger { background: #ef4444; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; }
         .btn-danger:hover { background: #dc2626; }
         
-        /* Account Box */
-        .account-box { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 28px; max-width: 500px; display: flex; flex-direction: column; gap: 20px; }
-        .account-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f2937; padding-bottom: 14px; }
-        .account-row span:first-child { color: #9ca3af; font-weight: 500; }
-        .account-row strong { color: #f8fafc; }
-        
-        .status-dot { color: #22c55e; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        .status-badge { color: #22c55e; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <div class="sidebar-brand">
-            <i class="fa-solid fa-shield-halved" style="color: #fbbf24;"></i> NATO
+    <!-- Üst Bar -->
+    <header class="navbar">
+        <div class="nav-left">
+            <button class="menu-toggle-btn" onclick="toggleSidebar()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="brand-title">NATO</div>
         </div>
-        <div class="sidebar-menu">
-            <div class="menu-item active" onclick="switchTab('gruplar', this)"><i class="fa-solid fa-users-rectangle"></i> Gruplar</div>
-            <div class="menu-item" onclick="switchTab('botlar', this)"><i class="fa-solid fa-robot"></i> Botlar</div>
-            <div class="menu-item" onclick="switchTab('hesap', this)"><i class="fa-solid fa-user-gear"></i> Hesap</div>
+        <a href="#" class="login-btn"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</a>
+    </header>
+
+    <!-- Soldan Açılan Menü (Drawer) -->
+    <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar-drawer" id="sidebarDrawer">
+        <div class="drawer-header">
+            <h3><i class="fa-solid fa-shield-halved"></i> Menü</h3>
+            <button class="drawer-close" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
         </div>
-    </div>
-
-    <div class="main-content">
-        <header>
-            <div class="header-title">Komuta Kontrol Merkezi</div>
-            <div id="userHeader" class="user-badge">
-                <a href="/auth/discord" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;"><i class="fa-brands fa-discord"></i> Giriş Yap</a>
-            </div>
-        </header>
-
-        <div class="content-body">
-            
-            <!-- GRUPLAR BÖLÜMÜ -->
-            <div id="gruplar" class="tab-content active">
-                <h2><i class="fa-solid fa-sitemap"></i> Askeri Branşlar ve Birlikler</h2>
-                <div class="grid" id="groupGrid">
-                    <!-- Dinamik olarak yüklenecek veya statik listelenecek -->
-                    <div class="card">
-                        <div>
-                            <h3><i class="fa-solid fa-person-military-rifle"></i> Kara Kuvvetleri</h3>
-                            <p>Karadan sorumlu askeri branştır. Bölge güvenliğini ve ana muharebe hatlarını korur.</p>
-                            <div class="sub-tags">
-                                <span class="tag">BÖRÜ</span>
-                                <span class="tag">KHO</span>
-                                <span class="tag">MUHABERE</span>
-                                <span class="tag">ARAMA KURTARMA</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary" onclick="sendGroupRequest('Kara Kuvvetleri')">Gruba İstek At</button>
-                    </div>
-
-                    <div class="card">
-                        <div>
-                            <h3><i class="fa-solid fa-shield-dog"></i> Sınır Müfettişleri</h3>
-                            <p>Sınırdan ve gümrük kontrollerinden sorumlu yetkili branştır.</p>
-                            <div class="sub-tags">
-                                <span class="tag">GÜMRÜK</span>
-                                <span class="tag">DEVRİYE</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary" onclick="sendGroupRequest('Sınır Müfettişleri')">Gruba İstek At</button>
-                    </div>
-
-                    <div class="card">
-                        <div>
-                            <h3><i class="fa-solid fa-handcuffs"></i> Askeri İnzibat</h3>
-                            <p>Askeri disiplini, düzeni koruyan ve kural ihlallerini denetleyen kolluk kuvvetidir.</p>
-                            <div class="sub-tags">
-                                <span class="tag">NÖBET</span>
-                                <span class="tag">ASAYİŞ</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary" onclick="sendGroupRequest('Askeri İnzibat')">Gruba İstek At</button>
-                    </div>
-
-                    <div class="card">
-                        <div>
-                            <h3><i class="fa-solid fa-crosshairs"></i> Özel Kuvvetler</h3>
-                            <p>Yüksek riskli operasyonları yürüten, özel eğitimli ve yetkili taarruz birimidir.</p>
-                            <div class="sub-tags">
-                                <span class="tag">TAARRUZ</span>
-                                <span class="tag">SİBER TİM</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary" onclick="sendGroupRequest('Özel Kuvvetler')">Gruba İstek At</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- BOTLAR BÖLÜMÜ -->
-            <div id="botlar" class="tab-content">
-                <h2><i class="fa-solid fa-microchip"></i> Sistem Botları</h2>
-                <div class="grid">
-                    <div class="card">
-                        <div>
-                            <h3>NATO Bot</h3>
-                            <p>Ana senkronizasyon, oyun entegrasyonu ve sunucu içi komut yönetim botudur.</p>
-                        </div>
-                        <div class="status-dot"><i class="fa-solid fa-circle" style="font-size: 8px;"></i> Aktif (Çevrimiçi)</div>
-                    </div>
-                    <div class="card">
-                        <div>
-                            <h3>NATO Moderasyon</h3>
-                            <p>Güvenlik, denetim, kayıt işlemleri ve `/update` yetki dağıtımlarını yürüten moderasyon botudur.</p>
-                        </div>
-                        <div class="status-dot"><i class="fa-solid fa-circle" style="font-size: 8px;"></i> Aktif (Çevrimiçi)</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- HESAP BÖLÜMÜ -->
-            <div id="hesap" class="tab-content">
-                <h2><i class="fa-solid fa-id-card"></i> Hesap Bilgileri</h2>
-                <div class="account-box" id="accountBox">
-                    <div class="account-row">
-                        <span>Discord Profili:</span>
-                        <strong id="accDiscord">Giriş Yapılmadı</strong>
-                    </div>
-                    <div class="account-row">
-                        <span>Minecraft Hesabı:</span>
-                        <strong style="color: #22c55e;"><i class="fa-solid fa-check-circle"></i> Bağlı (Microsoft OAuth)</strong>
-                    </div>
-                    <a href="/logout" class="btn btn-danger"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</a>
-                </div>
-            </div>
-
+        <div class="drawer-menu">
+            <div class="drawer-item active" onclick="switchTab('gruplar', this)"><i class="fa-solid fa-users-rectangle"></i> Gruplar</div>
+            <div class="drawer-item" onclick="switchTab('botlar', this)"><i class="fa-solid fa-robot"></i> Botlar</div>
+            <div class="drawer-item" onclick="switchTab('hesap', this)"><i class="fa-solid fa-user-gear"></i> Hesap</div>
         </div>
     </div>
+
+    <!-- Ana İçerik -->
+    <main class="main-container">
+        
+        <!-- GRUPLAR BÖLÜMÜ -->
+        <section id="gruplar" class="tab-content active">
+            <h2 class="section-title"><i class="fa-solid fa-sitemap"></i> Askeri Branşlar ve Birimler</h2>
+            <div class="grid">
+                
+                <div class="card">
+                    <div>
+                        <h3><i class="fa-solid fa-person-military-rifle"></i> Kara Kuvvetleri</h3>
+                        <p>Karadan sorumlu ana askeri branştır. Bölge güvenliğini ve ana muharebe hatlarını korur.</p>
+                        <div class="sub-tags">
+                            <span class="tag">BÖRÜ</span>
+                            <span class="tag">KHO</span>
+                            <span class="tag">MUHABERE</span>
+                            <span class="tag">ARAMA KURTARMA</span>
+                        </div>
+                    </div>
+                    <button class="btn-action" onclick="alert('Kara Kuvvetleri grubuna katılım isteğin yetkililere iletildi Paşam!')">Gruba İstek At</button>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <h3><i class="fa-solid fa-shield-dog"></i> Sınır Müfettişleri</h3>
+                        <p>Sınırdan ve gümrük kontrollerinden sorumlu denetim birimidir.</p>
+                        <div class="sub-tags">
+                            <span class="tag">GÜMRÜK</span>
+                            <span class="tag">DEVRİYE</span>
+                        </div>
+                    </div>
+                    <button class="btn-action" onclick="alert('Sınır Müfettişleri grubuna katılım isteğin yetkililere iletildi Paşam!')">Gruba İstek At</button>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <h3><i class="fa-solid fa-handcuffs"></i> Askeri İnzibat</h3>
+                        <p>Askeri disiplini ve düzeni sağlayan kolluk kuvvetidir.</p>
+                        <div class="sub-tags">
+                            <span class="tag">NÖBET</span>
+                            <span class="tag">ASAYİŞ</span>
+                        </div>
+                    </div>
+                    <button class="btn-action" onclick="alert('Askeri İnzibat grubuna katılım isteğin yetkililere iletildi Paşam!')">Gruba İstek At</button>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <h3><i class="fa-solid fa-crosshairs"></i> Özel Kuvvetler</h3>
+                        <p>Yüksek riskli operasyonları yürüten taarruz birimidir.</p>
+                        <div class="sub-tags">
+                            <span class="tag">TAARRUZ</span>
+                            <span class="tag">SİBER TİM</span>
+                        </div>
+                    </div>
+                    <button class="btn-action" onclick="alert('Özel Kuvvetler grubuna katılım isteğin yetkililere iletildi Paşam!')">Gruba İstek At</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- BOTLAR BÖLÜMÜ -->
+        <section id="botlar" class="tab-content">
+            <h2 class="section-title"><i class="fa-solid fa-microchip"></i> Sistem Botları</h2>
+            <div class="grid">
+                <div class="card">
+                    <div>
+                        <h3>NATO Bot</h3>
+                        <p>Sunucu senkronizasyon ve entegrasyon botudur.</p>
+                    </div>
+                    <div class="status-badge"><i class="fa-solid fa-circle" style="font-size: 7px;"></i> Aktif (Çevrimiçi)</div>
+                </div>
+                <div class="card">
+                    <div>
+                        <h3>NATO Moderasyon</h3>
+                        <p>Kayıt, güvenlik ve `/update` yetki dağıtımlarını yöneten bot.</p>
+                    </div>
+                    <div class="status-badge"><i class="fa-solid fa-circle" style="font-size: 7px;"></i> Aktif (Çevrimiçi)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HESAP BÖLÜMÜ -->
+        <section id="hesap" class="tab-content">
+            <h2 class="section-title"><i class="fa-solid fa-id-card"></i> Hesap Yönetimi</h2>
+            <div class="account-box">
+                <div class="account-row">
+                    <span>Discord Profili:</span>
+                    <strong style="color: #fbbf24;">sinansx</strong>
+                </div>
+                <div class="account-row">
+                    <span>Minecraft Hesabı:</span>
+                    <strong style="color: #22c55e;"><i class="fa-solid fa-check-circle"></i> Bağlı (Microsoft)</strong>
+                </div>
+                <button class="btn-danger" onclick="alert('Oturum kapatıldı Paşam!')"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</button>
+            </div>
+        </section>
+
+    </main>
 
     <script>
+        function toggleSidebar() {
+            document.getElementById('sidebarDrawer').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('open');
+        }
+
         function switchTab(tabId, element) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.drawer-item').forEach(el => el.classList.remove('active'));
+            
             document.getElementById(tabId).classList.add('active');
             element.classList.add('active');
+            
+            // Mobilde sekmeye basınca menüyü otomatik kapat
+            toggleSidebar();
         }
-
-        function sendGroupRequest(groupName) {
-            fetch('/api/request-group', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ groupName })
-            })
-            .then(res => res.json())
-            .then(data => {
-                alert(data.message || data.error);
-            })
-            .catch(() => alert('Bir hata oluştu Paşam!'));
-        }
-
-        // Kullanıcı oturum durumunu kontrol et
-        fetch('/api/user')
-            .then(res => res.json())
-            .then(user => {
-                if (user && user.username) {
-                    document.getElementById('userHeader').innerHTML = `
-                        <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" alt="Avatar">
-                        <span style="font-weight: 600; font-size: 13px; color: #fbbf24;">${user.username} (Paşam)</span>
-                    `;
-                    document.getElementById('accDiscord').innerText = user.username;
-                }
-            }).catch(() => {});
     </script>
 </body>
-</html>
+                        </html>
+                        
