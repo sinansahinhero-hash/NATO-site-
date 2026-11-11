@@ -13,8 +13,10 @@
         /* Üst Header Çubuğu */
         .navbar { background-color: #0f172a; border-bottom: 1px solid #1e293b; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
         .nav-left { display: flex; align-items: center; gap: 14px; }
-        .menu-toggle-btn { background: #1e293b; border: 1px solid rgba(251, 191, 36, 0.3); color: #fbbf24; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; transition: 0.2s; }
+        .menu-toggle-btn { background: #1e293b; border: 1px solid rgba(251, 191, 36, 0.3); color: #fbbf24; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; transition: 0.2s; pointer-events: auto; }
         .menu-toggle-btn:hover { background: rgba(251, 191, 36, 0.1); }
+        .menu-toggle-btn * { pointer-events: none; } /* İkonun tıklamayı engellemesini önler */
+
         .brand-container { display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none; }
         .brand-container i { font-size: 20px; color: #fbbf24; }
         .brand-title { font-size: 22px; font-weight: 800; color: #fbbf24; letter-spacing: 1px; }
@@ -22,7 +24,7 @@
         .login-btn { background: #0284c7; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px; cursor: pointer; text-decoration: none; transition: 0.2s; }
         .login-btn:hover { background: #0369a1; }
 
-        /* Soldan Sağa Açılan Menü (Drawer) - Z-index ve Açılma Mantığı Düzeltildi */
+        /* Soldan Sağa Açılan Menü (Drawer) */
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); z-index: 9998; display: none; }
         .sidebar-overlay.open { display: block; }
 
@@ -90,10 +92,10 @@
     <header class="navbar">
         <div class="nav-left">
             <!-- Menüyü Açan Ev Butonu -->
-            <button class="menu-toggle-btn" id="menuBtn" title="Menüyü Aç">
+            <button class="menu-toggle-btn" id="menuBtn" title="Menüyü Aç" onclick="toggleSidebar()">
                 <i class="fa-solid fa-house"></i>
             </button>
-            <div class="brand-container" id="brandHome">
+            <div class="brand-container" id="brandHome" onclick="switchTab('ev', document.querySelector('[data-target=\'ev\']'))">
                 <i class="fa-solid fa-shield-halved"></i>
                 <div class="brand-title">NATO</div>
             </div>
@@ -102,20 +104,20 @@
     </header>
 
     <!-- Soldan Açılan Menü (Drawer) -->
-    <div class="sidebar-overlay" id="overlay"></div>
+    <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
     <div class="sidebar-drawer" id="sidebarDrawer">
         <div class="drawer-header">
             <h3><i class="fa-solid fa-bars-staggered"></i> Komuta Menüsü</h3>
-            <button class="drawer-close" id="closeDrawerBtn"><i class="fa-solid fa-xmark"></i></button>
+            <button class="drawer-close" id="closeDrawerBtn" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="drawer-menu">
-            <div class="drawer-item active" data-target="ev"><i class="fa-solid fa-house"></i> Ev / Ana Sayfa</div>
-            <div class="drawer-item" data-target="destek"><i class="fa-solid fa-headset"></i> Destek Talepleri</div>
-            <div class="drawer-item" data-target="branslar"><i class="fa-solid fa-shield-halved"></i> Branşlar</div>
-            <div class="drawer-item" data-target="emegegectenler"><i class="fa-solid fa-award"></i> Emeği Geçenler</div>
-            <div class="drawer-item" data-target="gruplar"><i class="fa-solid fa-users-rectangle"></i> Gruplar</div>
-            <div class="drawer-item" data-target="botlar"><i class="fa-solid fa-robot"></i> Botlar</div>
-            <div class="drawer-item" data-target="hesap"><i class="fa-solid fa-user-gear"></i> Hesap</div>
+            <div class="drawer-item active" data-target="ev" onclick="switchTab('ev', this)"><i class="fa-solid fa-house"></i> Ev / Ana Sayfa</div>
+            <div class="drawer-item" data-target="destek" onclick="switchTab('destek', this)"><i class="fa-solid fa-headset"></i> Destek Talepleri</div>
+            <div class="drawer-item" data-target="branslar" onclick="switchTab('branslar', this)"><i class="fa-solid fa-shield-halved"></i> Branşlar</div>
+            <div class="drawer-item" data-target="emegegectenler" onclick="switchTab('emegegectenler', this)"><i class="fa-solid fa-award"></i> Emeği Geçenler</div>
+            <div class="drawer-item" data-target="gruplar" onclick="switchTab('gruplar', this)"><i class="fa-solid fa-users-rectangle"></i> Gruplar</div>
+            <div class="drawer-item" data-target="botlar" onclick="switchTab('botlar', this)"><i class="fa-solid fa-robot"></i> Botlar</div>
+            <div class="drawer-item" data-target="hesap" onclick="switchTab('hesap', this)"><i class="fa-solid fa-user-gear"></i> Hesap</div>
         </div>
     </div>
 
@@ -330,21 +332,7 @@
     </footer>
 
     <script>
-        const drawer = document.getElementById('sidebarDrawer');
-        const overlay = document.getElementById('overlay');
-        const menuBtn = document.getElementById('menuBtn');
-        const closeDrawerBtn = document.getElementById('closeDrawerBtn');
-        const brandHome = document.getElementById('brandHome');
-        const menuItems = document.querySelectorAll('.drawer-item');
-
-        function openDrawer() {
-            drawer.classList.add('open');
-            overlay.classList.add('open');
-        }
-
-        function closeDrawer() {
-            drawer.classList.remove('open');
-            overlay.classList.remove('open');
-        }
-
-        // Ev simges
+        function toggleSidebar() {
+            const drawer = document.getElementById('sidebarDrawer');
+            const overlay = document.getElementById('overlay');
+            drawer
