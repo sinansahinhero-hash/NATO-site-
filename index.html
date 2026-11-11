@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATO Askeri & Topluluk Portalı</title>
+    <title>NATO</title>
     <!-- FontAwesome & Fontlar -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Teko:wght@500;700&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
@@ -26,6 +26,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Montserrat', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -71,7 +72,7 @@
             transition: all 0.3s;
         }
 
-        .home-icon-btn:hover {
+        .home-icon-btn:hover, .home-icon-btn:active {
             background: var(--accent-gold);
             color: var(--bg-primary);
             box-shadow: 0 0 12px rgba(255, 183, 3, 0.4);
@@ -99,36 +100,38 @@
             transition: 0.3s;
         }
 
-        .auth-btn:hover {
+        .auth-btn:hover, .auth-btn:active {
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(0, 119, 182, 0.4);
         }
 
-        /* HERO TANITIM BANNERI */
+        /* HERO TANITIM BANNERI - GÖNDERİLEN NATO LOGOLU ARKA PLAN */
         .hero-section {
-            background: linear-gradient(rgba(10, 14, 23, 0.85), rgba(10, 14, 23, 0.95)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1350&q=80');
+            background: linear-gradient(rgba(10, 14, 23, 0.75), rgba(10, 14, 23, 0.90)), url('https://i.ibb.co/4nPyJ5s/nato-red.jpg');
             background-size: cover;
             background-position: center;
-            padding: 40px 20px;
+            padding: 55px 20px;
             text-align: center;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
         .hero-title {
             font-family: 'Teko', sans-serif;
-            font-size: 3rem;
+            font-size: 4rem;
             color: var(--accent-gold);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(0,0,0,0.8);
         }
 
         .hero-sub {
-            color: var(--text-muted);
+            color: #e0e6ed;
             max-width: 800px;
             margin: 0 auto;
             font-size: 1.05rem;
             line-height: 1.5;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
         }
 
         /* ANA İÇERİK DÜZENİ */
@@ -147,6 +150,7 @@
             border-bottom: 2px solid var(--bg-card);
             overflow-x: auto;
             padding-bottom: 5px;
+            -webkit-overflow-scrolling: touch;
         }
 
         .tab-btn {
@@ -176,12 +180,12 @@
         }
 
         .content-panel.active {
-            display: block;
-            animation: fadeIn 0.4s ease;
+            display: block !important;
+            animation: fadeIn 0.3s ease;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -476,16 +480,16 @@
     <header>
         <div class="nav-bar">
             <div class="nav-left">
-                <button class="home-icon-btn" id="homeBtn"><i class="fa-solid fa-house"></i></button>
+                <button class="home-icon-btn" onclick="openTab('ev')"><i class="fa-solid fa-house"></i></button>
                 <div class="logo-title">NATO</div>
             </div>
-            <button class="auth-btn" id="loginOpenBtn"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
+            <button class="auth-btn" onclick="toggleModal(true)"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
         </div>
     </header>
 
-    <!-- NATO TANITIM HERO BANNER -->
+    <!-- NATO TANITIM HERO BANNER (NATO LOGOLU ARKA PLAN) -->
     <section class="hero-section">
-        <h1 class="hero-title">Yıldırım Orduları & NATO Komutanlığı</h1>
+        <h1 class="hero-title">NATO</h1>
         <p class="hero-sub">Minecraft ve Discord sunucularında hiyerarşi, disiplin ve operasyonel mükemmellik ilkesiyle hareket eden elit askeri topluluk.</p>
     </section>
 
@@ -494,12 +498,12 @@
         
         <!-- SEKMELER (TAB MENU) -->
         <div class="tab-menu">
-            <button class="tab-btn active" data-tab="ev"><i class="fa-solid fa-shield-halved"></i> Ana Sayfa & Branşlar</button>
-            <button class="tab-btn" data-tab="destek"><i class="fa-solid fa-headset"></i> Destek Talepleri</button>
-            <button class="tab-btn" data-tab="gruplar"><i class="fa-solid fa-users-gear"></i> Gruplar & Başvuru</button>
-            <button class="tab-btn" data-tab="emegi-gecenler"><i class="fa-solid fa-award"></i> Emeği Geçenler</button>
-            <button class="tab-btn" data-tab="botlar"><i class="fa-solid fa-robot"></i> Resmi Botlar</button>
-            <button class="tab-btn" data-tab="hesap"><i class="fa-solid fa-user-gear"></i> Hesabım</button>
+            <button class="tab-btn active" onclick="openTab('ev')"><i class="fa-solid fa-shield-halved"></i> Ana Sayfa & Branşlar</button>
+            <button class="tab-btn" onclick="openTab('destek')"><i class="fa-solid fa-headset"></i> Destek Talepleri</button>
+            <button class="tab-btn" onclick="openTab('gruplar')"><i class="fa-solid fa-users-gear"></i> Gruplar & Başvuru</button>
+            <button class="tab-btn" onclick="openTab('emegi-gecenler')"><i class="fa-solid fa-award"></i> Emeği Geçenler</button>
+            <button class="tab-btn" onclick="openTab('botlar')"><i class="fa-solid fa-robot"></i> Resmi Botlar</button>
+            <button class="tab-btn" onclick="openTab('hesap')"><i class="fa-solid fa-user-gear"></i> Hesabım</button>
         </div>
 
         <!-- SEKTÖR 1: EV / BRANŞLAR -->
@@ -562,7 +566,7 @@
                         <option>Askeri Şikayet</option>
                         <option>Ulusal Şikayet</option>
                     </select>
-                    <button class="auth-btn" id="createTicketBtn" style="width:100%; justify-content:center;">Talep Oluştur</button>
+                    <button class="auth-btn" style="width:100%; justify-content:center;" onclick="alert('Destek Talebi Oluşturuldu!')">Talep Oluştur</button>
 
                     <h4 style="margin-top: 25px; margin-bottom: 10px;">Aktif Talepleriniz</h4>
                     <div style="background:var(--bg-card); padding:10px; border-radius:4px; font-size:0.85rem; border-left:3px solid var(--accent-gold);">
@@ -589,11 +593,4 @@
                     <div class="chat-messages">
                         <div class="msg admin">
                             <strong style="color:var(--accent-gold);">Yetkili (Tahirg):</strong> Merhaba Paşam, destek talebiniz yetkili ekibimize ulaştı. Nasıl yardımcı olabiliriz?
-                        </div>
-                        <div class="msg user">
-                            <strong>Herobrine_sinan:</strong> Haksız ban konusunda inceleme yapılmasını talep ediyorum.
-                        </div>
-                    </div>
-
-                    <div style="display:flex; gap:10px;">
-                        <input type="te
+                        </div
