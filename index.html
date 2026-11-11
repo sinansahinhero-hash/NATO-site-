@@ -10,8 +10,8 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: #0b1120; color: #f8fafc; display: flex; height: 100vh; overflow: hidden; }
         
-        /* Sidebar - Askeri Tema */
-        .sidebar { width: 280px; background: #0f172a; border-right: 1px style; border-color: #1e293b; display: flex; flex-direction: column; }
+        /* Sidebar */
+        .sidebar { width: 280px; background: #0f172a; border-right: 1px solid #1e293b; display: flex; flex-direction: column; }
         .sidebar-brand { padding: 24px; font-size: 22px; font-weight: 700; color: #fbbf24; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #1e293b; letter-spacing: 1px; }
         .sidebar-menu { padding: 20px 12px; display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
         .menu-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; color: #94a3b8; text-decoration: none; border-radius: 8px; font-weight: 600; transition: 0.2s; cursor: pointer; }
@@ -38,7 +38,6 @@
         .card h3 { font-size: 18px; margin-bottom: 8px; color: #fbbf24; display: flex; align-items: center; gap: 8px; }
         .card p { color: #9ca3af; font-size: 14px; margin-bottom: 16px; line-height: 1.5; }
         
-        /* Sub-badges / Tags */
         .sub-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
         .tag { background: #1f2937; color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.2); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; }
 
@@ -73,9 +72,8 @@
     <div class="main-content">
         <header>
             <div class="header-title">Komuta Kontrol Merkezi</div>
-            <div class="user-badge">
-                <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f464.png" alt="Avatar">
-                <span style="font-weight: 600; font-size: 13px; color: #fbbf24;">Sinan (Paşam)</span>
+            <div id="userHeader" class="user-badge">
+                <a href="/auth/discord" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;"><i class="fa-brands fa-discord"></i> Giriş Yap</a>
             </div>
         </header>
 
@@ -84,7 +82,8 @@
             <!-- GRUPLAR BÖLÜMÜ -->
             <div id="gruplar" class="tab-content active">
                 <h2><i class="fa-solid fa-sitemap"></i> Askeri Branşlar ve Birlikler</h2>
-                <div class="grid">
+                <div class="grid" id="groupGrid">
+                    <!-- Dinamik olarak yüklenecek veya statik listelenecek -->
                     <div class="card">
                         <div>
                             <h3><i class="fa-solid fa-person-military-rifle"></i> Kara Kuvvetleri</h3>
@@ -96,19 +95,19 @@
                                 <span class="tag">ARAMA KURTARMA</span>
                             </div>
                         </div>
-                        <button class="btn btn-primary" onclick="alert('Kara Kuvvetleri grubuna katılım isteğiniz yetkililere iletildi Paşam!')">Gruba İstek At</button>
+                        <button class="btn btn-primary" onclick="sendGroupRequest('Kara Kuvvetleri')">Gruba İstek At</button>
                     </div>
 
                     <div class="card">
                         <div>
                             <h3><i class="fa-solid fa-shield-dog"></i> Sınır Müfettişleri</h3>
-                            <p>Sınırdan ve gümrük kontrollerinden sorumlu yetkili branştır. Bölge denetimini sağlar.</p>
+                            <p>Sınırdan ve gümrük kontrollerinden sorumlu yetkili branştır.</p>
                             <div class="sub-tags">
                                 <span class="tag">GÜMRÜK</span>
                                 <span class="tag">DEVRİYE</span>
                             </div>
                         </div>
-                        <button class="btn btn-primary" onclick="alert('Sınır Müfettişleri grubuna katılım isteğiniz yetkililere iletildi Paşam!')">Gruba İstek At</button>
+                        <button class="btn btn-primary" onclick="sendGroupRequest('Sınır Müfettişleri')">Gruba İstek At</button>
                     </div>
 
                     <div class="card">
@@ -120,7 +119,7 @@
                                 <span class="tag">ASAYİŞ</span>
                             </div>
                         </div>
-                        <button class="btn btn-primary" onclick="alert('Askeri İnzibat grubuna katılım isteğiniz yetkililere iletildi Paşam!')">Gruba İstek At</button>
+                        <button class="btn btn-primary" onclick="sendGroupRequest('Askeri İnzibat')">Gruba İstek At</button>
                     </div>
 
                     <div class="card">
@@ -132,7 +131,7 @@
                                 <span class="tag">SİBER TİM</span>
                             </div>
                         </div>
-                        <button class="btn btn-primary" onclick="alert('Özel Kuvvetler grubuna katılım isteğiniz yetkililere iletildi Paşam!')">Gruba İstek At</button>
+                        <button class="btn btn-primary" onclick="sendGroupRequest('Özel Kuvvetler')">Gruba İstek At</button>
                     </div>
                 </div>
             </div>
@@ -161,16 +160,16 @@
             <!-- HESAP BÖLÜMÜ -->
             <div id="hesap" class="tab-content">
                 <h2><i class="fa-solid fa-id-card"></i> Hesap Bilgileri</h2>
-                <div class="account-box">
+                <div class="account-box" id="accountBox">
                     <div class="account-row">
                         <span>Discord Profili:</span>
-                        <strong>sinansx</strong>
+                        <strong id="accDiscord">Giriş Yapılmadı</strong>
                     </div>
                     <div class="account-row">
                         <span>Minecraft Hesabı:</span>
-                        <strong style="color: #22c55e;"><i class="fa-solid fa-check-circle"></i> Bağlı (Microsoft)</strong>
+                        <strong style="color: #22c55e;"><i class="fa-solid fa-check-circle"></i> Bağlı (Microsoft OAuth)</strong>
                     </div>
-                    <button class="btn btn-danger" onclick="alert('Oturum kapatıldı Paşam!')"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</button>
+                    <a href="/logout" class="btn btn-danger"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</a>
                 </div>
             </div>
 
@@ -184,7 +183,32 @@
             document.getElementById(tabId).classList.add('active');
             element.classList.add('active');
         }
+
+        function sendGroupRequest(groupName) {
+            fetch('/api/request-group', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ groupName })
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message || data.error);
+            })
+            .catch(() => alert('Bir hata oluştu Paşam!'));
+        }
+
+        // Kullanıcı oturum durumunu kontrol et
+        fetch('/api/user')
+            .then(res => res.json())
+            .then(user => {
+                if (user && user.username) {
+                    document.getElementById('userHeader').innerHTML = `
+                        <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" alt="Avatar">
+                        <span style="font-weight: 600; font-size: 13px; color: #fbbf24;">${user.username} (Paşam)</span>
+                    `;
+                    document.getElementById('accDiscord').innerText = user.username;
+                }
+            }).catch(() => {});
     </script>
 </body>
-                                                                           </html>
-                                                                           
+</html>
