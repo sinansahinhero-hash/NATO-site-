@@ -22,11 +22,11 @@
         .login-btn { background: #0284c7; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px; cursor: pointer; text-decoration: none; transition: 0.2s; }
         .login-btn:hover { background: #0369a1; }
 
-        /* Soldan Sağa Açılan Menü (Drawer) */
-        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); z-index: 999; display: none; transition: 0.3s; }
+        /* Soldan Sağa Açılan Menü (Drawer) - Z-index ve Açılma Mantığı Düzeltildi */
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); z-index: 9998; display: none; }
         .sidebar-overlay.open { display: block; }
 
-        .sidebar-drawer { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: #0f172a; border-right: 1px solid #1e293b; z-index: 1000; display: flex; flex-direction: column; transition: left 0.3s ease; box-shadow: 5px 0 25px rgba(0,0,0,0.5); }
+        .sidebar-drawer { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: #0f172a; border-right: 1px solid #1e293b; z-index: 9999; display: flex; flex-direction: column; transition: left 0.3s ease; box-shadow: 5px 0 25px rgba(0,0,0,0.5); }
         .sidebar-drawer.open { left: 0; }
         
         .drawer-header { padding: 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; }
@@ -89,11 +89,11 @@
     <!-- Üst Bar -->
     <header class="navbar">
         <div class="nav-left">
-            <!-- Eksi işareti yerine ev simgesi yapıldı -->
-            <button class="menu-toggle-btn" onclick="toggleSidebar()" title="Menüyü Aç">
+            <!-- Menüyü Açan Ev Butonu -->
+            <button class="menu-toggle-btn" id="menuBtn" title="Menüyü Aç">
                 <i class="fa-solid fa-house"></i>
             </button>
-            <div class="brand-container" onclick="switchTab('ev', document.querySelector('.drawer-item'))">
+            <div class="brand-container" id="brandHome">
                 <i class="fa-solid fa-shield-halved"></i>
                 <div class="brand-title">NATO</div>
             </div>
@@ -102,20 +102,20 @@
     </header>
 
     <!-- Soldan Açılan Menü (Drawer) -->
-    <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar-overlay" id="overlay"></div>
     <div class="sidebar-drawer" id="sidebarDrawer">
         <div class="drawer-header">
             <h3><i class="fa-solid fa-bars-staggered"></i> Komuta Menüsü</h3>
-            <button class="drawer-close" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
+            <button class="drawer-close" id="closeDrawerBtn"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="drawer-menu">
-            <div class="drawer-item active" onclick="switchTab('ev', this)"><i class="fa-solid fa-house"></i> Ev / Ana Sayfa</div>
-            <div class="drawer-item" onclick="switchTab('destek', this)"><i class="fa-solid fa-headset"></i> Destek Talepleri</div>
-            <div class="drawer-item" onclick="switchTab('branslar', this)"><i class="fa-solid fa-shield-halved"></i> Branşlar</div>
-            <div class="drawer-item" onclick="switchTab('emegegectenler', this)"><i class="fa-solid fa-award"></i> Emeği Geçenler</div>
-            <div class="drawer-item" onclick="switchTab('gruplar', this)"><i class="fa-solid fa-users-rectangle"></i> Gruplar</div>
-            <div class="drawer-item" onclick="switchTab('botlar', this)"><i class="fa-solid fa-robot"></i> Botlar</div>
-            <div class="drawer-item" onclick="switchTab('hesap', this)"><i class="fa-solid fa-user-gear"></i> Hesap</div>
+            <div class="drawer-item active" data-target="ev"><i class="fa-solid fa-house"></i> Ev / Ana Sayfa</div>
+            <div class="drawer-item" data-target="destek"><i class="fa-solid fa-headset"></i> Destek Talepleri</div>
+            <div class="drawer-item" data-target="branslar"><i class="fa-solid fa-shield-halved"></i> Branşlar</div>
+            <div class="drawer-item" data-target="emegegectenler"><i class="fa-solid fa-award"></i> Emeği Geçenler</div>
+            <div class="drawer-item" data-target="gruplar"><i class="fa-solid fa-users-rectangle"></i> Gruplar</div>
+            <div class="drawer-item" data-target="botlar"><i class="fa-solid fa-robot"></i> Botlar</div>
+            <div class="drawer-item" data-target="hesap"><i class="fa-solid fa-user-gear"></i> Hesap</div>
         </div>
     </div>
 
@@ -330,15 +330,21 @@
     </footer>
 
     <script>
-        function toggleSidebar() {
-            const drawer = document.getElementById('sidebarDrawer');
-            const overlay = document.getElementById('overlay');
-            drawer.classList.toggle('open');
-            overlay.classList.toggle('open');
+        const drawer = document.getElementById('sidebarDrawer');
+        const overlay = document.getElementById('overlay');
+        const menuBtn = document.getElementById('menuBtn');
+        const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+        const brandHome = document.getElementById('brandHome');
+        const menuItems = document.querySelectorAll('.drawer-item');
+
+        function openDrawer() {
+            drawer.classList.add('open');
+            overlay.classList.add('open');
         }
 
-        function switchTab(tabId, element) {
-            // Tüm sekmeleri gizle
-            document.querySelectorAll('.tab-content').forEach(el => {
-                el.classList.remove('active');
-            }
+        function closeDrawer() {
+            drawer.classList.remove('open');
+            overlay.classList.remove('open');
+        }
+
+        // Ev simges
