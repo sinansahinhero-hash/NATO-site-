@@ -14,12 +14,12 @@
         .navbar { background-color: #0f172a; border-bottom: 1px solid #1e293b; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
         .nav-left { display: flex; align-items: center; gap: 14px; }
         
-        /* Menü Butonu - Tıklama Garantiye Alındı */
-        .menu-toggle-btn { background: #1e293b; border: 1px solid rgba(251, 191, 36, 0.3); color: #fbbf24; width: 44px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; transition: 0.2s; z-index: 101; }
+        /* Menüyü Açan Ev Butonu - Kesin Çözüm Katmanı */
+        .menu-toggle-btn { background: #1e293b; border: 1px solid rgba(251, 191, 36, 0.3); color: #fbbf24; width: 44px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; transition: 0.2s; position: relative; z-index: 1001; }
         .menu-toggle-btn:hover { background: rgba(251, 191, 36, 0.1); }
         .menu-toggle-btn i { pointer-events: none; }
 
-        .brand-container { display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none; z-index: 101; }
+        .brand-container { display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none; position: relative; z-index: 1001; }
         .brand-container i { font-size: 20px; color: #fbbf24; pointer-events: none; }
         .brand-title { font-size: 22px; font-weight: 800; color: #fbbf24; letter-spacing: 1px; pointer-events: none; }
 
@@ -142,16 +142,16 @@
                 <div class="card">
                     <div>
                         <h3>Destek Talebi Aç</h3>
-                        <p>Ban Affı, Discord Destek, Askeri Şikayet veya Ulusal Şikayet konularında talep oluşturabilirsiniz.</p>
+                        <p>Ban Affı, Discord Destek, Askeri Şikayet ve Ulusal Şikayet talepleri oluşturulabilir.</p>
                     </div>
-                    <button class="btn-action" onclick="alert('Destek talebi oluşturma ekranı açıldı Paşam!')">Talep Oluştur</button>
+                    <button class="btn-action" onclick="alert('Destek talebi açma ekranı (Ban Affı, Discord Destek, Askeri/Ulusal Şikayet) aktif, Paşam!')">Talep Oluştur</button>
                 </div>
                 <div class="card">
                     <div>
-                        <h3>Yetkili Yönetimi & Paneli</h3>
-                        <p>Yetkili atama, destek sahiplenme, kapatma, kilitleme ve talep açan kullanıcının Discord sunucularını inceleme paneli.</p>
+                        <h3>Yetkili & Yazışma Paneli</h3>
+                        <p>Destek sahiplenme, kapatma, kilitleme, yazışma yönetimi ve talep açan kullanıcının Discord sunucularını inceleme (Sadece Yetkililer).</p>
                     </div>
-                    <button class="btn-action" onclick="alert('Yetkili paneline erişildi Paşam!')">Paneli Aç</button>
+                    <button class="btn-action" onclick="alert('Yetkili paneline giriş yapıldı, Paşam!')">Yetkili Paneli</button>
                 </div>
             </div>
         </section>
@@ -163,7 +163,7 @@
                 <div class="card">
                     <div>
                         <h3>Kara Kuvvetleri</h3>
-                        <p>Karadan sorumlu branştır.</p>
+                        <p>Karadan Sorumlu Branştır.</p>
                         <div class="sub-tags">
                             <span class="tag">BÖRÜ</span>
                             <span class="tag">KHO</span>
@@ -175,7 +175,7 @@
                 <div class="card">
                     <div>
                         <h3>Sınıf Müfettişleri</h3>
-                        <p>Sınırdan sorumlu branştır.</p>
+                        <p>Sınırdan Sorumlu Branştır.</p>
                         <div class="sub-tags">
                             <span class="tag">GARDİYAN MUHAFIZLARI</span>
                             <span class="tag">DENETİM BİRİMİ</span>
@@ -235,7 +235,7 @@
                 <div class="card">
                     <div>
                         <h3>Kara Kuvvetleri Grubu</h3>
-                        <p>Kara Kuvvetleri personeli olarak katılım isteği gönderin. Onaylandığında bot sunucularda /update komutuyla rollerinizi verecektir.</p>
+                        <p>Kara Kuvvetleri personeli olmak için istek atın. Yetkililer onayladığında bot /update komutuyla rollerinizi verecektir.</p>
                         <div class="sub-tags">
                             <span class="tag">BÖRÜ</span>
                             <span class="tag">KHO</span>
@@ -248,7 +248,7 @@
                 <div class="card">
                     <div>
                         <h3>Sınıf Müfettişleri Grubu</h3>
-                        <p>Sınıf Müfettişleri birimleri için katılım ve yetkilendirme isteği.</p>
+                        <p>Sınıf Müfettişleri birimleri için katılım isteği.</p>
                         <div class="sub-tags">
                             <span class="tag">GARDİYAN MUHAFIZLARI</span>
                             <span class="tag">DENETİM BİRİMİ</span>
@@ -259,7 +259,7 @@
                 <div class="card">
                     <div>
                         <h3>Askeri İnzibat Grubu</h3>
-                        <p>Askeri İnzibat birimleri için katılım ve yetkilendirme isteği.</p>
+                        <p>Askeri İnzibat birimleri için katılım isteği.</p>
                         <div class="sub-tags">
                             <span class="tag">Yıldırım Orduları</span>
                             <span class="tag">Kızıl Sağ El</span>
@@ -270,7 +270,7 @@
                 <div class="card">
                     <div>
                         <h3>Özel Kuvvetler Grubu</h3>
-                        <p>Özel Kuvvetler birimleri için katılım ve yetkilendirme isteği.</p>
+                        <p>Özel Kuvvetler birimleri için katılım isteği.</p>
                         <div class="sub-tags">
                             <span class="tag">SAT Özel Koruma Birliği</span>
                             <span class="tag">OMEGA</span>
@@ -288,14 +288,14 @@
                 <div class="card">
                     <div>
                         <h3>NATO Bot</h3>
-                        <p>Ana sunucu senkronizasyonu ve oyun içi entegrasyon botudur.</p>
+                        <p>Ana komuta ve entegrasyon botu.</p>
                     </div>
                     <div class="status-badge"><i class="fa-solid fa-circle" style="font-size: 7px;"></i> Aktif (Çevrimiçi)</div>
                 </div>
                 <div class="card">
                     <div>
                         <h3>NATO Moderasyon</h3>
-                        <p>Kayıt, güvenlik logları ve `/update` yetki dağıtımlarını yöneten moderasyon botudur.</p>
+                        <p>Kayıt, güvenlik ve /update yetki dağıtımlarını yöneten moderasyon botu.</p>
                     </div>
                     <div class="status-badge"><i class="fa-solid fa-circle" style="font-size: 7px;"></i> Aktif (Çevrimiçi)</div>
                 </div>
@@ -325,8 +325,8 @@
         <div class="footer-links">
             <a href="https://discord.gg/ymv8D3WHNz" target="_blank"><i class="fa-brands fa-discord"></i> Discord Sunucumuz</a>
             <a href="https://youtube.com/@nato_delta?si=l6qxhNVICEX9g1np" target="_blank"><i class="fa-brands fa-youtube"></i> YouTube Hesabımız</a>
-            <a href="#" onclick="alert('Hizmet Şartları sayfası yakında eklenecektir, Paşam.')"><i class="fa-solid fa-file-contract"></i> Hizmet Şartları</a>
-            <a href="#" onclick="alert('Gizlilik Politikası sayfası yakında eklenecektir, Paşam.')"><i class="fa-solid fa-shield-halved"></i> Gizlilik Politikası</a>
+            <a href="#" onclick="alert('Hizmet Şartları sayfası, Paşam.')"><i class="fa-solid fa-file-contract"></i> Hizmet Şartları</a>
+            <a href="#" onclick="alert('Gizlilik Politikası sayfası, Paşam.')"><i class="fa-solid fa-shield-halved"></i> Gizlilik Politikası</a>
         </div>
         <div class="footer-copy">
             &copy; 2026 NATO Topluluğu. Tüm hakları saklıdır, Paşam.
@@ -341,5 +341,6 @@
         const brandHome = document.getElementById('brandHome');
         const menuItems = document.querySelectorAll('.drawer-item');
 
-        // Menüyü açma fonksiyonu
-        function tog
+        function toggleDrawer(e) {
+            if (e) e.stopPropagation();
+            drawer.
