@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: #0b1120; color: #f8fafc; overflow-x: hidden; }
+        body { background-color: #0b1120; color: #f8fafc; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
 
         /* Üst Header Çubuğu */
         .navbar { background-color: #0f172a; border-bottom: 1px solid #1e293b; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
@@ -37,7 +37,7 @@
         .drawer-item:hover, .drawer-item.active { background: rgba(251, 191, 36, 0.1); color: #fbbf24; border-left: 4px solid #fbbf24; }
 
         /* Ana İçerik Alanı */
-        .main-container { max-width: 1000px; margin: 0 auto; padding: 32px 16px; }
+        .main-container { max-width: 1000px; margin: 0 auto; padding: 32px 16px; flex-grow: 1; width: 100%; }
         
         .tab-content { display: none; }
         .tab-content.active { display: block; }
@@ -73,6 +73,13 @@
         .btn-danger:hover { background: #dc2626; }
         
         .status-badge { color: #22c55e; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+
+        /* En Aşağı Footer Alanı */
+        .footer { background-color: #0f172a; border-top: 1px solid #1e293b; padding: 24px 20px; margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+        .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+        .footer-links a { color: #94a3b8; text-decoration: none; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+        .footer-links a:hover { color: #fbbf24; }
+        .footer-copy { color: #64748b; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -212,6 +219,19 @@
 
     </main>
 
+    <!-- En Aşağı Footer Alanı -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#" target="_blank"><i class="fa-brands fa-discord"></i> Discord Sunucusu</a>
+            <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i> YouTube Hesabı</a>
+            <a href="#" target="_blank"><i class="fa-solid fa-file-contract"></i> Hizmet Şartları</a>
+            <a href="#" target="_blank"><i class="fa-solid fa-shield-halved"></i> Gizlilik Politikası</a>
+        </div>
+        <div class="footer-copy">
+            &copy; 2026 NATO Topluluğu. Tüm hakları saklıdır, Paşam.
+        </div>
+    </footer>
+
     <script>
         function toggleSidebar() {
             document.getElementById('sidebarDrawer').classList.toggle('open');
@@ -234,4 +254,5 @@
         }
     </script>
 </body>
-</html>
+    </html>
+    
