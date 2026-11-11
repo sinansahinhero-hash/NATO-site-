@@ -185,7 +185,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* KART DÜZENİ (BRANŞLAR / EMETİ GEÇENLER / BOTLAR) */
+        /* KART DÜZENİ */
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -241,12 +241,18 @@
             font-weight: 600;
         }
 
-        /* DESTEK BÖLÜMÜ (TICKETS) */
+        /* DESTEK BÖLÜMÜ */
         .ticket-layout {
             display: grid;
             grid-template-columns: 300px 1fr;
             gap: 20px;
             min-height: 450px;
+        }
+
+        @media (max-width: 768px) {
+            .ticket-layout {
+                grid-template-columns: 1fr;
+            }
         }
 
         .ticket-sidebar {
@@ -273,6 +279,7 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            max-height: 250px;
         }
 
         .msg {
@@ -320,7 +327,7 @@
             color: #000;
         }
 
-        /* MODAL (GİRİŞ YAP / POPUP) */
+        /* MODAL */
         .modal {
             display: none;
             position: fixed;
@@ -333,7 +340,7 @@
         }
 
         .modal.active {
-            display: flex;
+            display: flex !important;
         }
 
         .modal-box {
@@ -352,15 +359,16 @@
             top: 15px;
             right: 20px;
             color: var(--text-muted);
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             cursor: pointer;
         }
 
         .mc-font {
             font-family: 'Press Start 2P', monospace;
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             color: #fff;
             margin-bottom: 25px;
+            line-height: 1.5;
         }
 
         .login-btn-group {
@@ -468,10 +476,10 @@
     <header>
         <div class="nav-bar">
             <div class="nav-left">
-                <button class="home-icon-btn" onclick="switchTab('ev')"><i class="fa-solid fa-house"></i></button>
+                <button class="home-icon-btn" id="homeBtn"><i class="fa-solid fa-house"></i></button>
                 <div class="logo-title">NATO</div>
             </div>
-            <button class="auth-btn" onclick="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
+            <button class="auth-btn" id="loginOpenBtn"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
         </div>
     </header>
 
@@ -486,12 +494,12 @@
         
         <!-- SEKMELER (TAB MENU) -->
         <div class="tab-menu">
-            <button class="tab-btn active" onclick="switchTab('ev')"><i class="fa-solid fa-shield-halved"></i> Ana Sayfa & Branşlar</button>
-            <button class="tab-btn" onclick="switchTab('destek')"><i class="fa-solid fa-headset"></i> Destek Talepleri</button>
-            <button class="tab-btn" onclick="switchTab('gruplar')"><i class="fa-solid fa-users-gear"></i> Gruplar & Başvuru</button>
-            <button class="tab-btn" onclick="switchTab('emegi-gecenler')"><i class="fa-solid fa-award"></i> Emeği Geçenler</button>
-            <button class="tab-btn" onclick="switchTab('botlar')"><i class="fa-solid fa-robot"></i> Resmi Botlar</button>
-            <button class="tab-btn" onclick="switchTab('hesap')"><i class="fa-solid fa-user-gear"></i> Hesabım</button>
+            <button class="tab-btn active" data-tab="ev"><i class="fa-solid fa-shield-halved"></i> Ana Sayfa & Branşlar</button>
+            <button class="tab-btn" data-tab="destek"><i class="fa-solid fa-headset"></i> Destek Talepleri</button>
+            <button class="tab-btn" data-tab="gruplar"><i class="fa-solid fa-users-gear"></i> Gruplar & Başvuru</button>
+            <button class="tab-btn" data-tab="emegi-gecenler"><i class="fa-solid fa-award"></i> Emeği Geçenler</button>
+            <button class="tab-btn" data-tab="botlar"><i class="fa-solid fa-robot"></i> Resmi Botlar</button>
+            <button class="tab-btn" data-tab="hesap"><i class="fa-solid fa-user-gear"></i> Hesabım</button>
         </div>
 
         <!-- SEKTÖR 1: EV / BRANŞLAR -->
@@ -554,7 +562,7 @@
                         <option>Askeri Şikayet</option>
                         <option>Ulusal Şikayet</option>
                     </select>
-                    <button class="auth-btn" style="width:100%; justify-content:center;" onclick="createTicket()">Talep Oluştur</button>
+                    <button class="auth-btn" id="createTicketBtn" style="width:100%; justify-content:center;">Talep Oluştur</button>
 
                     <h4 style="margin-top: 25px; margin-bottom: 10px;">Aktif Talepleriniz</h4>
                     <div style="background:var(--bg-card); padding:10px; border-radius:4px; font-size:0.85rem; border-left:3px solid var(--accent-gold);">
@@ -563,7 +571,7 @@
                 </div>
 
                 <div class="ticket-chat-area">
-                    <!-- YETKİLİ PANELİ KONTROLLERİ (Sadece Yetkililere Görünür) -->
+                    <!-- YETKİLİ PANELİ KONTROLLERİ -->
                     <div>
                         <div class="admin-controls">
                             <span style="font-weight:bold; color:var(--accent-red); width:100%; font-size:0.8rem;"><i class="fa-solid fa-user-gear"></i> YETKİLİ YÖNETİM PANELİ</span>
@@ -572,7 +580,6 @@
                             <button class="btn-action" style="border-color:var(--accent-red);" onclick="alert('Destek kapatıldı!')"><i class="fa-solid fa-box-archive"></i> Kapat</button>
                         </div>
                         
-                        <!-- Kullanıcının Bulunduğu Discord Sunucuları Bilgisi (Yetkili İncelemesi) -->
                         <div style="background:var(--bg-primary); padding:8px 12px; border-radius:4px; font-size:0.8rem; margin-bottom:15px; color:var(--text-muted);">
                             <strong style="color:var(--accent-gold)">Kullanıcı Discord Sunucuları:</strong> Craftlime Türkiye, NATO Ana Sunucu, Yıldırım Orduları HQ.
                         </div>
@@ -588,4 +595,5 @@
                         </div>
                     </div>
 
-      
+                    <div style="display:flex; gap:10px;">
+                        <input type="te
