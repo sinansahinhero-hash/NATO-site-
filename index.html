@@ -15,7 +15,9 @@
         .nav-left { display: flex; align-items: center; gap: 14px; }
         .menu-toggle-btn { background: #1e293b; border: 1px solid rgba(251, 191, 36, 0.3); color: #fbbf24; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; transition: 0.2s; }
         .menu-toggle-btn:hover { background: rgba(251, 191, 36, 0.1); }
-        .brand-title { font-size: 22px; font-weight: 800; color: #fbbf24; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .brand-container { display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none; }
+        .brand-container i { font-size: 20px; color: #fbbf24; }
+        .brand-title { font-size: 22px; font-weight: 800; color: #fbbf24; letter-spacing: 1px; }
 
         .login-btn { background: #0284c7; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px; cursor: pointer; text-decoration: none; transition: 0.2s; }
         .login-btn:hover { background: #0369a1; }
@@ -32,7 +34,7 @@
         .drawer-close { background: none; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; }
         .drawer-close:hover { color: #fff; }
 
-        .drawer-menu { padding: 20px 12px; display: flex; flex-direction: column; gap: 8px; }
+        .drawer-menu { padding: 20px 12px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex-grow: 1; }
         .drawer-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; color: #94a3b8; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s; }
         .drawer-item:hover, .drawer-item.active { background: rgba(251, 191, 36, 0.1); color: #fbbf24; border-left: 4px solid #fbbf24; }
 
@@ -42,16 +44,16 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* Ana Sayfa Tanıtım Kartı */
-        .hero-card { background: #111827; border: 1px solid #1f2937; border-radius: 16px; padding: 40px 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-top: 4px solid #fbbf24; }
+        /* Ana Sayfa / Ev Bölümü */
+        .hero-card { background: #111827; border: 1px solid #1f2937; border-radius: 16px; padding: 40px 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-top: 4px solid #fbbf24; margin-bottom: 30px; }
         .hero-card i { font-size: 48px; color: #fbbf24; margin-bottom: 8px; }
         .hero-card h1 { font-size: 26px; color: #fbbf24; font-weight: 800; }
         .hero-card p { color: #9ca3af; font-size: 15px; max-width: 600px; line-height: 1.6; }
 
         .section-title { font-size: 20px; font-weight: 700; color: #fbbf24; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 
-        /* Kart Yapıları */
-        .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        /* Grid & Kart Yapıları */
+        .grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 30px; }
         @media(min-width: 768px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 
         .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; transition: 0.2s; }
@@ -74,7 +76,7 @@
         
         .status-badge { color: #22c55e; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
 
-        /* En Aşağı Footer Alanı */
+        /* Footer Alanı */
         .footer { background-color: #0f172a; border-top: 1px solid #1e293b; padding: 24px 20px; margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
         .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
         .footer-links a { color: #94a3b8; text-decoration: none; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
@@ -90,9 +92,12 @@
             <button class="menu-toggle-btn" onclick="toggleSidebar()">
                 <i class="fa-solid fa-bars"></i>
             </button>
-            <div class="brand-title" onclick="switchTab('anasayfa', null)"><i class="fa-solid fa-shield-halved"></i> NATO</div>
+            <div class="brand-container" onclick="switchTab('ev', null)">
+                <i class="fa-solid fa-house"></i>
+                <div class="brand-title">NATO</div>
+            </div>
         </div>
-        <a href="#" class="login-btn"><i class="fa-brands fa-discord"></i> Giriş Yap</a>
+        <a href="#" class="login-btn" onclick="alert('Minecraft ve Discord OAuth2 Giriş Ekranına Yönlendiriliyorsunuz, Paşam!')"><i class="fa-brands fa-discord"></i> Giriş Yap</a>
     </header>
 
     <!-- Soldan Açılan Menü (Drawer) -->
@@ -103,7 +108,10 @@
             <button class="drawer-close" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="drawer-menu">
-            <div class="drawer-item active" onclick="switchTab('anasayfa', this)"><i class="fa-solid fa-house"></i> Ana Sayfa</div>
+            <div class="drawer-item active" onclick="switchTab('ev', this)"><i class="fa-solid fa-house"></i> Ev / Ana Sayfa</div>
+            <div class="drawer-item" onclick="switchTab('destek', this)"><i class="fa-solid fa-headset"></i> Destek Talepleri</div>
+            <div class="drawer-item" onclick="switchTab('branslar', this)"><i class="fa-solid fa-shield-halved"></i> Branşlar</div>
+            <div class="drawer-item" onclick="switchTab('emegegectenler', this)"><i class="fa-solid fa-award"></i> Emeği Geçenler</div>
             <div class="drawer-item" onclick="switchTab('gruplar', this)"><i class="fa-solid fa-users-rectangle"></i> Gruplar</div>
             <div class="drawer-item" onclick="switchTab('botlar', this)"><i class="fa-solid fa-robot"></i> Botlar</div>
             <div class="drawer-item" onclick="switchTab('hesap', this)"><i class="fa-solid fa-user-gear"></i> Hesap</div>
@@ -113,8 +121,8 @@
     <!-- Ana İçerik -->
     <main class="main-container">
         
-        <!-- ANA SAYFA (Sadece NATO Tanıtımı) -->
-        <section id="anasayfa" class="tab-content active">
+        <!-- EV / ANA SAYFA BÖLÜMÜ -->
+        <section id="ev" class="tab-content active">
             <div class="hero-card">
                 <i class="fa-solid fa-shield-halved"></i>
                 <h1>NATO Komuta Kontrol</h1>
@@ -122,15 +130,35 @@
             </div>
         </section>
 
-        <!-- GRUPLAR BÖLÜMÜ -->
-        <section id="gruplar" class="tab-content">
-            <h2 class="section-title"><i class="fa-solid fa-sitemap"></i> Branş ve Birlik Grupları</h2>
+        <!-- DESTEK BÖLÜMÜ -->
+        <section id="destek" class="tab-content">
+            <h2 class="section-title"><i class="fa-solid fa-headset"></i> Destek Merkezi</h2>
             <div class="grid">
-                
                 <div class="card">
                     <div>
-                        <h3><i class="fa-solid fa-person-military-rifle"></i> Kara Kuvvetleri</h3>
-                        <p>Karadan sorumlu ana askeri branş ve operasyon birimidir.</p>
+                        <h3>Destek Talebi Aç</h3>
+                        <p>Ban Affı, Discord Destek, Askeri Şikayet veya Ulusal Şikayet konularında talep oluşturabilirsiniz.</p>
+                    </div>
+                    <button class="btn-action" onclick="alert('Destek talebi oluşturma ekranı açıldı Paşam!')">Talep Oluştur</button>
+                </div>
+                <div class="card">
+                    <div>
+                        <h3>Yetkili Yönetimi & Paneli</h3>
+                        <p>Yetkili atama, destek sahiplenme, kapatma, kilitleme ve talep açan kullanıcının Discord sunucularını inceleme paneli.</p>
+                    </div>
+                    <button class="btn-action" onclick="alert('Yetkili paneline erişildi Paşam!')">Paneli Aç</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- BRANŞLAR BÖLÜMÜ -->
+        <section id="branslar" class="tab-content">
+            <h2 class="section-title"><i class="fa-solid fa-shield-halved"></i> Askeri Branşlar ve Birimler</h2>
+            <div class="grid">
+                <div class="card">
+                    <div>
+                        <h3>Kara Kuvvetleri</h3>
+                        <p>Karadan sorumlu branştır.</p>
                         <div class="sub-tags">
                             <span class="tag">BÖRÜ</span>
                             <span class="tag">KHO</span>
@@ -138,56 +166,124 @@
                             <span class="tag">ARAMA KURTARMA</span>
                         </div>
                     </div>
-                    <button class="btn-action" onclick="alert('Kara Kuvvetleri grubuna katılım isteğin yetkililere iletildi Paşam! Onaylandığında /update komutuyla rollerin tanımlanacak.')">Gruba İstek At</button>
                 </div>
-
                 <div class="card">
                     <div>
-                        <h3><i class="fa-solid fa-shield-dog"></i> Sınır Müfettişleri</h3>
-                        <p>Sınır güvenliği, gümrük ve bölge denetimlerinden sorumlu branş.</p>
+                        <h3>Sınıf Müfettişleri</h3>
+                        <p>Sınırdan sorumlu branştır.</p>
                         <div class="sub-tags">
-                            <span class="tag">GÜMRÜK</span>
-                            <span class="tag">DEVRİYE</span>
+                            <span class="tag">GARDİYAN MUHAFIZLARI</span>
+                            <span class="tag">DENETİM BİRİMİ</span>
                         </div>
                     </div>
-                    <button class="btn-action" onclick="alert('Sınır Müfettişleri grubuna katılım isteğin yetkililere iletildi Paşam!')">Gruba İstek At</button>
                 </div>
-
                 <div class="card">
                     <div>
-                        <h3><i class="fa-solid fa-handcuffs"></i> Askeri İnzibat</h3>
-                        <p>Disiplin, asayiş ve kural denetimlerini yürüten kolluk kuvveti birimi.</p>
+                        <h3>Askeri İnzibat</h3>
+                        <p>Asayişten sorumlu branştır.</p>
                         <div class="sub-tags">
-                            <span class="tag">NÖBET</span>
-                            <span class="tag">ASAYİŞ</span>
+                            <span class="tag">Yıldırım Orduları</span>
+                            <span class="tag">Kızıl Sağ El</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div>
+                        <h3>Özel Kuvvetler</h3>
+                        <p>Operasyonlardan sorumlu branştır.</p>
+                        <div class="sub-tags">
+                            <span class="tag">SAT Özel Koruma Birliği</span>
+                            <span class="tag">OMEGA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EMEĞİ GEÇENLER BÖLÜMÜ -->
+        <section id="emegegectenler" class="tab-content">
+            <h2 class="section-title"><i class="fa-solid fa-award"></i> Emeği Geçenler</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Herobrine_sinan</h3>
+                    <p>NATO Başkomutanı. NATO'nun Askeri olmasını sağlayan lider.</p>
+                </div>
+                <div class="card">
+                    <h3>Yusufg</h3>
+                    <p>Ulusun ilk kurucuları ve Yönetim Kurulu Başkanlarından biridir.</p>
+                </div>
+                <div class="card">
+                    <h3>Omer_salih</h3>
+                    <p>Ulusun Kurucularından biridir.</p>
+                </div>
+                <div class="card">
+                    <h3>Tahirg</h3>
+                    <p>Ulusun Kurucularından biridir.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- GRUPLAR BÖLÜMÜ -->
+        <section id="gruplar" class="tab-content">
+            <h2 class="section-title"><i class="fa-solid fa-users-rectangle"></i> Grup İstekleri</h2>
+            <div class="grid">
+                <div class="card">
+                    <div>
+                        <h3>Kara Kuvvetleri Grubu</h3>
+                        <p>Kara Kuvvetleri personeli olarak katılım isteği gönderin. Onaylandığında bot sunucularda /update komutuyla rollerinizi verecektir.</p>
+                        <div class="sub-tags">
+                            <span class="tag">BÖRÜ</span>
+                            <span class="tag">KHO</span>
+                            <span class="tag">MUHABERE</span>
+                            <span class="tag">ARAMA KURTARMA</span>
+                        </div>
+                    </div>
+                    <button class="btn-action" onclick="alert('Kara Kuvvetleri grubuna katılım isteğin yetkililere iletildi Paşam!')">Gruba İstek At</button>
+                </div>
+                <div class="card">
+                    <div>
+                        <h3>Sınıf Müfettişleri Grubu</h3>
+                        <p>Sınıf Müfettişleri birimleri için katılım ve yetkilendirme isteği.</p>
+                        <div class="sub-tags">
+                            <span class="tag">GARDİYAN MUHAFIZLARI</span>
+                            <span class="tag">DENETİM BİRİMİ</span>
+                        </div>
+                    </div>
+                    <button class="btn-action" onclick="alert('Sınıf Müfettişleri grubuna katılım isteğin yetkililere iletildi Paşam!')">Gruba İstek At</button>
+                </div>
+                <div class="card">
+                    <div>
+                        <h3>Askeri İnzibat Grubu</h3>
+                        <p>Askeri İnzibat birimleri için katılım ve yetkilendirme isteği.</p>
+                        <div class="sub-tags">
+                            <span class="tag">Yıldırım Orduları</span>
+                            <span class="tag">Kızıl Sağ El</span>
                         </div>
                     </div>
                     <button class="btn-action" onclick="alert('Askeri İnzibat grubuna katılım isteğin yetkililere iletildi Paşam!')">Gruba İstek At</button>
                 </div>
-
                 <div class="card">
                     <div>
-                        <h3><i class="fa-solid fa-crosshairs"></i> Özel Kuvvetler</h3>
-                        <p>Yüksek riskli taarruz operasyonları ve siber savunma birimidir.</p>
+                        <h3>Özel Kuvvetler Grubu</h3>
+                        <p>Özel Kuvvetler birimleri için katılım ve yetkilendirme isteği.</p>
                         <div class="sub-tags">
-                            <span class="tag">TAARRUZ</span>
-                            <span class="tag">SİBER TİM</span>
+                            <span class="tag">SAT Özel Koruma Birliği</span>
+                            <span class="tag">OMEGA</span>
                         </div>
                     </div>
                     <button class="btn-action" onclick="alert('Özel Kuvvetler grubuna katılım isteğin yetkililere iletildi Paşam!')">Gruba İstek At</button>
                 </div>
-
             </div>
         </section>
 
         <!-- BOTLAR BÖLÜMÜ -->
         <section id="botlar" class="tab-content">
-            <h2 class="section-title"><i class="fa-solid fa-microchip"></i> Sistem Botları</h2>
+            <h2 class="section-title"><i class="fa-solid fa-robot"></i> Sistem Botları</h2>
             <div class="grid">
                 <div class="card">
                     <div>
                         <h3>NATO Bot</h3>
-                        <p>Ana sunucu senkronizasyonu ve oyun içi entegrasyon botudur.</p>
+                        <p>Ana sunucu senkronizasyon ve entegrasyon botudur.</p>
                     </div>
                     <div class="status-badge"><i class="fa-solid fa-circle" style="font-size: 7px;"></i> Aktif (Çevrimiçi)</div>
                 </div>
@@ -219,13 +315,13 @@
 
     </main>
 
-    <!-- En Aşağı Footer Alanı -->
+    <!-- Footer Alanı -->
     <footer class="footer">
         <div class="footer-links">
-            <a href="#" target="_blank"><i class="fa-brands fa-discord"></i> Discord Sunucusu</a>
-            <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i> YouTube Hesabı</a>
-            <a href="#" target="_blank"><i class="fa-solid fa-file-contract"></i> Hizmet Şartları</a>
-            <a href="#" target="_blank"><i class="fa-solid fa-shield-halved"></i> Gizlilik Politikası</a>
+            <a href="https://discord.gg/ymv8D3WHNz" target="_blank"><i class="fa-brands fa-discord"></i> Discord Sunucumuz</a>
+            <a href="https://youtube.com/@nato_delta?si=l6qxhNVICEX9g1np" target="_blank"><i class="fa-brands fa-youtube"></i> YouTube Hesabımız</a>
+            <a href="#" onclick="alert('Hizmet Şartları sayfası yakında eklenecektir, Paşam.')"><i class="fa-solid fa-file-contract"></i> Hizmet Şartları</a>
+            <a href="#" onclick="alert('Gizlilik Politikası sayfası yakında eklenecektir, Paşam.')"><i class="fa-solid fa-shield-halved"></i> Gizlilik Politikası</a>
         </div>
         <div class="footer-copy">
             &copy; 2026 NATO Topluluğu. Tüm hakları saklıdır, Paşam.
@@ -247,12 +343,3 @@
             if (element) {
                 element.classList.add('active');
             } else {
-                document.querySelector('.drawer-menu .drawer-item').classList.add('active');
-            }
-            
-            toggleSidebar();
-        }
-    </script>
-</body>
-    </html>
-    
