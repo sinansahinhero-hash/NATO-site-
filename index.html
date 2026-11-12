@@ -97,6 +97,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            z-index: 1001;
         }
 
         /* SOLDAN SAĞA AÇILAN YAN MENÜ (DRAWER) */
@@ -105,7 +106,7 @@
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.7);
-            z-index: 1500;
+            z-index: 1900;
         }
 
         .drawer-overlay.open {
@@ -115,12 +116,12 @@
         .side-drawer {
             position: fixed;
             top: 0;
-            left: -280px;
+            left: -300px;
             width: 270px;
             height: 100%;
             background-color: var(--bg-header);
             border-right: 2px solid var(--accent-yellow);
-            z-index: 1600;
+            z-index: 2000;
             transition: left 0.3s ease;
             display: flex;
             flex-direction: column;
@@ -150,8 +151,9 @@
             background: none;
             border: none;
             color: var(--text-gray);
-            font-size: 22px;
+            font-size: 24px;
             cursor: pointer;
+            padding: 5px;
         }
 
         .drawer-nav-btn {
@@ -169,6 +171,7 @@
             gap: 12px;
             margin-bottom: 6px;
             transition: 0.2s;
+            width: 100%;
         }
 
         .drawer-nav-btn:hover, .drawer-nav-btn.active {
@@ -329,7 +332,7 @@
             background-color: var(--bg-card-inner);
         }
 
-        /* Sadece Yetkililerin Göreceği Kapatma / Kilitleme / Sahiplenme Alanı */
+        /* Sadece Yetkililerin Görebileceği Kapatma / Kilitleme / Sahiplenme Alanı */
         .staff-controls {
             display: none;
             background-color: rgba(239, 68, 68, 0.08);
@@ -390,8 +393,8 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
+            background: rgba(0,0,0,0.85);
+            z-index: 2500;
             justify-content: center;
             align-items: center;
             padding: 16px;
@@ -414,40 +417,40 @@
     <header>
         <div class="brand-box">
             <!-- Ev Butonu: Basınca Soldan Sağa Menü Açılır -->
-            <button class="home-menu-btn" onclick="toggleDrawer()" title="Menüyü Aç">
+            <button class="home-menu-btn" id="homeMenuBtn" title="Menüyü Aç">
                 <i class="fa-solid fa-house"></i>
             </button>
             <span class="brand-title">NATO</span>
         </div>
-        <button class="login-btn" id="headerLoginBtn" onclick="openLogin()">
+        <button class="login-btn" id="headerLoginBtn">
             <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
         </button>
     </header>
 
     <!-- Soldan Sağa Açılan Menü Penceresi -->
-    <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+    <div class="drawer-overlay" id="drawerOverlay"></div>
     <aside class="side-drawer" id="sideDrawer">
         <div class="drawer-header">
             <span><i class="fa-solid fa-shield-halved"></i> NATO MENÜ</span>
-            <button class="close-drawer-btn" onclick="toggleDrawer()">&times;</button>
+            <button class="close-drawer-btn" id="closeDrawerBtn">&times;</button>
         </div>
 
-        <button class="drawer-nav-btn active" onclick="navigate('ev')">
+        <button class="drawer-nav-btn active" data-target="ev">
             <i class="fa-solid fa-house"></i> Ev & Branşlar
         </button>
-        <button class="drawer-nav-btn" onclick="navigate('destek')">
+        <button class="drawer-nav-btn" data-target="destek">
             <i class="fa-solid fa-headset"></i> Destek Merkezi
         </button>
-        <button class="drawer-nav-btn" onclick="navigate('emegi-gecenler')">
+        <button class="drawer-nav-btn" data-target="emegi-gecenler">
             <i class="fa-solid fa-award"></i> Emeği Geçenler
         </button>
-        <button class="drawer-nav-btn" onclick="navigate('gruplar')">
+        <button class="drawer-nav-btn" data-target="gruplar">
             <i class="fa-solid fa-users-gear"></i> Gruplar
         </button>
-        <button class="drawer-nav-btn" onclick="navigate('hesap')">
+        <button class="drawer-nav-btn" data-target="hesap">
             <i class="fa-solid fa-user-check"></i> Hesap
         </button>
-        <button class="drawer-nav-btn" onclick="navigate('botlar')">
+        <button class="drawer-nav-btn" data-target="botlar">
             <i class="fa-solid fa-robot"></i> Botlar
         </button>
     </aside>
@@ -526,7 +529,7 @@
                     <label>Mesajınız / Açıklamanız</label>
                     <textarea class="form-control" id="ticketInitialMsg" rows="3" placeholder="Durumunuzu detaylıca açıklayınız..."></textarea>
                 </div>
-                <button class="primary-btn" onclick="openSupportTicket()">Destek Talebi Aç</button>
+                <button class="primary-btn" id="submitTicketBtn">Destek Talebi Aç</button>
             </div>
 
             <!-- Talep Açıldıktan Sonra Ortaya Çıkan Ekran -->
@@ -541,7 +544,7 @@
 
                 <div style="display:flex; gap:8px;" id="chatInputArea">
                     <input type="text" class="form-control" id="chatReplyInput" placeholder="Mesaj yazın...">
-                    <button class="primary-btn" style="width:auto; padding:0 16px;" onclick="sendChatMessage()">Gönder</button>
+                    <button class="primary-btn" style="width:auto; padding:0 16px;" id="sendChatBtn">Gönder</button>
                 </div>
 
                 <!-- Sadece Yetkililerin Görebileceği Yetkili Bölümü -->
@@ -551,9 +554,9 @@
                     </h4>
                     <p style="font-size:12px; color:var(--text-gray);">Talep Sahibinin Bulunduğu Sunucular: <b style="color:white;">NATO Resmi Sunucusu, Craftlime</b></p>
                     <div class="staff-actions">
-                        <button class="staff-btn" style="background:#0284c7;" onclick="claimTicket()">Desteği Sahiplen</button>
-                        <button class="staff-btn" style="background:#d97706;" onclick="lockTicket()">Desteği Kilitle</button>
-                        <button class="staff-btn" style="background:#dc2626;" onclick="closeTicket()">Desteği Kapat</button>
+                        <button class="staff-btn" style="background:#0284c7;" id="claimTicketBtn">Desteği Sahiplen</button>
+                        <button class="staff-btn" style="background:#d97706;" id="lockTicketBtn">Desteği Kilitle</button>
+                        <button class="staff-btn" style="background:#dc2626;" id="closeTicketBtn">Desteği Kapat</button>
                     </div>
                 </div>
             </div>
@@ -588,4 +591,6 @@
             </div>
         </section>
 
-        <!-- 4. GRUPLAR 
+        <!-- 4. GRUPLAR -->
+        <section id="gruplar" class="tab-section">
+  
