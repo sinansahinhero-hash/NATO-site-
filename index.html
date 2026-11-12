@@ -20,6 +20,7 @@
             --border-subtle: #232f42;
             --danger: #ef4444;
             --success: #10b981;
+            --warning: #f59e0b;
         }
 
         * {
@@ -35,6 +36,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
 
         /* Üst Şerit (Navbar) */
@@ -54,20 +56,25 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            cursor: pointer;
         }
 
-        .home-icon-box {
+        .home-menu-btn {
             background-color: #161e2e;
-            border: 1px solid var(--border-subtle);
-            width: 42px;
-            height: 42px;
+            border: 1px solid var(--accent-yellow);
+            width: 44px;
+            height: 44px;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--accent-yellow);
-            font-size: 18px;
+            font-size: 19px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .home-menu-btn:active {
+            transform: scale(0.95);
         }
 
         .brand-title {
@@ -90,76 +97,106 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        /* SOLDAN SAĞA AÇILAN YAN MENÜ (DRAWER) */
+        .drawer-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1500;
+        }
+
+        .drawer-overlay.open {
+            display: block;
+        }
+
+        .side-drawer {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 270px;
+            height: 100%;
+            background-color: var(--bg-header);
+            border-right: 2px solid var(--accent-yellow);
+            z-index: 1600;
+            transition: left 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 14px;
+        }
+
+        .side-drawer.open {
+            left: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-subtle);
+            margin-bottom: 16px;
+        }
+
+        .drawer-header span {
+            font-family: 'Chakra Petch', sans-serif;
+            color: var(--accent-yellow);
+            font-size: 22px;
+        }
+
+        .close-drawer-btn {
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .drawer-nav-btn {
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 6px;
             transition: 0.2s;
         }
 
-        .login-btn:hover {
-            background-color: var(--accent-cyan-hover);
+        .drawer-nav-btn:hover, .drawer-nav-btn.active {
+            background-color: #182234;
+            color: var(--accent-yellow);
+            border-left: 4px solid var(--accent-yellow);
         }
 
         /* Tanıtım Alanı (Hero) */
         .hero-banner {
             background: linear-gradient(180deg, #0f172a 0%, #0a0e17 100%);
-            padding: 28px 20px;
+            padding: 24px 20px;
             text-align: center;
             border-bottom: 1px solid var(--border-subtle);
         }
 
         .hero-banner p {
             color: #cbd5e1;
-            font-size: 15px;
+            font-size: 14px;
             line-height: 1.6;
             max-width: 600px;
             margin: 0 auto;
         }
 
-        /* Soldan Sağa Kaydırılabilir Kart Sekmeler */
-        .tabs-wrapper {
-            padding: 16px 16px 8px 16px;
-            overflow-x: auto;
-            display: flex;
-            gap: 10px;
-            scrollbar-width: thin;
-            scrollbar-color: #334155 transparent;
-        }
-
-        .tabs-wrapper::-webkit-scrollbar {
-            height: 5px;
-        }
-
-        .tabs-wrapper::-webkit-scrollbar-thumb {
-            background-color: #334155;
-            border-radius: 4px;
-        }
-
-        .tab-card-btn {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-gray);
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.2s;
-            border-bottom: 3px solid transparent;
-        }
-
-        .tab-card-btn.active {
-            background-color: #182234;
-            color: var(--accent-yellow);
-            border-color: var(--border-subtle);
-            border-bottom: 3px solid var(--accent-yellow);
-        }
-
         /* Ana İçerik Alanı */
         main {
             flex: 1;
-            padding: 16px;
+            padding: 18px 16px;
             max-width: 900px;
             width: 100%;
             margin: 0 auto;
@@ -183,18 +220,17 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 22px;
+            font-size: 21px;
             font-weight: 700;
             color: var(--accent-yellow);
-            margin: 10px 0 18px 0;
+            margin-bottom: 16px;
         }
 
-        /* Kart Tasarımı (Görseldeki Gibi) */
         .info-card {
             background-color: var(--bg-card);
             border: 1px solid var(--border-subtle);
             border-radius: 12px;
-            padding: 20px;
+            padding: 18px;
             margin-bottom: 16px;
         }
 
@@ -205,7 +241,7 @@
             font-size: 18px;
             font-weight: 700;
             color: var(--accent-yellow);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .card-desc {
@@ -214,12 +250,11 @@
             line-height: 1.5;
         }
 
-        /* Birim Rozetleri */
         .unit-badges {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-top: 16px;
+            margin-top: 14px;
         }
 
         .unit-badge {
@@ -230,7 +265,6 @@
             border-radius: 6px;
             font-size: 12px;
             font-weight: 700;
-            letter-spacing: 0.5px;
         }
 
         /* Form ve Butonlar */
@@ -267,19 +301,42 @@
             width: 100%;
         }
 
-        /* Yetkili Paneli */
-        .staff-box {
-            background-color: rgba(239, 68, 68, 0.06);
-            border: 1px dashed var(--danger);
-            border-radius: 10px;
-            padding: 14px;
+        /* Açılan Talep Ekranı ve Yazışma Bölümü */
+        .ticket-view {
+            display: none;
+            background-color: var(--bg-card);
+            border: 1px solid var(--accent-yellow);
+            border-radius: 12px;
+            padding: 18px;
             margin-top: 16px;
         }
 
-        .staff-box h4 {
-            color: var(--danger);
+        .chat-box {
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 12px;
+            height: 180px;
+            overflow-y: auto;
+            margin: 12px 0;
             font-size: 13px;
+        }
+
+        .chat-msg {
             margin-bottom: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            background-color: var(--bg-card-inner);
+        }
+
+        /* Sadece Yetkililerin Göreceği Kapatma / Kilitleme / Sahiplenme Alanı */
+        .staff-controls {
+            display: none;
+            background-color: rgba(239, 68, 68, 0.08);
+            border: 1px dashed var(--danger);
+            border-radius: 8px;
+            padding: 14px;
+            margin-top: 14px;
         }
 
         .staff-actions {
@@ -290,11 +347,11 @@
         }
 
         .staff-btn {
-            padding: 6px 12px;
+            padding: 8px 12px;
             border-radius: 6px;
             border: none;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             color: white;
             cursor: pointer;
         }
@@ -355,57 +412,62 @@
 
     <!-- Üst Şerit -->
     <header>
-        <div class="brand-box" onclick="openTab('ev')">
-            <div class="home-icon-box">
+        <div class="brand-box">
+            <!-- Ev Butonu: Basınca Soldan Sağa Menü Açılır -->
+            <button class="home-menu-btn" onclick="toggleDrawer()" title="Menüyü Aç">
                 <i class="fa-solid fa-house"></i>
-            </div>
+            </button>
             <span class="brand-title">NATO</span>
         </div>
-        <button class="login-btn" onclick="openLogin()">
+        <button class="login-btn" id="headerLoginBtn" onclick="openLogin()">
             <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
         </button>
     </header>
+
+    <!-- Soldan Sağa Açılan Menü Penceresi -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+    <aside class="side-drawer" id="sideDrawer">
+        <div class="drawer-header">
+            <span><i class="fa-solid fa-shield-halved"></i> NATO MENÜ</span>
+            <button class="close-drawer-btn" onclick="toggleDrawer()">&times;</button>
+        </div>
+
+        <button class="drawer-nav-btn active" onclick="navigate('ev')">
+            <i class="fa-solid fa-house"></i> Ev & Branşlar
+        </button>
+        <button class="drawer-nav-btn" onclick="navigate('destek')">
+            <i class="fa-solid fa-headset"></i> Destek Merkezi
+        </button>
+        <button class="drawer-nav-btn" onclick="navigate('emegi-gecenler')">
+            <i class="fa-solid fa-award"></i> Emeği Geçenler
+        </button>
+        <button class="drawer-nav-btn" onclick="navigate('gruplar')">
+            <i class="fa-solid fa-users-gear"></i> Gruplar
+        </button>
+        <button class="drawer-nav-btn" onclick="navigate('hesap')">
+            <i class="fa-solid fa-user-check"></i> Hesap
+        </button>
+        <button class="drawer-nav-btn" onclick="navigate('botlar')">
+            <i class="fa-solid fa-robot"></i> Botlar
+        </button>
+    </aside>
 
     <!-- NATO Tanıtımı -->
     <div class="hero-banner">
         <p>Hiyerarşi, disiplin ve operasyonel mükemmeliyet ilkesiyle hareket eden elit askeri topluluk.</p>
     </div>
 
-    <!-- Soldan Sağa Açılan Sekmeler -->
-    <div class="tabs-wrapper">
-        <button class="tab-card-btn active" onclick="openTab('ev')">
-            <i class="fa-solid fa-shield-halved"></i> Ana Sayfa & Branşlar
-        </button>
-        <button class="tab-card-btn" onclick="openTab('destek')">
-            <i class="fa-solid fa-headset"></i> Destek Talepleri
-        </button>
-        <button class="tab-card-btn" onclick="openTab('emegi-gecenler')">
-            <i class="fa-solid fa-award"></i> Emeği Geçenler
-        </button>
-        <button class="tab-card-btn" onclick="openTab('gruplar')">
-            <i class="fa-solid fa-users-gear"></i> Gruplar
-        </button>
-        <button class="tab-card-btn" onclick="openTab('hesap')">
-            <i class="fa-solid fa-user-check"></i> Hesap
-        </button>
-        <button class="tab-card-btn" onclick="openTab('botlar')">
-            <i class="fa-solid fa-robot"></i> Botlar
-        </button>
-    </div>
-
-    <!-- İçerikler -->
+    <!-- Ana İçerikler -->
     <main>
-        <!-- 1. ANA SAYFA & BRANŞLAR -->
+        <!-- 1. EV & BRANŞLAR -->
         <section id="ev" class="tab-section active">
             <h2 class="section-header">
                 <i class="fa-solid fa-sitemap"></i> Askeri Branşlar ve Birimler
             </h2>
 
             <div class="info-card">
-                <div class="card-title">
-                    <i class="fa-solid fa-person-rifle"></i> Kara Kuvvetleri
-                </div>
-                <p class="card-desc">Karadan Sorumlu Askeri Branştır. Bölge güvenliğini ve ana muharebe hatlarını korur.</p>
+                <div class="card-title"><i class="fa-solid fa-person-rifle"></i> Kara Kuvvetleri</div>
+                <p class="card-desc">Karadan Sorumlu Branştır.</p>
                 <div class="unit-badges">
                     <span class="unit-badge">BÖRÜ</span>
                     <span class="unit-badge">KHO</span>
@@ -415,10 +477,8 @@
             </div>
 
             <div class="info-card">
-                <div class="card-title">
-                    <i class="fa-solid fa-passport"></i> Sınıf Müfettişleri
-                </div>
-                <p class="card-desc">Sınırdan ve gümrük kontrollerinden sorumlu yetkili branştır.</p>
+                <div class="card-title"><i class="fa-solid fa-passport"></i> Sınıf Müfettişleri</div>
+                <p class="card-desc">Sınırdan Sorumlu Branştır.</p>
                 <div class="unit-badges">
                     <span class="unit-badge">GARDİYAN MUHAFIZLARI</span>
                     <span class="unit-badge">DENETİM BİRİMİ</span>
@@ -426,10 +486,8 @@
             </div>
 
             <div class="info-card">
-                <div class="card-title">
-                    <i class="fa-solid fa-scale-balanced"></i> Askeri İnzibat
-                </div>
-                <p class="card-desc">Asayişten ve askeri disiplinin sağlanmasından sorumlu branştır.</p>
+                <div class="card-title"><i class="fa-solid fa-scale-balanced"></i> Askeri İnzibat</div>
+                <p class="card-desc">Asayişten sorumlu branştır.</p>
                 <div class="unit-badges">
                     <span class="unit-badge">YILDIRIM ORDULARI</span>
                     <span class="unit-badge">KIZIL SAĞ EL</span>
@@ -437,10 +495,8 @@
             </div>
 
             <div class="info-card">
-                <div class="card-title">
-                    <i class="fa-solid fa-crosshairs"></i> Özel Kuvvetler
-                </div>
-                <p class="card-desc">Kritik operasyonlardan ve yüksek riskli görevlerden sorumlu elit branştır.</p>
+                <div class="card-title"><i class="fa-solid fa-crosshairs"></i> Özel Kuvvetler</div>
+                <p class="card-desc">Operasyonlardan sorumlu branştır.</p>
                 <div class="unit-badges">
                     <span class="unit-badge">SAT</span>
                     <span class="unit-badge">ÖZEL KORUMA BİRLİĞİ</span>
@@ -449,16 +505,17 @@
             </div>
         </section>
 
-        <!-- 2. DESTEK TALEPLERİ -->
+        <!-- 2. DESTEK BÖLÜMÜ -->
         <section id="destek" class="tab-section">
             <h2 class="section-header">
-                <i class="fa-solid fa-headset"></i> Destek Merkezi
+                <i class="fa-solid fa-headset"></i> Destek Talebi Oluştur
             </h2>
 
-            <div class="info-card">
+            <!-- Talep Açma Formu -->
+            <div class="info-card" id="ticketCreateForm">
                 <div class="form-group">
-                    <label>Destek Kategorisi</label>
-                    <select class="form-control" id="ticketCategory">
+                    <label>Destek Türü Seçiniz</label>
+                    <select class="form-control" id="ticketTypeSelect">
                         <option>Ban Affı</option>
                         <option>Discord Destek</option>
                         <option>Askeri Şikayet</option>
@@ -466,19 +523,37 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Açıklama</label>
-                    <textarea class="form-control" rows="3" placeholder="Talebinizi detaylıca yazınız..."></textarea>
+                    <label>Mesajınız / Açıklamanız</label>
+                    <textarea class="form-control" id="ticketInitialMsg" rows="3" placeholder="Durumunuzu detaylıca açıklayınız..."></textarea>
                 </div>
-                <button class="primary-btn" onclick="alert('Destek talebiniz oluşturuldu Paşam!')">Destek Talebi Aç</button>
+                <button class="primary-btn" onclick="openSupportTicket()">Destek Talebi Aç</button>
+            </div>
 
-                <!-- Sadece Yetkililer İçin -->
-                <div class="staff-box">
-                    <h4><i class="fa-solid fa-lock"></i> Yetkili Kontrol Bölümü (Sadece Yetkililer)</h4>
-                    <p style="font-size: 12px; color: var(--text-gray);">Kullanıcının Bulunduğu Discord Sunucuları: <b style="color: white;">NATO Ana Üs, Craftlime</b></p>
+            <!-- Talep Açıldıktan Sonra Ortaya Çıkan Ekran -->
+            <div class="ticket-view" id="activeTicketView">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-subtle); padding-bottom:10px;">
+                    <h3 style="color:var(--accent-yellow); font-size:16px;" id="ticketHeaderTitle">Destek Talebi #1</h3>
+                    <span id="ticketStatusBadge" style="background:var(--success); color:#000; padding:3px 8px; border-radius:4px; font-size:11px; font-weight:700;">AÇIK</span>
+                </div>
+
+                <!-- Yazışma Bölümü -->
+                <div class="chat-box" id="ticketChatBox"></div>
+
+                <div style="display:flex; gap:8px;" id="chatInputArea">
+                    <input type="text" class="form-control" id="chatReplyInput" placeholder="Mesaj yazın...">
+                    <button class="primary-btn" style="width:auto; padding:0 16px;" onclick="sendChatMessage()">Gönder</button>
+                </div>
+
+                <!-- Sadece Yetkililerin Görebileceği Yetkili Bölümü -->
+                <div class="staff-controls" id="staffTicketControls">
+                    <h4 style="color:var(--danger); font-size:13px; margin-bottom:6px;">
+                        <i class="fa-solid fa-shield-halved"></i> Yetkili Bölümü (Sadece Yetkililer Görür)
+                    </h4>
+                    <p style="font-size:12px; color:var(--text-gray);">Talep Sahibinin Bulunduğu Sunucular: <b style="color:white;">NATO Resmi Sunucusu, Craftlime</b></p>
                     <div class="staff-actions">
-                        <button class="staff-btn" style="background:#0284c7;" onclick="alert('Destek sahiplenildi.')">Desteği Sahiplen</button>
-                        <button class="staff-btn" style="background:#d97706;" onclick="alert('Destek kilitlendi.')">Desteği Kilitle</button>
-                        <button class="staff-btn" style="background:#dc2626;" onclick="alert('Destek kapatıldı.')">Desteği Kapat</button>
+                        <button class="staff-btn" style="background:#0284c7;" onclick="claimTicket()">Desteği Sahiplen</button>
+                        <button class="staff-btn" style="background:#d97706;" onclick="lockTicket()">Desteği Kilitle</button>
+                        <button class="staff-btn" style="background:#dc2626;" onclick="closeTicket()">Desteği Kapat</button>
                     </div>
                 </div>
             </div>
@@ -486,9 +561,7 @@
 
         <!-- 3. EMEĞİ GEÇENLER -->
         <section id="emegi-gecenler" class="tab-section">
-            <h2 class="section-header">
-                <i class="fa-solid fa-award"></i> Emeği Geçenler
-            </h2>
+            <h2 class="section-header"><i class="fa-solid fa-award"></i> Emeği Geçenler</h2>
 
             <div class="info-card">
                 <div class="card-title"><i class="fa-solid fa-star"></i> Herobrine_sinan</div>
@@ -515,57 +588,4 @@
             </div>
         </section>
 
-        <!-- 4. GRUPLAR -->
-        <section id="gruplar" class="tab-section">
-            <h2 class="section-header">
-                <i class="fa-solid fa-users-gear"></i> Birim Grupları
-            </h2>
-
-            <div class="info-card">
-                <p class="card-desc" style="margin-bottom: 14px;">Katıldığınız birimin grubuna istek gönderin. Yetkili onayından sonra Discord sunucumuzda <code>/update</code> yazarak rollerinizi alabilirsiniz.</p>
-                <div class="form-group">
-                    <label>Grup Seçiniz</label>
-                    <select class="form-control">
-                        <optgroup label="Kara Kuvvetleri">
-                            <option>Kara Kuvvetleri - BÖRÜ</option>
-                            <option>Kara Kuvvetleri - KHO</option>
-                            <option>Kara Kuvvetleri - MUHABERE</option>
-                            <option>Kara Kuvvetleri - ARAMA KURTARMA</option>
-                        </optgroup>
-                        <optgroup label="Sınıf Müfettişleri">
-                            <option>Sınıf Müfettişleri - GARDİYAN MUHAFIZLARI</option>
-                            <option>Sınıf Müfettişleri - DENETİM BİRİMİ</option>
-                        </optgroup>
-                        <optgroup label="Askeri İnzibat">
-                            <option>Askeri İnzibat - Yıldırım Orduları</option>
-                            <option>Askeri İnzibat - Kızıl Sağ El</option>
-                        </optgroup>
-                        <optgroup label="Özel Kuvvetler">
-                            <option>Özel Kuvvetler - SAT</option>
-                            <option>Özel Kuvvetler - Özel Koruma Birliği</option>
-                            <option>Özel Kuvvetler - OMEGA</option>
-                        </optgroup>
-                    </select>
-                </div>
-                <button class="primary-btn" onclick="alert('Grup katılım isteğiniz yetkililere iletildi!')">Grup İsteği Gönder</button>
-            </div>
-        </section>
-
-        <!-- 5. HESAP -->
-        <section id="hesap" class="tab-section">
-            <h2 class="section-header">
-                <i class="fa-solid fa-user-check"></i> Hesap Bilgileri
-            </h2>
-
-            <div class="info-card">
-                <div class="card-title"><i class="fa-brands fa-discord" style="color:#5865F2;"></i> Discord Hesabı</div>
-                <p class="card-desc" id="dcStatus">Giriş Yapılmadı</p>
-            </div>
-
-            <div class="info-card">
-                <div class="card-title"><i class="fa-solid fa-cube" style="color:#10b981;"></i> Minecraft Hesabı</div>
-                <p class="card-desc" id="mcStatus">Giriş Yapılmadı</p>
-            </div>
-
-            <button class="primary-btn" style="background-color: var(--danger); color: white;" onclick="logoutUser()">Çıkış Yap</button>
-        
+        <!-- 4. GRUPLAR 
