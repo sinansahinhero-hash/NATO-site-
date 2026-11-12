@@ -1,596 +1,236 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATO - Resmi Askeri Portal</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-main: #0a0e17;
-            --bg-header: #0d131f;
-            --bg-card: #141c2b;
-            --bg-card-inner: #1a2333;
-            --accent-yellow: #ffb703;
-            --accent-cyan: #0088a9;
-            --accent-cyan-hover: #00728f;
-            --text-white: #f8fafc;
-            --text-gray: #94a3b8;
-            --border-subtle: #232f42;
-            --danger: #ef4444;
-            --success: #10b981;
-            --warning: #f59e0b;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-white);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-        }
-
-        /* Üst Şerit (Navbar) */
-        header {
-            background-color: var(--bg-header);
-            border-bottom: 2px solid var(--accent-yellow);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 18px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .brand-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .home-menu-btn {
-            background-color: #161e2e;
-            border: 1px solid var(--accent-yellow);
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent-yellow);
-            font-size: 19px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .home-menu-btn:active {
-            transform: scale(0.95);
-        }
-
-        .brand-title {
-            font-family: 'Chakra Petch', sans-serif;
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--accent-yellow);
-            letter-spacing: 1.5px;
-        }
-
-        .login-btn {
-            background-color: var(--accent-cyan);
-            color: #ffffff;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            z-index: 1001;
-        }
-
-        /* SOLDAN SAĞA AÇILAN YAN MENÜ (DRAWER) */
-        .drawer-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1900;
-        }
-
-        .drawer-overlay.open {
-            display: block;
-        }
-
-        .side-drawer {
-            position: fixed;
-            top: 0;
-            left: -300px;
-            width: 270px;
-            height: 100%;
-            background-color: var(--bg-header);
-            border-right: 2px solid var(--accent-yellow);
-            z-index: 2000;
-            transition: left 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            padding: 20px 14px;
-        }
-
-        .side-drawer.open {
-            left: 0;
-        }
-
-        .drawer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--border-subtle);
-            margin-bottom: 16px;
-        }
-
-        .drawer-header span {
-            font-family: 'Chakra Petch', sans-serif;
-            color: var(--accent-yellow);
-            font-size: 22px;
-        }
-
-        .close-drawer-btn {
-            background: none;
-            border: none;
-            color: var(--text-gray);
-            font-size: 24px;
-            cursor: pointer;
-            padding: 5px;
-        }
-
-        .drawer-nav-btn {
-            background: none;
-            border: none;
-            color: var(--text-gray);
-            padding: 14px 16px;
-            text-align: left;
-            font-size: 15px;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 6px;
-            transition: 0.2s;
-            width: 100%;
-        }
-
-        .drawer-nav-btn:hover, .drawer-nav-btn.active {
-            background-color: #182234;
-            color: var(--accent-yellow);
-            border-left: 4px solid var(--accent-yellow);
-        }
-
-        /* Tanıtım Alanı (Hero) */
-        .hero-banner {
-            background: linear-gradient(180deg, #0f172a 0%, #0a0e17 100%);
-            padding: 24px 20px;
-            text-align: center;
-            border-bottom: 1px solid var(--border-subtle);
-        }
-
-        .hero-banner p {
-            color: #cbd5e1;
-            font-size: 14px;
-            line-height: 1.6;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Ana İçerik Alanı */
-        main {
-            flex: 1;
-            padding: 18px 16px;
-            max-width: 900px;
-            width: 100%;
-            margin: 0 auto;
-        }
-
-        .tab-section {
-            display: none;
-        }
-
-        .tab-section.active {
-            display: block;
-            animation: fadeIn 0.25s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 21px;
-            font-weight: 700;
-            color: var(--accent-yellow);
-            margin-bottom: 16px;
-        }
-
-        .info-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 16px;
-        }
-
-        .card-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--accent-yellow);
-            margin-bottom: 8px;
-        }
-
-        .card-desc {
-            color: var(--text-gray);
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .unit-badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 14px;
-        }
-
-        .unit-badge {
-            background-color: var(--bg-card-inner);
-            border: 1px solid rgba(255, 183, 3, 0.45);
-            color: var(--accent-yellow);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        /* Form ve Butonlar */
-        .form-group {
-            margin-bottom: 14px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            color: var(--text-gray);
-            margin-bottom: 6px;
-        }
-
-        .form-control {
-            width: 100%;
-            background-color: var(--bg-main);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-white);
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .primary-btn {
-            background-color: var(--accent-yellow);
-            color: #0a0e17;
-            border: none;
-            padding: 11px 18px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        /* Açılan Talep Ekranı ve Yazışma Bölümü */
-        .ticket-view {
-            display: none;
-            background-color: var(--bg-card);
-            border: 1px solid var(--accent-yellow);
-            border-radius: 12px;
-            padding: 18px;
-            margin-top: 16px;
-        }
-
-        .chat-box {
-            background-color: var(--bg-main);
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
-            padding: 12px;
-            height: 180px;
-            overflow-y: auto;
-            margin: 12px 0;
-            font-size: 13px;
-        }
-
-        .chat-msg {
-            margin-bottom: 8px;
-            padding: 8px;
-            border-radius: 6px;
-            background-color: var(--bg-card-inner);
-        }
-
-        /* Sadece Yetkililerin Görebileceği Kapatma / Kilitleme / Sahiplenme Alanı */
-        .staff-controls {
-            display: none;
-            background-color: rgba(239, 68, 68, 0.08);
-            border: 1px dashed var(--danger);
-            border-radius: 8px;
-            padding: 14px;
-            margin-top: 14px;
-        }
-
-        .staff-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
-        .staff-btn {
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: none;
-            font-size: 12px;
-            font-weight: 700;
-            color: white;
-            cursor: pointer;
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--bg-header);
-            border-top: 1px solid var(--border-subtle);
-            padding: 20px 16px;
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
-        }
-
-        .footer-links a {
-            color: var(--accent-yellow);
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .copyright {
-            color: var(--text-gray);
-            font-size: 12px;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.85);
-            z-index: 2500;
-            justify-content: center;
-            align-items: center;
-            padding: 16px;
-        }
-
-        .modal-box {
-            background: var(--bg-card);
-            border: 1px solid var(--accent-yellow);
-            border-radius: 12px;
-            padding: 24px;
-            width: 100%;
-            max-width: 380px;
-            text-align: center;
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NATO</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0f1a;--panel:#121b2c;--line:#24324d;--gold:#ffb800;--text:#e8edf6;--mute:#93a1ba;--blue:#0a8fc9;--ok:#2fbf71;--bad:#e5484d;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.55 Inter,system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+h1,h2,h3,.brand{font-family:Oswald,Impact,sans-serif;letter-spacing:.02em;margin:0}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;gap:14px;padding:12px 16px;background:#0d1627;border-bottom:3px solid var(--gold)}
+.brand{font-size:32px;font-weight:700;color:var(--gold);flex:1}
+button{font:inherit;cursor:pointer;border:0;border-radius:8px;padding:10px 16px;color:var(--text);background:var(--line)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.icon{width:46px;height:46px;padding:0;background:var(--panel);border:1px solid var(--line);color:var(--gold);font-size:22px}
+.primary{background:var(--blue);color:#fff;font-weight:600}
+.gold{background:var(--gold);color:#1a1300;font-weight:600}
+.danger{background:var(--bad);color:#fff}
+.ok{background:var(--ok);color:#04150b}
+#scrim{position:fixed;inset:0;background:#000a;opacity:0;pointer-events:none;transition:opacity .25s;z-index:30}
+#scrim.on{opacity:1;pointer-events:auto}
+#drawer{position:fixed;top:0;bottom:0;left:0;width:min(300px,85vw);background:#0d1627;border-right:3px solid var(--gold);z-index:40;transform:translateX(-100%);transition:transform .3s ease;padding:calc(16px + env(safe-area-inset-top,0px)) 12px 16px;display:flex;flex-direction:column;gap:4px;overflow:auto}
+#drawer.on{transform:none}
+#drawer h2{color:var(--gold);padding:4px 12px 12px;font-size:24px}
+#drawer button{background:none;text-align:left;padding:13px 14px;font-size:17px;border-left:3px solid transparent;border-radius:0 8px 8px 0}
+#drawer button.cur{background:var(--panel);border-left-color:var(--gold);color:var(--gold)}
+main{flex:1;width:100%;max-width:860px;margin:0 auto;padding:24px 16px 40px}
+.hero{padding:36px 0 28px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.hero h1{font-size:clamp(38px,9vw,64px);color:var(--gold);line-height:1.05}
+.hero p{color:var(--mute);font-size:18px;max-width:60ch}
+h2.t{font-size:28px;color:var(--gold);margin-bottom:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px}
+.card h3{font-size:22px;color:var(--gold);margin-bottom:6px}
+.card p{margin:0 0 10px;color:var(--mute)}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{border:1px solid #6b5316;background:#2a2312;color:var(--gold);padding:4px 12px;border-radius:6px;font-weight:600;font-size:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.sp{justify-content:space-between}
+input,select,textarea{width:100%;background:#0a0f1a;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:11px 12px;font:inherit}
+label{display:block;color:var(--mute);font-size:14px;margin:12px 0 4px}
+.badge{font-size:13px;padding:2px 10px;border-radius:99px;background:var(--line)}
+.b-open{background:#123a28;color:#6ee7a1}.b-lock{background:#3a2a12;color:var(--gold)}.b-closed{background:#3a1519;color:#ff9aa0}
+.msg{padding:10px 12px;border-radius:10px;background:#0a0f1a;margin:8px 0;border:1px solid var(--line)}
+.msg.staff{border-color:#6b5316}
+.msg small{color:var(--mute)}
+.note{border-left:3px solid var(--gold);padding:8px 12px;background:#1d2434;color:var(--mute);font-size:14px;border-radius:0 8px 8px 0;margin-bottom:16px}
+.avatar{width:56px;height:56px;border-radius:50%;background:var(--line);display:grid;place-items:center;font:700 22px Oswald,sans-serif;color:var(--gold)}
+footer{border-top:1px solid var(--line);background:#0d1627;padding:22px 16px calc(22px + env(safe-area-inset-bottom,0px));text-align:center}
+footer nav{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+footer a,footer button.l{color:var(--text);background:none;padding:4px;text-decoration:underline;text-underline-offset:3px}
+footer small{color:var(--mute)}
+dialog{background:var(--panel);color:var(--text);border:1px solid var(--gold);border-radius:14px;max-width:min(440px,92vw);width:100%;padding:22px}
+dialog::backdrop{background:#000b}
+.oauth{width:100%;padding:14px;margin-top:10px;font-weight:600}
+.discord{background:#5865f2;color:#fff}.mc{background:#3c8527;color:#fff}
+.done{opacity:.7}
+@media(prefers-reduced-motion:reduce){#drawer,#scrim{transition:none}}
+</style>
 </head>
 <body>
+<header>
+  <button class="icon" id="homeBtn" aria-label="Menüyü aç">⌂</button>
+  <div class="brand">NATO</div>
+  <div id="authSlot"></div>
+</header>
+<div id="scrim"></div>
+<aside id="drawer" aria-label="Bölümler"></aside>
+<main id="main"></main>
+<footer>
+  <nav>
+    <button class="l" data-doc="tos">Hizmet Şartları</button>
+    <button class="l" data-doc="privacy">Gizlilik Politikası</button>
+    <a href="https://discord.gg/ymv8D3WHNz" target="_blank" rel="noopener">Discord sunucumuz</a>
+    <a href="https://youtube.com/@nato_delta?si=l6qxhNVICEX9g1np" target="_blank" rel="noopener">YouTube hesabımız</a>
+  </nav>
+  <small>© NATO. Resmî Discord ve Minecraft topluluğu.</small>
+</footer>
+<dialog id="dlg"></dialog>
 
-    <!-- Üst Şerit -->
-    <header>
-        <div class="brand-box">
-            <!-- Ev Butonu: Basınca Soldan Sağa Menü Açılır -->
-            <button class="home-menu-btn" id="homeMenuBtn" title="Menüyü Aç">
-                <i class="fa-solid fa-house"></i>
-            </button>
-            <span class="brand-title">NATO</span>
-        </div>
-        <button class="login-btn" id="headerLoginBtn">
-            <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
-        </button>
-    </header>
+<script>
+/* ===== AYARLAR (buraya kendi bilgilerini yaz) ===== */
+const YETKILILER = ["herobrine_sinan"]; // Discord kullanıcı adları: destek ve grup taleplerine bakabilir
+const KATEGORILER = ["Ban Affı","Discord Destek","Askeri Şikayet","Ulusal Şikayet"];
+const BRANSLAR = [
+ {ad:"Kara Kuvvetleri",acik:"Karadan sorumlu branştır.",birim:["BÖRÜ","KHO","MUHABERE","ARAMA KURTARMA"]},
+ {ad:"Sınır Müfettişleri",acik:"Sınırdan sorumlu branştır.",birim:["GARDİYAN","MUHAFIZLARI","DENETİM BİRİMİ"]},
+ {ad:"Askerî İnzibat",acik:"Asayişten sorumlu branştır.",birim:["Yıldırım Orduları","Kızıl Sağ El"]},
+ {ad:"Özel Kuvvetler",acik:"Operasyonlardan sorumlu branştır.",birim:["SAT","Özel Koruma Birliği","OMEGA"]}
+];
+const EMEK = [
+ ["Herobrine_sinan","NATO Başkomutanı","NATO’nun askerî olmasını sağlayan lider."],
+ ["Yusufg","Kurucu ve Yönetim Kurulu Başkanlarından biri","Ulusun ilk kurucularından biridir."],
+ ["Omer_salih","Kurucu","Ulusun kurucularından biridir."],
+ ["Tahirg","Kurucu","Ulusun kurucularından biridir."]
+];
+const BOTLAR = [["NATO","Ana bot. /update komutuyla onaylanan rolleri verir."],["NATO Moderasyon","Sunucu moderasyonu ve kayıtlar için kullanılır."]];
+const DOCS = {
+ tos:["Hizmet Şartları","Bu metin yer tutucudur. Kuralları, yaptırımları ve hesap kullanım şartlarını buraya yaz."],
+ privacy:["Gizlilik Politikası","Bu metin yer tutucudur. Siteye Discord (kullanıcı adı, avatar, e-posta, sunucu listesi) ve Minecraft hesap verisinin neden alındığını ve nasıl saklandığını buraya yaz."]
+};
+const BOLUMLER = [["home","Ana Sayfa"],["destek","Destek"],["bransl","Branşlar"],["emek","Emeği Geçenler"],["gruplar","Gruplar"],["hesap","Hesap"],["botlar","Botlar"]];
 
-    <!-- Soldan Sağa Açılan Menü Penceresi -->
-    <div class="drawer-overlay" id="drawerOverlay"></div>
-    <aside class="side-drawer" id="sideDrawer">
-        <div class="drawer-header">
-            <span><i class="fa-solid fa-shield-halved"></i> NATO MENÜ</span>
-            <button class="close-drawer-btn" id="closeDrawerBtn">&times;</button>
-        </div>
+/* ===== DURUM ===== */
+let S = {user:null,tickets:[],reqs:[],demoStaff:false};
+try{const r=localStorage.getItem("nato_v1");if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem("nato_v1",JSON.stringify(S))}catch(e){}};
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const isStaff=()=>S.user&&(YETKILILER.includes(S.user.discord.toLowerCase())||S.demoStaff);
+const now=()=>new Date().toLocaleString("tr-TR",{dateStyle:"short",timeStyle:"short"});
+let view="home",openTicket=null;
 
-        <button class="drawer-nav-btn active" data-target="ev">
-            <i class="fa-solid fa-house"></i> Ev & Branşlar
-        </button>
-        <button class="drawer-nav-btn" data-target="destek">
-            <i class="fa-solid fa-headset"></i> Destek Merkezi
-        </button>
-        <button class="drawer-nav-btn" data-target="emegi-gecenler">
-            <i class="fa-solid fa-award"></i> Emeği Geçenler
-        </button>
-        <button class="drawer-nav-btn" data-target="gruplar">
-            <i class="fa-solid fa-users-gear"></i> Gruplar
-        </button>
-        <button class="drawer-nav-btn" data-target="hesap">
-            <i class="fa-solid fa-user-check"></i> Hesap
-        </button>
-        <button class="drawer-nav-btn" data-target="botlar">
-            <i class="fa-solid fa-robot"></i> Botlar
-        </button>
-    </aside>
+/* ===== MENÜ ===== */
+function buildDrawer(){
+  $("#drawer").innerHTML="<h2>NATO</h2>"+BOLUMLER.map(([k,a])=>`<button data-go="${k}" class="${view===k?"cur":""}">${a}</button>`).join("");
+}
+function drawer(on){$("#drawer").classList.toggle("on",on);$("#scrim").classList.toggle("on",on)}
+$("#homeBtn").onclick=()=>{buildDrawer();drawer(!$("#drawer").classList.contains("on"))};
+$("#scrim").onclick=()=>drawer(false);
+$("#drawer").onclick=e=>{const b=e.target.closest("[data-go]");if(b){go(b.dataset.go);drawer(false)}};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")drawer(false)});
+document.querySelectorAll("[data-doc]").forEach(b=>b.onclick=()=>{const d=DOCS[b.dataset.doc];modal(`<h3 class="t" style="font-size:24px;color:var(--gold)">${d[0]}</h3><p>${d[1]}</p><button onclick="dlg.close()">Kapat</button>`)});
 
-    <!-- NATO Tanıtımı -->
-    <div class="hero-banner">
-        <p>Hiyerarşi, disiplin ve operasyonel mükemmeliyet ilkesiyle hareket eden elit askeri topluluk.</p>
-    </div>
+function modal(h){const d=$("#dlg");d.innerHTML=h;if(!d.open)d.showModal()}
+const dlg=$("#dlg");
 
-    <!-- Ana İçerikler -->
-    <main>
-        <!-- 1. EV & BRANŞLAR -->
-        <section id="ev" class="tab-section active">
-            <h2 class="section-header">
-                <i class="fa-solid fa-sitemap"></i> Askeri Branşlar ve Birimler
-            </h2>
+/* ===== ÜST ŞERİT: GİRİŞ ===== */
+function authSlot(){
+  $("#authSlot").innerHTML=S.user
+   ?`<button class="icon" data-go2="hesap" aria-label="Hesap" style="color:var(--text)">${esc(S.user.discord[0].toUpperCase())}</button>`
+   :`<button class="primary" id="loginBtn">Giriş Yap</button>`;
+  const l=$("#loginBtn");if(l)l.onclick=loginModal;
+  const a=document.querySelector("[data-go2]");if(a)a.onclick=()=>go("hesap");
+}
+let tmp={};
+function loginModal(){
+  modal(`<h3 style="font-size:24px;color:var(--gold)">Giriş Yap</h3>
+  <p style="color:var(--mute)">Girmek için iki hesabını da bağlaman gerekir.</p>
+  <button class="oauth discord" id="bd">${tmp.discord?"✓ Discord bağlandı: "+esc(tmp.discord):"Discord ile bağlan"}</button>
+  <button class="oauth mc" id="bm">${tmp.mc?"✓ Minecraft bağlandı: "+esc(tmp.mc):"Minecraft (Microsoft) ile bağlan"}</button>
+  <div class="note" style="margin-top:16px">Önizleme modu: gerçek Discord/Microsoft sayfası yerine kullanıcı adını elle yazıyorsun. Gerçek giriş sunucu kodu ister.</div>
+  <div class="row sp"><button onclick="dlg.close()">İptal</button><button class="gold" id="bgo" ${tmp.discord&&tmp.mc?"":"disabled style='opacity:.4'"}>Devam et</button></div>`);
+  $("#bd").onclick=()=>{const v=prompt("Discord kullanıcı adın (örn. sinansx):");if(v){tmp.discord=v.trim();loginModal()}};
+  $("#bm").onclick=()=>{const v=prompt("Minecraft kullanıcı adın (örn. Herobrine_sinan):");if(v){tmp.mc=v.trim();loginModal()}};
+  $("#bgo").onclick=()=>{if(!(tmp.discord&&tmp.mc))return;S.user={discord:tmp.discord,mc:tmp.mc,guilds:["NATO","Örnek Sunucu 1","Örnek Sunucu 2"]};tmp={};save();dlg.close();authSlot();go(view)};
+}
 
-            <div class="info-card">
-                <div class="card-title"><i class="fa-solid fa-person-rifle"></i> Kara Kuvvetleri</div>
-                <p class="card-desc">Karadan Sorumlu Branştır.</p>
-                <div class="unit-badges">
-                    <span class="unit-badge">BÖRÜ</span>
-                    <span class="unit-badge">KHO</span>
-                    <span class="unit-badge">MUHABERE</span>
-                    <span class="unit-badge">ARAMA KURTARMA</span>
-                </div>
-            </div>
+/* ===== GÖRÜNÜMLER ===== */
+function go(v){view=v;openTicket=null;buildDrawer();render();window.scrollTo(0,0)}
+function render(){
+  const m=$("#main");
+  if(view==="home")m.innerHTML=`<section class="hero"><h1>NATO</h1><p>Hiyerarşi, disiplin ve operasyonel mükemmellik ilkesiyle hareket eden elit askerî topluluk.</p></section>
+   <div class="card"><h3>Biz kimiz?</h3><p>NATO; Minecraft ve Discord üzerinde örgütlü, branşlara ve birimlere ayrılmış bir askerî topluluktur. Sol üstteki ev düğmesinden branşlara, destek taleplerine ve gruplara ulaşabilirsin.</p></div>
+   <div class="row"><button class="gold" data-go3="bransl">Branşları gör</button><button data-go3="destek">Destek al</button></div>`;
+  else if(view==="destek")destek(m);
+  else if(view==="bransl")m.innerHTML=`<h2 class="t">Askerî Branşlar ve Birimler</h2>`+BRANSLAR.map(b=>`<div class="card"><h3>${b.ad}</h3><p>${b.acik}</p><div class="tags">${b.birim.map(x=>`<span class="tag">${x}</span>`).join("")}</div></div>`).join("");
+  else if(view==="emek")m.innerHTML=`<h2 class="t">Emeği Geçenler</h2>`+EMEK.map(e=>`<div class="card row"><div class="avatar">${e[0][0]}</div><div><h3>${e[0]}</h3><b>${e[1]}</b><p style="margin:0">${e[2]}</p></div></div>`).join("");
+  else if(view==="gruplar")gruplar(m);
+  else if(view==="hesap")hesap(m);
+  else if(view==="botlar")m.innerHTML=`<h2 class="t">Botlar</h2>`+BOTLAR.map(b=>`<div class="card row"><div class="avatar">${b[0][0]}</div><div><h3>${b[0]}</h3><p style="margin:0">${b[1]}</p></div></div>`).join("");
+  document.querySelectorAll("[data-go3]").forEach(b=>b.onclick=()=>go(b.dataset.go3));
+}
+function needLogin(m,t){m.innerHTML=`<h2 class="t">${t}</h2><div class="card"><p>Bu bölümü kullanmak için giriş yapmalısın.</p><button class="primary" id="l2">Giriş Yap</button></div>`;$("#l2").onclick=loginModal}
 
-            <div class="info-card">
-                <div class="card-title"><i class="fa-solid fa-passport"></i> Sınıf Müfettişleri</div>
-                <p class="card-desc">Sınırdan Sorumlu Branştır.</p>
-                <div class="unit-badges">
-                    <span class="unit-badge">GARDİYAN MUHAFIZLARI</span>
-                    <span class="unit-badge">DENETİM BİRİMİ</span>
-                </div>
-            </div>
+/* --- Destek --- */
+function destek(m){
+  if(!S.user)return needLogin(m,"Destek");
+  if(openTicket!==null)return ticketView(m);
+  const list=S.tickets.filter(t=>isStaff()||t.owner===S.user.discord);
+  m.innerHTML=`<h2 class="t">Destek</h2>
+  <div class="card"><h3>Yeni talep aç</h3>
+   <label>Kategori</label><select id="tc">${KATEGORILER.map(k=>`<option>${k}</option>`).join("")}</select>
+   <label>Konu</label><input id="ts" maxlength="80">
+   <label>Açıklama</label><textarea id="td" rows="4"></textarea>
+   <p style="margin-top:10px;font-size:14px">Talebi açtığında bulunduğun Discord sunucuları yalnızca yetkililere görünür.</p>
+   <button class="gold" id="tn">Talebi aç</button></div>
+  <h3 style="margin:22px 0 10px">${isStaff()?"Tüm talepler":"Taleplerim"}</h3>
+  ${list.length?list.map(t=>`<div class="card"><div class="row sp"><b>#${t.id} ${esc(t.konu)}</b><span class="badge b-${t.durum}">${{open:"Açık",lock:"Kilitli",closed:"Kapalı"}[t.durum]}</span></div><p style="margin:4px 0 10px">${t.kat} · ${esc(t.owner)}${t.sahip?" · Sahiplenen: "+esc(t.sahip):""}</p><button data-t="${t.id}">Aç</button></div>`).join(""):`<div class="card"><p style="margin:0">Henüz talep yok. Yukarıdan ilk talebini aç.</p></div>`}`;
+  $("#tn").onclick=()=>{const s=$("#ts").value.trim(),d=$("#td").value.trim();if(!s||!d){alert("Konu ve açıklama yaz.");return}
+    const id=S.tickets.length+1;S.tickets.push({id,kat:$("#tc").value,konu:s,owner:S.user.discord,mc:S.user.mc,guilds:S.user.guilds,durum:"open",sahip:null,msgs:[{k:S.user.discord,y:false,t:d,z:now()}]});save();openTicket=id;render()};
+  m.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{openTicket=+b.dataset.t;render()});
+}
+function ticketView(m){
+  const t=S.tickets.find(x=>x.id===openTicket);if(!t){openTicket=null;return destek(m)}
+  const st=isStaff(),can=t.durum==="open"||st&&t.durum!=="closed";
+  m.innerHTML=`<button id="bk">← Taleplere dön</button>
+  <div class="card" style="margin-top:14px"><div class="row sp"><h3>#${t.id} ${esc(t.konu)}</h3><span class="badge b-${t.durum}">${{open:"Açık",lock:"Kilitli",closed:"Kapalı"}[t.durum]}</span></div><p style="margin:0">${t.kat} · ${esc(t.owner)} · MC: ${esc(t.mc)}</p></div>
+  ${st?`<div class="card"><h3>Yetkili bölümü</h3>
+    <div class="row"><button class="gold" id="a1">${t.sahip?"Bırak":"Sahiplen"}</button><button id="a2">${t.durum==="lock"?"Kilidi aç":"Kilitle"}</button><button class="danger" id="a3">${t.durum==="closed"?"Yeniden aç":"Kapat"}</button></div>
+    <p style="margin:12px 0 6px">Talep sahibinin Discord sunucuları:</p><div class="tags">${t.guilds.map(g=>`<span class="tag">${esc(g)}</span>`).join("")}</div></div>`:""}
+  <div class="card"><h3>Yazışma</h3>${t.msgs.map(x=>`<div class="msg ${x.y?"staff":""}"><small>${esc(x.k)}${x.y?" (yetkili)":""} · ${x.z}</small><br>${esc(x.t)}</div>`).join("")}
+   ${can&&t.durum!=="lock"||st&&t.durum==="lock"?`<textarea id="mt" rows="3" placeholder="Mesajını yaz"></textarea><button class="primary" id="ms" style="margin-top:8px">Gönder</button>`:`<p style="margin:0">Bu talebe mesaj yazılamıyor.</p>`}</div>`;
+  $("#bk").onclick=()=>{openTicket=null;render()};
+  const ms=$("#ms");if(ms)ms.onclick=()=>{const v=$("#mt").value.trim();if(!v)return;t.msgs.push({k:S.user.discord,y:st,t:v,z:now()});save();render()};
+  if(st){
+   $("#a1").onclick=()=>{t.sahip=t.sahip?null:S.user.discord;save();render()};
+   $("#a2").onclick=()=>{t.durum=t.durum==="lock"?"open":"lock";save();render()};
+   $("#a3").onclick=()=>{t.durum=t.durum==="closed"?"open":"closed";save();render()};
+  }
+}
 
-            <div class="info-card">
-                <div class="card-title"><i class="fa-solid fa-scale-balanced"></i> Askeri İnzibat</div>
-                <p class="card-desc">Asayişten sorumlu branştır.</p>
-                <div class="unit-badges">
-                    <span class="unit-badge">YILDIRIM ORDULARI</span>
-                    <span class="unit-badge">KIZIL SAĞ EL</span>
-                </div>
-            </div>
+/* --- Gruplar --- */
+function gruplar(m){
+  if(!S.user)return needLogin(m,"Gruplar");
+  const mine=ad=>S.reqs.find(r=>r.u===S.user.discord&&r.g===ad);
+  let h=`<h2 class="t">Gruplar</h2><div class="note">Bir gruba istek at. Yetkililer onaylarsa, Discord’da NATO botuna <b>/update</b> yazınca o grubun rolleri verilir.</div>`;
+  h+=BRANSLAR.map(b=>`<div class="card"><h3>${b.ad}</h3>${[b.ad+" (genel)",...b.birim].map(g=>{const r=mine(g);return `<div class="row sp" style="padding:8px 0;border-top:1px solid var(--line)"><span>${g}</span>${r?`<span class="badge ${r.d==="onay"?"b-open":r.d==="red"?"b-closed":"b-lock"}">${{bekle:"Beklemede",onay:"Onaylandı",red:"Reddedildi"}[r.d]}</span>`:`<button data-g="${esc(g)}">İstek at</button>`}</div>`}).join("")}</div>`).join("");
+  if(isStaff()){
+    const p=S.reqs.filter(r=>r.d==="bekle");
+    h+=`<h3 style="margin:22px 0 10px">Bekleyen istekler (yetkili)</h3>`+(p.length?p.map((r,i)=>`<div class="card row sp"><span><b>${esc(r.u)}</b> → ${esc(r.g)}</span><span class="row"><button class="ok" data-d="onay" data-i="${S.reqs.indexOf(r)}">Onayla</button><button class="danger" data-d="red" data-i="${S.reqs.indexOf(r)}">Reddet</button></span></div>`).join(""):`<div class="card"><p style="margin:0">Bekleyen istek yok.</p></div>`);
+  }
+  m.innerHTML=h;
+  m.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{S.reqs.push({u:S.user.discord,g:b.dataset.g,d:"bekle"});save();render()});
+  m.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{S.reqs[+b.dataset.i].d=b.dataset.d;save();render()});
+}
 
-            <div class="info-card">
-                <div class="card-title"><i class="fa-solid fa-crosshairs"></i> Özel Kuvvetler</div>
-                <p class="card-desc">Operasyonlardan sorumlu branştır.</p>
-                <div class="unit-badges">
-                    <span class="unit-badge">SAT</span>
-                    <span class="unit-badge">ÖZEL KORUMA BİRLİĞİ</span>
-                    <span class="unit-badge">OMEGA</span>
-                </div>
-            </div>
-        </section>
+/* --- Hesap --- */
+function hesap(m){
+  if(!S.user)return needLogin(m,"Hesap");
+  m.innerHTML=`<h2 class="t">Hesap</h2>
+  <div class="card row"><div class="avatar">${esc(S.user.discord[0].toUpperCase())}</div><div><h3>Discord</h3><p style="margin:0">${esc(S.user.discord)}</p></div></div>
+  <div class="card row"><div class="avatar" style="color:var(--ok)">M</div><div><h3>Minecraft</h3><p style="margin:0">${esc(S.user.mc)}</p></div></div>
+  <div class="card"><label style="display:flex;gap:10px;align-items:center;margin:0"><input type="checkbox" id="ds" style="width:auto" ${S.demoStaff?"checked":""}> Önizleme: yetkili olarak gör</label>
+  <p style="margin:8px 0 0;font-size:14px">Gerçek sitede yetki, koddaki YETKİLİLER listesinden gelir; bu kutu yalnızca denemek içindir.</p></div>
+  <button class="danger" id="lo">Çıkış yap</button>`;
+  $("#ds").onchange=e=>{S.demoStaff=e.target.checked;save()};
+  $("#lo").onclick=()=>{S.user=null;S.demoStaff=false;save();authSlot();go("home")};
+}
 
-        <!-- 2. DESTEK BÖLÜMÜ -->
-        <section id="destek" class="tab-section">
-            <h2 class="section-header">
-                <i class="fa-solid fa-headset"></i> Destek Talebi Oluştur
-            </h2>
-
-            <!-- Talep Açma Formu -->
-            <div class="info-card" id="ticketCreateForm">
-                <div class="form-group">
-                    <label>Destek Türü Seçiniz</label>
-                    <select class="form-control" id="ticketTypeSelect">
-                        <option>Ban Affı</option>
-                        <option>Discord Destek</option>
-                        <option>Askeri Şikayet</option>
-                        <option>Ulusal Şikayet</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Mesajınız / Açıklamanız</label>
-                    <textarea class="form-control" id="ticketInitialMsg" rows="3" placeholder="Durumunuzu detaylıca açıklayınız..."></textarea>
-                </div>
-                <button class="primary-btn" id="submitTicketBtn">Destek Talebi Aç</button>
-            </div>
-
-            <!-- Talep Açıldıktan Sonra Ortaya Çıkan Ekran -->
-            <div class="ticket-view" id="activeTicketView">
-                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-subtle); padding-bottom:10px;">
-                    <h3 style="color:var(--accent-yellow); font-size:16px;" id="ticketHeaderTitle">Destek Talebi #1</h3>
-                    <span id="ticketStatusBadge" style="background:var(--success); color:#000; padding:3px 8px; border-radius:4px; font-size:11px; font-weight:700;">AÇIK</span>
-                </div>
-
-                <!-- Yazışma Bölümü -->
-                <div class="chat-box" id="ticketChatBox"></div>
-
-                <div style="display:flex; gap:8px;" id="chatInputArea">
-                    <input type="text" class="form-control" id="chatReplyInput" placeholder="Mesaj yazın...">
-                    <button class="primary-btn" style="width:auto; padding:0 16px;" id="sendChatBtn">Gönder</button>
-                </div>
-
-                <!-- Sadece Yetkililerin Görebileceği Yetkili Bölümü -->
-                <div class="staff-controls" id="staffTicketControls">
-                    <h4 style="color:var(--danger); font-size:13px; margin-bottom:6px;">
-                        <i class="fa-solid fa-shield-halved"></i> Yetkili Bölümü (Sadece Yetkililer Görür)
-                    </h4>
-                    <p style="font-size:12px; color:var(--text-gray);">Talep Sahibinin Bulunduğu Sunucular: <b style="color:white;">NATO Resmi Sunucusu, Craftlime</b></p>
-                    <div class="staff-actions">
-                        <button class="staff-btn" style="background:#0284c7;" id="claimTicketBtn">Desteği Sahiplen</button>
-                        <button class="staff-btn" style="background:#d97706;" id="lockTicketBtn">Desteği Kilitle</button>
-                        <button class="staff-btn" style="background:#dc2626;" id="closeTicketBtn">Desteği Kapat</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. EMEĞİ GEÇENLER -->
-        <section id="emegi-gecenler" class="tab-section">
-            <h2 class="section-header"><i class="fa-solid fa-award"></i> Emeği Geçenler</h2>
-
-            <div class="info-card">
-                <div class="card-title"><i class="fa-solid fa-star"></i> Herobrine_sinan</div>
-                <p style="color: var(--accent-yellow); font-size: 13px; font-weight: 700; margin-bottom: 6px;">NATO Başkomutanı</p>
-                <p class="card-desc">NATO'nun Askeri olmasını sağlayan lider.</p>
-            </div>
-
-            <div class="info-card">
-                <div class="card-title"><i class="fa-solid fa-user-shield"></i> Yusufg</div>
-                <p style="color: var(--accent-yellow); font-size: 13px; font-weight: 700; margin-bottom: 6px;">Kurucu & Yönetim Kurulu Başkanı</p>
-                <p class="card-desc">Ulusun ilk kurucuları ve Yönetim Kurulu Başkanlarından biridir.</p>
-            </div>
-
-            <div class="info-card">
-                <div class="card-title"><i class="fa-solid fa-user-shield"></i> Omer_salih</div>
-                <p style="color: var(--accent-yellow); font-size: 13px; font-weight: 700; margin-bottom: 6px;">Kurucu</p>
-                <p class="card-desc">Ulusun Kurucularından biridir.</p>
-            </div>
-
-            <div class="info-card">
-                <div class="card-title"><i class="fa-solid fa-user-shield"></i> Tahirg</div>
-                <p style="color: var(--accent-yellow); font-size: 13px; font-weight: 700; margin-bottom: 6px;">Kurucu</p>
-                <p class="card-desc">Ulusun Kurucularından biridir.</p>
-            </div>
-        </section>
-
-        <!-- 4. GRUPLAR -->
-        <section id="gruplar" class="tab-section">
-  
+authSlot();buildDrawer();render();
+</script>
+</body>
+    </html>
