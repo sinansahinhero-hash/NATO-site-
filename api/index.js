@@ -13,7 +13,7 @@ for (const [k, v] of Object.entries({ DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, 
   if (!v) throw new Error("Eksik ortam değişkeni: " + k);
 }
 
-const REDIRECT = `${BASE_URL}/api/auth/discord/callback`;
+const REDIRECT = "https://natox-mauve.vercel.app/api/auth/discord/callback";
 const db = new pg.Pool({ connectionString: DATABASE_URL, ssl: { rejectUnauthorized: false }, max: 3 });
 
 /* ===== TABLOLAR ===== */
