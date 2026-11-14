@@ -137,7 +137,7 @@ app.get("/api/auth/discord/callback", wrap(async (req, res) => {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
-        client_id: DISCORD_CLIENT_ID,
+        client_id: "1538105408911187999",
         client_secret: DISCORD_CLIENT_SECRET,
         grant_type: "authorization_code",
         code,
