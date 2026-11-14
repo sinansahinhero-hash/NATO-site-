@@ -103,49 +103,8 @@ const BOTLAR = [["NATO","Towny sunucularına en gelişmiş Askeri ulusu NATO tar
 
 Tek amacım NATO'ya yardım etmek"]];
 const DOCS = {
- tos:["Hizmet Şartları","NATO Topluluğu – Hizmet Şartları
-Son Güncelleme Tarihi: 14 Kasım 2026
-Bu Hizmet Şartları ("Şartlar"), NATO Topluluğu web sitesine (natox-mauve.vercel.app) ve ilgili Discord bot/sunucu hizmetlerine erişiminizi ve kullanımınızı düzenler. Platformumuzu kullanarak bu şartları eksiksiz kabul etmiş sayılarsınız.
-1. Hesap Doğrulama ve Güvenlik
-Discord ve Minecraft Entegrasyonu: Platformumuza erişmek ve kayıt olmak için Discord hesabınızla oturum açmanız ve Minecraft hesabınızı eşleştirmeniz gerekebilir.
-Kimlik Eşleşmesi: Topluluğumuz genelinde (site ve tüm bağlı sunucularda) kullanıcı adınız/takma adınız, resmi Minecraft adınız ile aynı olmak zorundadır. Yanıltıcı veya başkasına ait isimlerin kullanılması yasaktır.
-Hesap Sorumluluğu: Hesabınızla yapılan tüm işlemlerden doğrudan siz sorumlusunuzdur. Güvenliğiniz için hesap bilgilerinizi kimseyle paylaşmayın.
-2. Topluluk Kuralları ve Davranış İlkeleri
-NATO Topluluğu askeri rol yapma (Roleplay) ve düzen üzerine kurulu ciddi bir topluluktur. Buna dayanarak:
-Tüm üyeler birbirine saygı duymak ve yetkili talimatlarına uymakla yükümlüdür.
-Hile, manipülasyon, bot altyapısına zarar verme girişimi, sunucu açıklarından yararlanma (bug abuse) veya platformu kötüye kullanma yasaktır.
-Discord sunucularında ve site içi iletişimde küfür, hakaret, nefret söylemi ve provokasyon kesinlikle yasaktır. Kurallara uymayanların platform erişimi askıya alınabilir.
-3. Yönetim ve Yetki Hakları
-Topluluk içerisindeki yetkilendirmeler, rütbe atamaları ve idari işlemler yalnızca kurucu ve yetkilendirilmiş resmi paneller üzerinden yürütülür.
-Yönetim ekibi, kurallara uymayan kullanıcıların hesaplarını, rollerini veya site erişimlerini önceden haber vermeksizin sonlandırma ya da kısıtlama hakkını saklı tutar.
-4. Hizmet Kesintileri ve Sorumluluk Reddi
-Platformumuz (web sitesi ve botlar) kesintisiz bir deneyim sunmayı hedefler; ancak teknik aksaklıklar, bakım çalışmalarları veya harici sağlayıcı (Render, Vercel, Discord, Microsoft/Mojang) kaynaklı kesintilerden dolayı topluluk yönetimi sorumlu tutulamaz.
-5. Şartlardaki Değişiklikler
-NATO Topluluğu yönetimi, gerekli gördüğü durumlarda bu hizmet şartlarını güncelleyebilir. Yapılan değişiklikler site üzerinden yayımlandığı andan itibaren geçerli olur."],
- privacy:["Gizlilik Politikası","NATO Topluluğu – Gizlilik Politikası
-Son Güncelleme Tarihi: 14 Kasım 2026
-NATO Topluluğu olarak (natox-mauve.vercel.app) üyelerimizin gizliliğine ve veri güvenliğine önem veriyoruz. Bu Gizlilik Politikası, sitemizi ve entegre Discord bot hizmetlerimizi kullandığınızda hangi verilerin toplandığını, nasıl kullanıldığını ve korunduğunu açıklamaktadır.
-1. Toplanan Veriler
-Hizmetlerimizi eksiksiz sunabilmek ve topluluk içi senkronizasyonu sağlamak amacıyla yalnızca gerekli olan şu temel veriler toplanır:
-Discord Hesap Bilgileri: Discord kullanıcı adınız, kullanıcı ID'niz, profil fotoğrafınız ve sunucu üyelik bilgileriniz (OAuth2 identify ve guilds izinleri kapsamında).
-Minecraft Hesap Bilgileri: Minecraft kullanıcı adınız (Java ve Bedrock sürümleri dahil) ve oyun içi kimlik doğrulama verileriniz.
-Sistem ve İşlem Kayıtları: Platform üzerindeki başvurularınız, destek talepleriniz, rol eşleştirmeleriniz ve yetkili işlem kayıtları.
-2. Verilerin Kullanım Amaçları
-Toplanan bu veriler yalnızca topluluk işleyişi amacıyla kullanılır:
-Discord hesabınız ile Minecraft hesabınız arasında güvenli eşleştirme yapmak.
-Ana NATO sunucusu ile bağlı branş ve birim sunucularındaki rollerinizi ve takma adlarınızı otomatik güncellemek.
-Destek taleplerini, şikayetleri ve yetkili paneli işlemlerini yönetmek.
-Topluluk kurallarının ihlalini ve sahte hesap kullanımını önlemek.
-3. Verilerin Saklanması ve Güvenliği
-Verileriniz güvenli bulut veritabanlarında (PostgreSQL / Neon altyapısı) şifrelenmiş bağlantılar üzerinden saklanır.
-Sitemiz ve botlarımız kesinlikle Discord veya Minecraft şifrenizi talep etmez ve saklamaz. Tüm giriş işlemleri resmi OAuth2 protokolleri üzerinden gerçekleşir.
-Verilerinize yalnızca sistem yöneticileri ve yetkilendirilmiş personel, görevleri kapsamında erişebilir.
-4. Üçüncü Taraflarla Paylaşım
-Kişisel verileriniz hiçbir koşulda üçüncü şahıslara, reklam ağlarına veya ticari kuruluşlara satılmaz, kiralanmaz ya da paylaşılmaz. Veriler yalnızca teknik altyapı sağlayıcılarımız (Vercel, Render, Neon, Discord) aracılığıyla hizmetin çalışması amacıyla işlenir.
-5. Kullanıcı Hakları ve Veri Silme
-Platformumuzdan ayrılmak veya verilerinizin sistemden tamamen silinmesini talep etmek isterseniz, Discord sunucumuzdaki destek kanalları üzerinden yönetim ekibiyle iletişime geçebilirsiniz. Talebiniz doğrulandıktan sonra kayıtlarınız veritabanından kalıcı olarak silinir.
-6. Politika Değişiklikleri
-NATO Topluluğu yönetimi bu Gizlilik Politikası'nı güncelleme hakkını saklı tutar. Güncellemeler site üzerinde yayımlandığı tarihte yürürlüğe girer."]
+ tos:["Hizmet Şartları","Şu anlık boş."],
+ privacy:["Gizlilik Politikası","Şu anlık boş."]
 };
 const KAT = {ban:"Ban Affı",destek:"Discord Destek",askeri:"Askerî Şikayet",ulusal:"Ulusal Şikayet"};
 const PERM_ETIKET = {...KAT,gruplar:"Grup istekleri"};
