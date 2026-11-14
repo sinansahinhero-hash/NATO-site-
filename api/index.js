@@ -4,16 +4,20 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import pg from "pg";
 
-const {
-  DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, BASE_URL,
-  DATABASE_URL, SESSION_SECRET, OWNER_ID
-} = process.env;
+/* ===== AYARLAR ===== */
+const CLIENT_ID = "1538105408911187999";
+const REDIRECT = "https://natox-mauve.vercel.app/api/auth/discord/callback";
 
-for (const [k, v] of Object.entries({ DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, BASE_URL, DATABASE_URL, SESSION_SECRET, OWNER_ID })) {
+const clean = v => String(v ?? "").trim().replace(/^["']|["']$/g, "");
+const DISCORD_CLIENT_SECRET = clean(process.env.DISCORD_CLIENT_SECRET);
+const DATABASE_URL = clean(process.env.DATABASE_URL);
+const SESSION_SECRET = clean(process.env.SESSION_SECRET);
+const OWNER_ID = clean(process.env.OWNER_ID);
+
+for (const [k, v] of Object.entries({ DISCORD_CLIENT_SECRET, DATABASE_URL, SESSION_SECRET, OWNER_ID })) {
   if (!v) throw new Error("Eksik ortam değişkeni: " + k);
 }
 
-const REDIRECT = "https://natox-mauve.vercel.app/api/auth/discord/callback";
 const db = new pg.Pool({ connectionString: DATABASE_URL, ssl: { rejectUnauthorized: false }, max: 3 });
 
 /* ===== TABLOLAR ===== */
@@ -111,19 +115,27 @@ async function getPerms(uid) {
   return r.rows[0]?.perms || [];
 }
 
+/* ===== KONTROL ADRESİ (sorun çözülünce silebilirsin) ===== */
+app.get("/api/debug", (req, res) => {
+  res.json({
+    client_id: CLIENT_ID,
+    redirect_uri: REDIRECT,
+    secret_length: DISCORD_CLIENT_SECRET.length
+  });
+});
+
 /* ===== DISCORD GİRİŞİ ===== */
 app.get("/api/auth/discord", (req, res) => {
   const state = crypto.randomBytes(16).toString("hex");
   res.cookie("nato_state", state, { ...cookieOpts, maxAge: 10 * 60 * 1000 });
-  const url = new URL("https://discord.com/oauth2/authorize");
-  url.search = new URLSearchParams({
-    client_id: DISCORD_CLIENT_ID,
+  const params = new URLSearchParams({
+    client_id: CLIENT_ID,
     redirect_uri: REDIRECT,
     response_type: "code",
     scope: "identify email guilds",
     state
   });
-  res.redirect(url.toString());
+  res.redirect("https://discord.com/oauth2/authorize?" + params.toString());
 });
 
 app.get("/api/auth/discord/callback", wrap(async (req, res) => {
@@ -137,7 +149,7 @@ app.get("/api/auth/discord/callback", wrap(async (req, res) => {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
-        client_id: "1538105408911187999",
+        client_id: CLIENT_ID,
         client_secret: DISCORD_CLIENT_SECRET,
         grant_type: "authorization_code",
         code,
@@ -145,7 +157,7 @@ app.get("/api/auth/discord/callback", wrap(async (req, res) => {
       })
     });
     const token = await tokenRes.json();
-    if (!token.access_token) throw new Error("Token alınamadı");
+    if (!token.access_token) throw new Error("Token alınamadı: " + JSON.stringify(token));
     const headers = { Authorization: `Bearer ${token.access_token}` };
     const me = await (await fetch("https://discord.com/api/users/@me", { headers })).json();
     const guilds = await (await fetch("https://discord.com/api/users/@me/guilds", { headers })).json();
