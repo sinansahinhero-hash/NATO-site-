@@ -253,4 +253,34 @@ async function gruplar(m){
 /* ---- Hesap ---- */
 function hesap(m){
   m.innerHTML=`<h2 class="t">Hesap</h2>
-  <div class="card row"><div class="avatar">${me.avatar?`<img src="${
+  <div class="card row"><div class="avatar">${me.avatar?`<img src="${esc(me.avatar)}" alt="">`:esc(me.username[0].toUpperCase())}</div><div><h3>Discord</h3><p style="margin:0">${esc(me.username)}</p></div></div>
+  <div class="card row"><div class="avatar" style="color:var(--ok)">M</div><div><h3>Minecraft</h3><p style="margin:0">${esc(me.mcName||"Kayıtlı değil")}${me.mcEdition?" · "+(me.mcEdition==="java"?"Java":"Bedrock"):""}</p></div></div>
+  ${me.perms.length?`<div class="card"><h3>Yetkilerin</h3><div class="tags">${me.perms.map(p=>`<span class="tag">${esc(PERM_ETIKET[p]||p)}</span>`).join("")}</div></div>`:""}
+  <button class="danger" id="lo">Çıkış yap</button>`;
+  $("#lo").onclick=logout;
+}
+/* ---- Yönetim paneli (sadece sahip) ---- */
+async function yonetim(m){
+  if(!me.isOwner){m.innerHTML=`<div class="card"><p style="margin:0">Bu bölüm sadece sahibe açık.</p></div>`;return}
+  const list=await api("/api/admin/staff");
+  m.innerHTML=`<h2 class="t">Yönetim Paneli</h2>
+  <div class="card"><h3>Yetkili ekle veya güncelle</h3>
+   <label>Discord ID</label><input id="ai" inputmode="numeric" maxlength="20" placeholder="örn. 1422615267309129751">
+   <p style="margin:8px 0 0;font-size:14px">Aynı ID’yi tekrar girersen yetkileri güncellenir.</p>
+   <label>Baktığı alanlar</label>${Object.entries(PERM_ETIKET).map(([k,v])=>`<label class="chk"><input type="checkbox" value="${k}"> ${v}</label>`).join("")}
+   <button class="gold" id="as" style="margin-top:10px">Kaydet</button><div class="err" id="er"></div></div>
+  <h3 style="margin:22px 0 10px;font-size:22px">Yetkililer</h3>
+  ${list.length?list.map(s=>`<div class="card"><div class="row sp"><b>${esc(s.username||"Henüz giriş yapmadı")} <span style="color:var(--mute);font-weight:400">${esc(s.id)}</span></b><button class="danger" data-r="${esc(s.id)}">Yetkiyi al</button></div><div class="tags" style="margin-top:8px">${s.perms.map(p=>`<span class="tag">${esc(PERM_ETIKET[p]||p)}</span>`).join("")}</div></div>`).join(""):`<div class="card"><p style="margin:0">Henüz yetkili eklenmedi.</p></div>`}`;
+  $("#as").onclick=async()=>{
+    const perms=[...m.querySelectorAll(".chk input:checked")].map(i=>i.value);
+    try{await api("/api/admin/staff",{method:"POST",body:{discordId:$("#ai").value.trim(),perms}});render()}catch(e){$("#er").textContent=e.message}
+  };
+  m.querySelectorAll("[data-r]").forEach(b=>b.onclick=async()=>{if(!confirm("Bu kişinin yetkisi alınsın mı?"))return;try{await api("/api/admin/staff/"+b.dataset.r,{method:"DELETE"});render()}catch(e){alert(e.message)}});
+}
+
+/* ---- Başlangıç ---- */
+authSlot();buildDrawer();render();
+api("/api/me").then(u=>{me=u;authSlot();buildDrawer();render();if(me&&!me.mcName)mcModal()}).catch(()=>{});
+</script>
+</body>
+</html>
