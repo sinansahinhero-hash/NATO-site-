@@ -269,16 +269,6 @@ async function hesap(m){
   catch(e){$("#hp").innerHTML=`<div class="card"><p style="margin:0">${esc(e.message)}</p></div>`}
 }
 
-/* ---- Hesap ---- */
-async function hesap(m){
-  m.innerHTML=`<h2 class="t">Hesap</h2><div id="hp"></div>
-  ${me.perms.length?`<div class="card"><h3>Yetkilerin</h3><div class="tags">${me.perms.map(p=>`<span class="tag">${esc(PERM_ETIKET[p]||p)}</span>`).join("")}</div></div>`:""}
-  <button class="danger" id="lo">Çıkış yap</button>`;
-  $("#lo").onclick=logout;
-  try{const p=await api("/api/profiles/me");$("#hp").innerHTML=profilHtml(p,false)}
-  catch(e){$("#hp").innerHTML=`<div class="card"><p style="margin:0">${esc(e.message)}</p></div>`}
-}
-
 /* ---- Profil ---- */
 function pAv(p){
   return `<div class="avatar">${p.avatar?`<img src="${esc(p.avatar)}" alt="">`:esc(((p.mcName||p.username||"?")[0]).toUpperCase())}</div>`;
@@ -325,7 +315,7 @@ async function profilAra(m){
   };
   $("#ps").onclick=ara;
   $("#pq").onkeydown=e=>{if(e.key==="Enter")ara()};
-       }
+    }
 
 /* ---- Yönetim ---- */
 const reloadY=()=>yonetim($("#main"));
@@ -362,450 +352,113 @@ async function yonetim(m){
   else if(ytab==="grup")await yGrup(b);
   else if(ytab==="rutbe")await yRutbe(b);
   else await yYetki(b);
-  }
-  Hepsini yapıyorum, senin tarif ettiğin sistemle birebir. Yetki bölümü hariç, bunun için üç şeyi birlikte yapmak gerekiyor: site + bot + veritabanı. Hepsini küçük dosyalara böldüm. Her biri ayrı yapıştırılacağı için hangisi yarım kalırsa kolayca görürsün.
-
-Sistem nasıl çalışacak
-Grup Ayarları (sadece sen): Yönetim → Grup Ayarları. Buradan Discord sunucusu eklersin, yeni branş/birim açarsın. Her grubun üye rollerini ve rütbelerini tanımlarsın. Yeni birim açılınca kod değişmez, panelden eklersin.
-Rütbe Ver / Al: Kişinin ID’sini (ya da Minecraft adını) yazarsın. Grubu, rütbeleri ve sunucuları seçersin. Rütbe verince kişi o gruba onaylı üye de olur.
-Rütbe Yetkileri: Kimin hangi grupta hangi rütbeleri verebileceğini sen seçersin. “Başkalarına da yetki verebilsin” kutusunu işaretlersen o kişi de kendi kapsamında yetki dağıtabilir. Sen yokken bile sistem işler. Yetki verenler sadece kendi kapsamını aşağı aktarabilir.
-Profil Ara: Siteye girmiş herkesin Minecraft adı, Discord adı, grupları ve rütbeleri görünür. E-posta ve sunucu listesi görünmez. Yetkili olanlar profilde Gruptan at ve Rütbeyi al düğmelerini görür.
-/update: Bot, sitedeki gruplara ve rütbelere göre roller verir, gereksiz olanları alır ve takma adı Minecraft adına çevirir. Sonucu embed kartı olarak yazar.
-Yükleme sırası
-Önce site dosyalarını yükle (1-10).
-Siteyi bir kez aç. Veritabanı tabloları ve mevcut 14 grubun rolleri kendiliğinden oluşur.
-Sonra bot dosyasını yükle (11).
-
-Her kod kutusunun sağ üstündeki kopyala simgesini kullan. Yeni dosyalar için GitHub’da Add file → Create new file, isim kutusuna yolu yaz (lib/core.js gibi, klasör kendiliğinden oluşur).
-
-1. lib/core.js (yeni)
-js
-import jwt from "jsonwebtoken";
-import pg from "pg";
-
-const clean = v => String(v ?? "").trim().replace(/^["']|["']$/g, "");
-
-export const CLIENT_ID = "1538105408911187999";
-export const REDIRECT = "https://natox-mauve.vercel.app/api/auth/discord/callback";
-export const DISCORD_CLIENT_SECRET = clean(process.env.DISCORD_CLIENT_SECRET);
-export const DATABASE_URL = clean(process.env.DATABASE_URL);
-export const SESSION_SECRET = clean(process.env.SESSION_SECRET);
-export const OWNER_ID = clean(process.env.OWNER_ID);
-
-for (const [k, v] of Object.entries({ DISCORD_CLIENT_SECRET, DATABASE_URL, SESSION_SECRET, OWNER_ID })) {
-  if (!v) throw new Error("Eksik ortam değişkeni: " + k);
 }
-
-export const db = new pg.Pool({ connectionString: DATABASE_URL, ssl: { rejectUnauthorized: false }, max: 3 });
-
-/* ===== TABLOLAR ===== */
-await db.query(`
-  CREATE TABLE IF NOT EXISTS users (
-    id TEXT PRIMARY KEY,
-    username TEXT NOT NULL,
-    avatar TEXT,
-    email TEXT,
-    guilds JSONB DEFAULT '[]',
-    mc_edition TEXT,
-    mc_name TEXT,
-    created_at TIMESTAMPTZ DEFAULT now()
-  );
-  CREATE UNIQUE INDEX IF NOT EXISTS users_mc_name_uq ON users (lower(mc_name));
-  CREATE TABLE IF NOT EXISTS staff (
-    discord_id TEXT PRIMARY KEY,
-    added_by TEXT,
-    perms TEXT[] DEFAULT '{}',
-    created_at TIMESTAMPTZ DEFAULT now()
-  );
-  ALTER TABLE staff ADD COLUMN IF NOT EXISTS perms TEXT[] DEFAULT '{}';
-  CREATE TABLE IF NOT EXISTS tickets (
-    id SERIAL PRIMARY KEY,
-    category TEXT NOT NULL,
-    subject TEXT NOT NULL,
-    owner_id TEXT NOT NULL REFERENCES users(id),
-    status TEXT NOT NULL DEFAULT 'open',
-    claimed_by TEXT,
-    created_at TIMESTAMPTZ DEFAULT now()
-  );
-  CREATE TABLE IF NOT EXISTS ticket_messages (
-    id SERIAL PRIMARY KEY,
-    ticket_id INT NOT NULL REFERENCES tickets(id) ON DELETE CASCADE,
-    author_id TEXT NOT NULL,
-    author_name TEXT NOT NULL,
-    is_staff BOOLEAN NOT NULL DEFAULT false,
-    body TEXT NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT now()
-  );
-  CREATE TABLE IF NOT EXISTS group_requests (
-    id SERIAL PRIMARY KEY,
-    user_id TEXT NOT NULL REFERENCES users(id),
-    group_key TEXT NOT NULL,
-    status TEXT NOT NULL DEFAULT 'pending',
-    decided_by TEXT,
-    created_at TIMESTAMPTZ DEFAULT now(),
-    UNIQUE (user_id, group_key)
-  );
-  CREATE TABLE IF NOT EXISTS servers (
-    guild_id TEXT PRIMARY KEY,
-    name TEXT NOT NULL
-  );
-  CREATE TABLE IF NOT EXISTS org_groups (
-    key TEXT PRIMARY KEY,
-    label TEXT NOT NULL,
-    branch TEXT NOT NULL,
-    sort INT NOT NULL DEFAULT 100
-  );
-  CREATE TABLE IF NOT EXISTS group_roles (
-    id SERIAL PRIMARY KEY,
-    group_key TEXT NOT NULL REFERENCES org_groups(key) ON DELETE CASCADE,
-    guild_id TEXT NOT NULL,
-    role_id TEXT NOT NULL,
-    UNIQUE (group_key, guild_id, role_id)
-  );
-  CREATE TABLE IF NOT EXISTS ranks (
-    id SERIAL PRIMARY KEY,
-    group_key TEXT NOT NULL REFERENCES org_groups(key) ON DELETE CASCADE,
-    name TEXT NOT NULL,
-    sort INT NOT NULL DEFAULT 100,
-    UNIQUE (group_key, name)
-  );
-  CREATE TABLE IF NOT EXISTS rank_roles (
-    id SERIAL PRIMARY KEY,
-    rank_id INT NOT NULL REFERENCES ranks(id) ON DELETE CASCADE,
-    guild_id TEXT NOT NULL,
-    role_id TEXT NOT NULL,
-    UNIQUE (rank_id, guild_id, role_id)
-  );
-  CREATE TABLE IF NOT EXISTS user_ranks (
-    user_id TEXT NOT NULL REFERENCES users(id),
-    rank_id INT NOT NULL REFERENCES ranks(id) ON DELETE CASCADE,
-    guilds TEXT[] NOT NULL DEFAULT '{}',
-    given_by TEXT,
-    created_at TIMESTAMPTZ DEFAULT now(),
-    PRIMARY KEY (user_id, rank_id)
-  );
-  CREATE TABLE IF NOT EXISTS rank_perms (
-    id SERIAL PRIMARY KEY,
-    user_id TEXT NOT NULL,
-    group_key TEXT NOT NULL REFERENCES org_groups(key) ON DELETE CASCADE,
-    rank_id INT REFERENCES ranks(id) ON DELETE CASCADE,
-    can_delegate BOOLEAN NOT NULL DEFAULT false,
-    granted_by TEXT,
-    created_at TIMESTAMPTZ DEFAULT now()
-  );
-`);
-
-/* ===== İLK KURULUM: mevcut 14 grup ve ana sunucu rolleri ===== */
-const SEED = [
-  ["kara", "Kara Kuvvetleri", "Kara Kuvvetleri", "1434904371245748297"],
-  ["boru", "Kara Kuvvetleri", "BÖRÜ", "1440426272537841664"],
-  ["kho", "Kara Kuvvetleri", "Komando Harp Okulu", "1440425587276779611"],
-  ["muhabere", "Kara Kuvvetleri", "Muhabere Arama Kurtarma", "1570885776886079578"],
-  ["sinir", "Sınır Müfettişleri", "Sınır Müfettişleri", "1434904514506260623"],
-  ["denetim", "Sınır Müfettişleri", "Denetim Birimi", "1570886354185887834"],
-  ["gardiyan", "Sınır Müfettişleri", "Gardiyan Muhafızlar", "1496922483113066536"],
-  ["ozel", "Özel Kuvvetler", "Özel Kuvvetler", "1434904099698249768"],
-  ["okb", "Özel Kuvvetler", "Özel Koruma Birliği", "1496921364924203159"],
-  ["sat", "Özel Kuvvetler", "Su Altı Taarruz", "1496921210506707097"],
-  ["omega", "Özel Kuvvetler", "OMEGA", "1570887178983309464"],
-  ["inzibat", "Askerî İnzibat", "Askerî İnzibat", "1434904969290584195"],
-  ["yildirim", "Askerî İnzibat", "Yıldırım Orduları", "1440429449727180901"],
-  ["kizil", "Askerî İnzibat", "Kızıl Sağ El", "1568917863979421807"]
-];
-const seeded = (await db.query("SELECT count(*)::int AS n FROM org_groups")).rows[0].n;
-if (seeded === 0) {
-  const MAIN = "1422629910211592296";
-  await db.query("INSERT INTO servers (guild_id, name) VALUES ($1,$2) ON CONFLICT DO NOTHING", [MAIN, "NATO Ana Sunucu"]);
-  let i = 0;
-  for (const [key, branch, label, role] of SEED) {
-    await db.query("INSERT INTO org_groups (key, label, branch, sort) VALUES ($1,$2,$3,$4) ON CONFLICT DO NOTHING", [key, label, branch, ++i * 10]);
-    await db.query("INSERT INTO group_roles (group_key, guild_id, role_id) VALUES ($1,$2,$3) ON CONFLICT DO NOTHING", [key, MAIN, role]);
-  }
-}
-
-/* ===== ORTAK YARDIMCILAR ===== */
-export const CATS = { ban: "Ban Affı", destek: "Discord Destek", askeri: "Askerî Şikayet", ulusal: "Ulusal Şikayet" };
-export const ALL_PERMS = [...Object.keys(CATS), "gruplar"];
-export const cookieOpts = { httpOnly: true, secure: true, sameSite: "lax", path: "/" };
-export const wrap = fn => (req, res, next) => fn(req, res, next).catch(next);
-export const bad = (res, msg, code = 400) => res.status(code).json({ error: msg });
-export const isId = v => /^\d{17,20}$/.test(String(v || ""));
-
-export function auth(req, res, next) {
-  try {
-    req.uid = jwt.verify(req.cookies.nato_session, SESSION_SECRET).uid;
-    next();
-  } catch {
-    res.status(401).json({ error: "Giriş yapmalısın." });
-  }
-}
-
-export function ownerOnly(req, res, next) {
-  if (req.uid !== OWNER_ID) return bad(res, "Bu bölüm sadece sahibe açık.", 403);
-  next();
-}
-
-export async function getPerms(uid) {
-  if (uid === OWNER_ID) return ALL_PERMS;
-  const r = await db.query("SELECT perms FROM staff WHERE discord_id=$1", [uid]);
-  return r.rows[0]?.perms || [];
-}
-
-// Bir kişinin bir gruptaki rütbe yetkileri
-export async function rankScope(uid, groupKey) {
-  if (uid === OWNER_ID) return { any: true, all: true, ranks: new Set(), delAll: true, del: new Set() };
-  const { rows } = await db.query("SELECT rank_id, can_delegate FROM rank_perms WHERE user_id=$1 AND group_key=$2", [uid, groupKey]);
-  const s = { any: rows.length > 0, all: false, ranks: new Set(), delAll: false, del: new Set() };
-  for (const r of rows) {
-    if (r.rank_id === null) {
-      s.all = true;
-      if (r.can_delegate) s.delAll = true;
-    } else {
-      s.ranks.add(r.rank_id);
-      if (r.can_delegate) s.del.add(r.rank_id);
-    }
-  }
-  return s;
-}
-export const canGive = (s, rankId) => s.all || s.ranks.has(Number(rankId));
-export const canDel = (s, rankId) => s.delAll || s.del.has(Number(rankId));
-
-export async function canManageGroup(uid, groupKey) {
-  if (uid === OWNER_ID) return true;
-  if ((await getPerms(uid)).includes("gruplar")) return true;
-  return (await rankScope(uid, groupKey)).any;
-}
-
-// Discord ID, Minecraft adı ya da Discord adından kullanıcı ID'si bulur
-export async function resolveTarget(raw, requireUser = true) {
-  const t = String(raw || "").trim();
-  if (!t) return null;
-  if (isId(t)) {
-    if (!requireUser) return t;
-    const r = await db.query("SELECT id FROM users WHERE id=$1", [t]);
-    return r.rows[0]?.id || null;
-  }
-  const r = await db.query("SELECT id FROM users WHERE lower(mc_name)=lower($1) OR lower(username)=lower($1) LIMIT 1", [t]);
-  return r.rows[0]?.id || null;
-}
-2. lib/auth.js (yeni)
-js
-import { Router } from "express";
-import jwt from "jsonwebtoken";
-import crypto from "crypto";
-import { db, auth, wrap, bad, cookieOpts, getPerms, CLIENT_ID, REDIRECT, DISCORD_CLIENT_SECRET, SESSION_SECRET, OWNER_ID } from "./core.js";
-
-export const router = Router();
-
-router.get("/auth/discord", (req, res) => {
-  const state = crypto.randomBytes(16).toString("hex");
-  res.cookie("nato_state", state, { ...cookieOpts, maxAge: 10 * 60 * 1000 });
-  const params = new URLSearchParams({
-    client_id: CLIENT_ID,
-    redirect_uri: REDIRECT,
-    response_type: "code",
-    scope: "identify email guilds",
-    state
-  });
-  res.redirect("https://discord.com/oauth2/authorize?" + params.toString());
-});
-
-router.get("/auth/discord/callback", wrap(async (req, res) => {
-  const { code, state } = req.query;
-  if (!code || !state || state !== req.cookies.nato_state) {
-    return res.status(400).send("Geçersiz giriş isteği. Siteye dönüp tekrar dene.");
-  }
-  res.clearCookie("nato_state", cookieOpts);
-  try {
-    const tokenRes = await fetch("https://discord.com/api/oauth2/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        client_id: CLIENT_ID,
-        client_secret: DISCORD_CLIENT_SECRET,
-        grant_type: "authorization_code",
-        code,
-        redirect_uri: REDIRECT
-      })
-    });
-    const token = await tokenRes.json();
-    if (!token.access_token) throw new Error("Token alınamadı: " + JSON.stringify(token));
-    const headers = { Authorization: `Bearer ${token.access_token}` };
-    const me = await (await fetch("https://discord.com/api/users/@me", { headers })).json();
-    const guilds = await (await fetch("https://discord.com/api/users/@me/guilds", { headers })).json();
-    if (!me.id) throw new Error("Kullanıcı alınamadı");
-
-    await db.query(
-      `INSERT INTO users (id, username, avatar, email, guilds)
-       VALUES ($1,$2,$3,$4,$5)
-       ON CONFLICT (id) DO UPDATE SET username=$2, avatar=$3, email=$4, guilds=$5`,
-      [me.id, me.username, me.avatar, me.email,
-       JSON.stringify(Array.isArray(guilds) ? guilds.map(g => ({ id: g.id, name: g.name })) : [])]
-    );
-
-    const session = jwt.sign({ uid: me.id }, SESSION_SECRET, { expiresIn: "7d" });
-    res.cookie("nato_session", session, { ...cookieOpts, maxAge: 7 * 24 * 3600 * 1000 });
-    res.redirect("/");
-  } catch (e) {
-    console.error(e);
-    res.status(500).send("Discord girişi başarısız oldu. Siteye dönüp tekrar dene.");
-  }
-}));
-
-router.post("/logout", (req, res) => {
-  res.clearCookie("nato_session", cookieOpts);
-  res.json({ ok: true });
-});
-
-router.get("/me", auth, wrap(async (req, res) => {
-  const { rows } = await db.query("SELECT * FROM users WHERE id=$1", [req.uid]);
-  const u = rows[0];
-  if (!u) return bad(res, "Hesap bulunamadı.", 401);
-  const owner = u.id === OWNER_ID;
-  const canManage = owner || (await db.query("SELECT 1 FROM rank_perms WHERE user_id=$1 LIMIT 1", [u.id])).rowCount > 0;
-  const canDelegate = owner || (await db.query("SELECT 1 FROM rank_perms WHERE user_id=$1 AND can_delegate LIMIT 1", [u.id])).rowCount > 0;
-  res.json({
-    id: u.id,
-    username: u.username,
-    avatar: u.avatar ? `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png` : null,
-    mcEdition: u.mc_edition,
-    mcName: u.mc_name,
-    isOwner: owner,
-    canManage,
-    canDelegate,
-    perms: await getPerms(u.id)
-  });
-}));
-
-router.post("/minecraft", auth, wrap(async (req, res) => {
-  const edition = req.body.edition;
-  const name = String(req.body.name || "").trim();
-  const rules = { java: /^[A-Za-z0-9_]{3,16}$/, bedrock: /^[A-Za-z0-9 ]{1,15}$/ };
-  if (!rules[edition]) return bad(res, "Sürüm Java veya Bedrock olmalı.");
-  if (!rules[edition].test(name)) {
-    return bad(res, edition === "java"
-      ? "Java adı 3-16 karakter olmalı; harf, rakam ve alt çizgi kullanılabilir."
-      : "Bedrock adı 1-15 karakter olmalı; harf, rakam ve boşluk kullanılabilir.");
-  }
-  const cur = await db.query("SELECT mc_name FROM users WHERE id=$1", [req.uid]);
-  if (cur.rows[0]?.mc_name) return bad(res, "Minecraft adın kilitli. Değiştirmek için yönetimle iletişime geç.", 403);
-  try {
-    await db.query("UPDATE users SET mc_edition=$1, mc_name=$2 WHERE id=$3", [edition, name, req.uid]);
-    res.json({ ok: true });
-  } catch (e) {
-    if (e.code === "23505") return bad(res, "Bu Minecraft adı başka bir hesapta kayıtlı.", 409);
-    throw e;
-  }
-}));
-3. lib/tickets.js (yeni)
-js
-import { Router } from "express";
-import { db, auth, ownerOnly, wrap, bad, CATS, ALL_PERMS, getPerms, OWNER_ID } from "./core.js";
-
-export const router = Router();
-
-/* ===== YETKİLİLER (sadece sahip) ===== */
-router.get("/admin/staff", auth, ownerOnly, wrap(async (req, res) => {
-  const { rows } = await db.query(
-    `SELECT s.discord_id, s.perms, u.username FROM staff s
-     LEFT JOIN users u ON u.id = s.discord_id ORDER BY s.created_at`);
-  res.json(rows.map(r => ({ id: r.discord_id, perms: r.perms, username: r.username })));
-}));
-
-router.post("/admin/staff", auth, ownerOnly, wrap(async (req, res) => {
-  const id = String(req.body.discordId || "").trim();
-  const perms = (Array.isArray(req.body.perms) ? req.body.perms : []).filter(p => ALL_PERMS.includes(p));
-  if (!/^\d{17,20}$/.test(id)) return bad(res, "Geçerli bir Discord ID yaz (17-20 haneli sayı).");
-  if (id === OWNER_ID) return bad(res, "Sahibin yetkisi zaten tam.");
-  if (!perms.length) return bad(res, "En az bir yetki seç.");
-  await db.query(
-    `INSERT INTO staff (discord_id, added_by, perms) VALUES ($1,$2,$3)
-     ON CONFLICT (discord_id) DO UPDATE SET perms=$3`, [id, req.uid, perms]);
-  res.json({ ok: true });
-}));
-
-router.delete("/admin/staff/:id", auth, ownerOnly, wrap(async (req, res) => {
-  await db.query("DELETE FROM staff WHERE discord_id=$1", [req.params.id]);
-  res.json({ ok: true });
-}));
-
-/* ===== DESTEK TALEPLERİ ===== */
-async function loadTicketAccess(req, res) {
-  const { rows } = await db.query("SELECT * FROM tickets WHERE id=$1", [Number(req.params.id) || 0]);
-  const t = rows[0];
-  if (!t) { bad(res, "Talep bulunamadı.", 404); return null; }
-  const perms = await getPerms(req.uid);
-  const canStaff = perms.includes(t.category);
-  if (t.owner_id !== req.uid && !canStaff) { bad(res, "Talep bulunamadı.", 404); return null; }
-  return { t, canStaff };
-}
-
-router.get("/tickets", auth, wrap(async (req, res) => {
-  const cats = (await getPerms(req.uid)).filter(p => CATS[p]);
-  const { rows } = await db.query(
-    `SELECT t.id, t.category, t.subject, t.status, t.owner_id, t.created_at,
-            u.username, u.mc_name, c.username AS claimed_name
-     FROM tickets t JOIN users u ON u.id = t.owner_id
-     LEFT JOIN users c ON c.id = t.claimed_by
-     WHERE t.owner_id = $1 OR t.category = ANY($2)
-     ORDER BY t.id DESC LIMIT 100`, [req.uid, cats]);
-  res.json(rows.map(r => ({
-    id: r.id, category: r.category, categoryName: CATS[r.category], subject: r.subject,
-    status: r.status, owner: r.username, mcName: r.mc_name, claimedBy: r.claimed_name, createdAt: r.created_at
-  })));
-}));
-
-router.post("/tickets", auth, wrap(async (req, res) => {
-  const category = req.body.category;
-  const subject = String(req.body.subject || "").trim();
-  const body = String(req.body.body || "").trim();
-  if (!CATS[category]) return bad(res, "Geçersiz kategori.");
-  if (subject.length < 3 || subject.length > 80) return bad(res, "Konu 3-80 karakter olmalı.");
-  if (!body || body.length > 2000) return bad(res, "Açıklama 1-2000 karakter olmalı.");
-  const u = (await db.query("SELECT username, mc_name FROM users WHERE id=$1", [req.uid])).rows[0];
-  if (!u?.mc_name) return bad(res, "Önce Minecraft adını kaydetmelisin.");
-  const open = await db.query("SELECT count(*)::int AS n FROM tickets WHERE owner_id=$1 AND status<>'closed'", [req.uid]);
-  if (open.rows[0].n >= 3) return bad(res, "En fazla 3 açık talebin olabilir.");
-  const t = (await db.query(
-    "INSERT INTO tickets (category, subject, owner_id) VALUES ($1,$2,$3) RETURNING id", [category, subject, req.uid])).rows[0];
-  await db.query(
-    "INSERT INTO ticket_messages (ticket_id, author_id, author_name, is_staff, body) VALUES ($1,$2,$3,false,$4)",
-    [t.id, req.uid, u.username, body]);
-  res.json({ id: t.id });
-}));
-
-router.get("/tickets/:id", auth, wrap(async (req, res) => {
-  const a = await loadTicketAccess(req, res); if (!a) return;
-  const msgs = (await db.query(
-    "SELECT author_name, is_staff, body, created_at FROM ticket_messages WHERE ticket_id=$1 ORDER BY id", [a.t.id])).rows;
-  const out = {
-    ticket: { id: a.t.id, category: a.t.category, categoryName: CATS[a.t.category], subject: a.t.subject, status: a.t.status, claimedBy: null },
-    messages: msgs.map(m => ({ author: m.author_name, isStaff: m.is_staff, body: m.body, at: m.created_at })),
-    canStaff: a.canStaff
+async function ySt(b){
+  const list=await api("/api/admin/staff");
+  b.innerHTML=`<div class="card"><h3>Yetkili ekle veya güncelle</h3>
+   <label>Discord ID</label><input id="ai" inputmode="numeric" maxlength="20" placeholder="örn. 1422615267309129751">
+   <p style="margin:8px 0 0;font-size:14px">Aynı ID’yi tekrar girersen yetkileri güncellenir.</p>
+   <label>Baktığı alanlar</label>${Object.entries(PERM_ETIKET).map(([k,v])=>`<label class="chk"><input type="checkbox" value="${k}"> ${v}</label>`).join("")}
+   <button class="gold" id="as" style="margin-top:10px">Kaydet</button><div class="err" id="er"></div></div>
+  <h3 style="margin:22px 0 10px;font-size:22px">Yetkililer</h3>
+  ${list.length?list.map(s=>`<div class="card"><div class="row sp"><b>${esc(s.username||"Henüz giriş yapmadı")} <span style="color:var(--mute);font-weight:400">${esc(s.id)}</span></b><button class="danger" data-r="${esc(s.id)}">Yetkiyi al</button></div><div class="tags" style="margin-top:8px">${s.perms.map(p=>`<span class="tag">${esc(PERM_ETIKET[p]||p)}</span>`).join("")}</div></div>`).join(""):`<div class="card"><p style="margin:0">Henüz yetkili eklenmedi.</p></div>`}`;
+  $("#as").onclick=async()=>{
+    const perms=[...b.querySelectorAll(".chk input:checked")].map(i=>i.value);
+    try{await api("/api/admin/staff",{method:"POST",body:{discordId:$("#ai").value.trim(),perms}});reloadY()}catch(e){$("#er").textContent=e.message}
   };
-  if (a.t.claimed_by) {
-    out.ticket.claimedBy = (await db.query("SELECT username FROM users WHERE id=$1", [a.t.claimed_by])).rows[0]?.username || null;
-  }
-  const o = (await db.query("SELECT id, username, mc_name, mc_edition, guilds FROM users WHERE id=$1", [a.t.owner_id])).rows[0];
-  out.ticket.owner = o.username;
-  if (a.canStaff) {
-    out.ownerInfo = { id: o.id, username: o.username, mcName: o.mc_name, mcEdition: o.mc_edition, guilds: o.guilds };
-  }
-  res.json(out);
-}));
+  b.querySelectorAll("[data-r]").forEach(x=>x.onclick=async()=>{
+    if(!confirm("Bu kişinin yetkisi alınsın mı?"))return;
+    try{await api("/api/admin/staff/"+x.dataset.r,{method:"DELETE"});reloadY()}catch(e){alert(e.message)}
+  });
+}
+async function yGrup(b){
+  const c=await api("/api/admin/config");
+  const so=c.servers.map(s=>`<option value="${esc(s.guildId)}">${esc(s.name)}</option>`).join("");
+  const sn=id=>{const s=c.servers.find(x=>x.guildId===id);return s?s.name:id};
+  const roleRow=(r,url)=>`<div class="row sp line"><span>${esc(sn(r.guildId))} · <code>${esc(r.roleId)}</code></span><button class="rm" data-del="${url}/${r.id}">Sil</button></div>`;
+  const roleAdd=(url,extra)=>so?addForm(url,extra,`<select name="guildId" style="flex:1;min-width:130px">${so}</select><input name="roleId" placeholder="Rol ID" inputmode="numeric" style="flex:1;min-width:130px">`,"Rol ekle"):`<p style="margin:8px 0 0">Önce yukarıdan bir sunucu ekle.</p>`;
+  b.innerHTML=`
+  <div class="card"><h3>Sunucular</h3><p>Botun bulunduğu ve rol verebileceği Discord sunucuları.</p>
+   ${c.servers.map(s=>`<div class="row sp line"><span>${esc(s.name)} · <code>${esc(s.guildId)}</code></span><button class="rm" data-del="/api/admin/servers/${esc(s.guildId)}" data-ask="Sunucu ve bu sunucudaki tüm rol tanımları silinsin mi?">Sil</button></div>`).join("")}
+   ${addForm("/api/admin/servers",{},`<input name="name" placeholder="Sunucu adı" style="flex:1;min-width:130px"><input name="guildId" placeholder="Sunucu ID" inputmode="numeric" style="flex:1;min-width:130px">`,"Sunucu ekle")}</div>
+  <div class="card"><h3>Yeni grup (branş veya birim)</h3>
+   ${addForm("/api/admin/groups",{},`<input name="label" placeholder="Ad (örn. BÖRÜ)" style="flex:1;min-width:130px"><input name="key" placeholder="Anahtar (örn. boru)" style="flex:1;min-width:130px"><input name="branch" placeholder="Branş (örn. Kara Kuvvetleri)" style="flex:1;min-width:130px"><input name="sort" placeholder="Sıra" inputmode="numeric" style="width:80px">`,"Grup ekle")}
+   <p style="margin:8px 0 0;font-size:14px">Aynı anahtarı tekrar girersen grubun adı, branşı ve sırası güncellenir.</p></div>
+  ${c.groups.map(g=>`<div class="card"><div class="row sp"><h3>${esc(g.label)}</h3><button class="rm" data-del="/api/admin/groups/${esc(g.key)}" data-ask="Grup, rolleri, rütbeleri ve üyelikleri silinsin mi?">Grubu sil</button></div>
+    <p>${esc(g.branch)} · anahtar: ${esc(g.key)}</p>
+    <b>Üye rolleri</b><p style="font-size:14px;margin:4px 0 0">Onaylanan kişiye /update ile verilir.</p>
+    ${g.roles.map(r=>roleRow(r,"/api/admin/group-roles")).join("")}
+    ${roleAdd("/api/admin/group-roles",{groupKey:g.key})}
+    <b style="display:block;margin-top:18px">Rütbeler</b>
+    ${g.ranks.map(r=>`<div class="line"><div class="row sp"><b>${esc(r.name)}</b><button class="rm" data-del="/api/admin/ranks/${r.id}" data-ask="Rütbe silinsin mi?">Rütbeyi sil</button></div>${r.roles.map(x=>roleRow(x,"/api/admin/rank-roles")).join("")}${roleAdd("/api/admin/rank-roles",{rankId:r.id})}</div>`).join("")}
+    ${addForm("/api/admin/ranks",{groupKey:g.key},`<input name="name" placeholder="Yeni rütbe adı" style="flex:1;min-width:130px"><input name="sort" placeholder="Sıra" inputmode="numeric" style="width:80px">`,"Rütbe ekle")}
+  </div>`).join("")}`;
+  bindAdmin(b);
+}
+async function yRutbe(b){
+  const d=await api("/api/manage/overview");
+  if(!d.groups.length){b.innerHTML=`<div class="card"><p style="margin:0">Yönetebileceğin bir grup yok.</p></div>`;return}
+  b.innerHTML=`<div class="card"><h3>Rütbe ver / al</h3>
+   <label>Grup</label><select id="rg">${d.groups.map(g=>`<option value="${esc(g.key)}">${esc(g.label)}</option>`).join("")}</select>
+   <label>Kişi (Discord ID veya Minecraft adı)</label><input id="rt" autocomplete="off">
+   <label>Rütbeler</label><div id="rr"></div>
+   <label>Sunucular</label><div id="rs">${d.servers.map(s=>`<label class="chk"><input type="checkbox" value="${esc(s.guildId)}"> ${esc(s.name)}</label>`).join("")||"<p style='margin:0'>Henüz sunucu eklenmedi.</p>"}</div>
+   <p style="font-size:14px;margin:8px 0">Sunucu seçmezsen rütbe, tanımlı olduğu tüm sunucularda geçerli olur. Kişi Discord’da /update yazınca roller güncellenir. Rütbe vermek kişiyi gruba da ekler.</p>
+   <div class="row"><button class="gold" id="rv">Rütbe ver</button><button class="danger" id="ra">Rütbe al</button></div><div class="err" id="er"></div></div>`;
+  const draw=()=>{
+    const g=d.groups.find(x=>x.key===$("#rg").value);
+    $("#rr").innerHTML=g.ranks.map(r=>`<label class="chk"><input type="checkbox" value="${r.id}"> ${esc(r.name)}</label>`).join("")||"<p style='margin:0'>Bu grupta rütbe yok ya da hiçbirini verme yetkin yok.</p>";
+  };
+  $("#rg").onchange=draw;draw();
+  const send=async path=>{
+    const rankIds=[...b.querySelectorAll("#rr input:checked")].map(i=>+i.value);
+    const guildIds=[...b.querySelectorAll("#rs input:checked")].map(i=>i.value);
+    const er=$("#er");
+    try{
+      await api(path,{method:"POST",body:{groupKey:$("#rg").value,target:$("#rt").value,rankIds,guildIds}});
+      er.style.color="var(--ok)";er.textContent="Tamam. Kişi /update yazınca roller güncellenir.";
+    }catch(e){er.style.color="";er.textContent=e.message}
+  };
+  $("#rv").onclick=()=>send("/api/manage/rank/give");
+  $("#ra").onclick=()=>send("/api/manage/rank/take");
+}
+async function yYetki(b){
+  const d=await api("/api/manage/overview");
+  const gs=d.groups.filter(g=>me.isOwner||g.delegateAny);
+  if(!gs.length){b.innerHTML=`<div class="card"><p style="margin:0">Yetki verebileceğin bir grup yok.</p></div>`;return}
+  b.innerHTML=`<div class="card"><h3>Rütbe yetkisi ver</h3>
+   <label>Grup</label><select id="yg">${gs.map(g=>`<option value="${esc(g.key)}">${esc(g.label)}</option>`).join("")}</select>
+   <label>Kişi (Discord ID veya kayıtlı isim)</label><input id="yt" autocomplete="off">
+   <label>Hangi rütbeleri verip alabilsin?</label><div id="yr"></div>
+   <p style="font-size:14px;margin:4px 0 8px">Hiçbirini seçmezsen grubun tüm rütbeleri için geçerli olur.</p>
+   ${me.isOwner?`<label class="chk"><input type="checkbox" id="yd"> Bu yetkiyi başkalarına da verebilsin</label>`:""}
+   <button class="gold" id="yv" style="margin-top:8px">Yetki ver</button><div class="err" id="er"></div></div>
+  <h3 style="margin:22px 0 10px;font-size:22px">Verilmiş yetkiler</h3><div id="yl"></div>`;
+  const list=async()=>{
+    const rows=await api("/api/manage/perms?group="+encodeURIComponent($("#yg").value));
+    $("#yl").innerHTML=rows.length?rows.map(p=>`<div class="card row sp"><span><b>${esc(p.mcName||p.username||p.userId)}</b> <small style="color:var(--mute)">${esc(p.userId)}</small><br>${esc(p.rankName||"Tüm rütbeler")}${p.canDelegate?" · yetki verebilir":""}</span><button class="rm" data-pd="${p.id}">Sil</button></div>`).join(""):`<div class="card"><p style="margin:0">Bu grupta verilmiş yetki yok.</p></div>`;
+    $("#yl").querySelectorAll("[data-pd]").forEach(x=>x.onclick=async()=>{
+      if(!confirm("Bu yetki silinsin mi?"))return;
+      try{await api("/api/manage/perms/"+x.dataset.pd,{method:"DELETE"});list()}catch(e){alert(e.message)}
+    });
+  };
+  const draw=()=>{
+    const g=gs.find(x=>x.key===$("#yg").value);
+    $("#yr").innerHTML=g.ranks.filter(r=>me.isOwner||r.canDelegate).map(r=>`<label class="chk"><input type="checkbox" value="${r.id}"> ${esc(r.name)}</label>`).join("")||"<p style='margin:0'>Bu grupta rütbe yok.</p>";
+    list();
+  };
+  $("#yg").onchange=draw;draw();
+  $("#yv").onclick=async()=>{
+    const rankIds=[...b.querySelectorAll("#yr input:checked")].map(i=>+i.value);
+    const er=$("#er");
+    try{
+      await api("/api/manage/perms",{method:"POST",body:{groupKey:$("#yg").value,target:$("#yt").value,rankIds,canDelegate:me.isOwner&&$("#yd").checked}});
+      er.style.color="var(--ok)";er.textContent="Yetki verildi.";list();
+    }catch(e){er.style.color="";er.textContent=e.message}
+  };
+    }
 
-router.post("/tickets/:id/messages", auth, wrap(async (req, res) => {
-  const a = await loadTicketAccess(req, res); if (!a) return;
-  const body = String(req.body.body || "").trim();
-  if (!body || body.length > 2000) return bad(res, "Mesaj 1-2000 karakter olmalı.");
-  if (a.t.status === "closed") return bad(res, "Talep kapalı.", 403);
-  if (a.t.status === "locked" && !a.canStaff) return bad(res, "Talep kilitli.", 403);
-  const u = (await db.query("SELECT username FROM users WHERE id=$1", [req.uid])).rows[0];
-  await db.query(
-    "INSERT INTO ticket_messages (ticket_id, author_id, author_name, is_staff, body) VALUES ($1,$2,$3,$4,$5)",
-    [a.t.id, req.uid, u.username, a.canStaff && a.t.ow
-
-/* ---- Başlangıç ---- */
+  /* ---- Başlangıç ---- */
 authSlot();buildDrawer();render();
 api("/api/me").then(u=>{me=u;authSlot();buildDrawer();render();if(me&&!me.mcName)mcModal()}).catch(()=>{});
 </script>
