@@ -127,13 +127,15 @@ async function api(path,opt={}){
   return d;
 }
 
-let me=null,view="home",ticketId=null,timer=null,profilId=null,ytab=null;
+let me=null,view="home",ticketId=null,timer=null,profilId=null,ytab=null,gtab="srv",ggroup=null,logKind="all";
 const isStaff=()=>me&&me.perms.length>0;
+const canLog=()=>me&&(me.isOwner||me.canManage||me.perms.includes("gruplar"));
 
 /* ---- Menü ---- */
 function bolumler(){
   const l=[["home","Ana Sayfa"],["destek","Destek"],["bransl","Branşlar"],["emek","Emeği Geçenler"],["gruplar","Gruplar"],["profil","Profil Ara"],["hesap","Hesap"],["botlar","Botlar"]];
   if(me&&(me.isOwner||me.canManage))l.push(["yonetim","Yönetim"]);
+  if(canLog())l.push(["log","Log"]);
   return l;
 }
 function buildDrawer(){$("#drawer").innerHTML="<h2>NATO</h2>"+bolumler().map(([k,a])=>`<button data-go="${k}" class="${view===k?"cur":""}">${a}</button>`).join("")}
@@ -192,12 +194,13 @@ async function render(){
   else if(view==="bransl")m.innerHTML=`<h2 class="t">Askerî Branşlar ve Birimler</h2>`+BRANSLAR.map(b=>`<div class="card"><h3>${b.ad}</h3><p>${b.acik}</p><div class="tags">${b.birim.map(x=>`<span class="tag">${x}</span>`).join("")}</div></div>`).join("");
   else if(view==="emek")m.innerHTML=`<h2 class="t">Emeği Geçenler</h2>`+EMEK.map(e=>`<div class="card row"><div class="avatar">${e[0][0]}</div><div><h3>${e[0]}</h3><b>${e[1]}</b><p style="margin:0">${e[2]}</p></div></div>`).join("");
   else if(view==="botlar")m.innerHTML=`<h2 class="t">Botlar</h2>`+BOTLAR.map(b=>`<div class="card row"><div class="avatar">${b[0][0]}</div><div><h3>${b[0]}</h3><p style="margin:0">${b[1]}</p></div></div>`).join("");
-  else if(!me)needLogin({destek:"Destek",gruplar:"Gruplar",profil:"Profil Ara",hesap:"Hesap",yonetim:"Yönetim"}[view]||"");
+  else if(!me)needLogin({destek:"Destek",gruplar:"Gruplar",profil:"Profil Ara",hesap:"Hesap",yonetim:"Yönetim",log:"Log"}[view]||"");
   else if(view==="destek")await destek(m);
   else if(view==="gruplar")await gruplar(m);
   else if(view==="profil")await profilAra(m);
   else if(view==="hesap")await hesap(m);
   else if(view==="yonetim")await yonetim(m);
+  else if(view==="log")await logSayfa(m);
   }catch(e){fail(e)}
 }
 
@@ -315,7 +318,25 @@ async function profilAra(m){
   };
   $("#ps").onclick=ara;
   $("#pq").onkeydown=e=>{if(e.key==="Enter")ara()};
-    }
+  }
+
+/* ---- Log ---- */
+const LOGT={
+ request:["İstek","b-pending",l=>`<b>${esc(l.actor)}</b>, <b>${esc(l.group)}</b> grubuna katılmak için istek gönderdi.`],
+ approve:["Onaylandı","b-open",l=>`<b>${esc(l.actor)}</b>, <b>${esc(l.target)}</b> kişisinin <b>${esc(l.group)}</b> isteğini onayladı.`],
+ reject:["Reddedildi","b-closed",l=>`<b>${esc(l.actor)}</b>, <b>${esc(l.target)}</b> kişisinin <b>${esc(l.group)}</b> isteğini reddetti.`],
+ kick:["Gruptan atıldı","b-closed",l=>`<b>${esc(l.actor)}</b>, <b>${esc(l.target)}</b> kişisini <b>${esc(l.group)}</b> grubundan çıkardı.`],
+ rank_give:["Rütbe verildi","b-open",l=>`<b>${esc(l.actor)}</b>, <b>${esc(l.target)}</b> kişisine <b>${esc(l.group)}</b> grubunda rütbe verdi: ${esc(l.detail||"")}`],
+ rank_take:["Rütbe alındı","b-closed",l=>`<b>${esc(l.actor)}</b>, <b>${esc(l.target)}</b> kişisinden <b>${esc(l.group)}</b> grubunda rütbe aldı: ${esc(l.detail||"")}`]
+};
+async function logSayfa(m){
+  const rows=await api("/api/logs?kind="+logKind);
+  const tabs=[["all","Tümü"],["group","Grup istekleri"],["rank","Rütbe işlemleri"]];
+  m.innerHTML=`<h2 class="t">Log</h2>
+  <div class="tabs">${tabs.map(t=>`<button data-lk="${t[0]}" class="${t[0]===logKind?"on":""}">${t[1]}</button>`).join("")}</div>
+  ${rows.length?rows.map(l=>{const t=LOGT[l.kind]||[l.kind,"",x=>esc(x.kind)];return `<div class="card"><div class="row sp"><span class="badge ${t[1]}">${t[0]}</span><small style="color:var(--mute)">${dt(l.at)}</small></div><p style="margin:8px 0 0;color:var(--text)">${t[2](l)}</p></div>`}).join(""):`<div class="card"><p style="margin:0">Henüz kayıt yok.</p></div>`}`;
+  m.querySelectorAll("[data-lk]").forEach(b=>b.onclick=()=>{logKind=b.dataset.lk;render()});
+}
 
 /* ---- Yönetim ---- */
 const reloadY=()=>yonetim($("#main"));
@@ -370,31 +391,56 @@ async function ySt(b){
     if(!confirm("Bu kişinin yetkisi alınsın mı?"))return;
     try{await api("/api/admin/staff/"+x.dataset.r,{method:"DELETE"});reloadY()}catch(e){alert(e.message)}
   });
-}
+      }
+
+/* ---- Grup Ayarları: 3 basit adım ---- */
+const srvName=(c,id)=>{const s=c.servers.find(x=>x.guildId===id);return s?s.name:id};
+const srvOpts=c=>c.servers.map(s=>`<option value="${esc(s.guildId)}">${esc(s.name)}</option>`).join("");
+const roleRow=(c,r,url)=>`<div class="row sp line"><span>${esc(srvName(c,r.guildId))} · <code>${esc(r.roleId)}</code></span><button class="rm" data-del="${url}/${r.id}">Sil</button></div>`;
 async function yGrup(b){
   const c=await api("/api/admin/config");
-  const so=c.servers.map(s=>`<option value="${esc(s.guildId)}">${esc(s.name)}</option>`).join("");
-  const sn=id=>{const s=c.servers.find(x=>x.guildId===id);return s?s.name:id};
-  const roleRow=(r,url)=>`<div class="row sp line"><span>${esc(sn(r.guildId))} · <code>${esc(r.roleId)}</code></span><button class="rm" data-del="${url}/${r.id}">Sil</button></div>`;
-  const roleAdd=(url,extra)=>so?addForm(url,extra,`<select name="guildId" style="flex:1;min-width:130px">${so}</select><input name="roleId" placeholder="Rol ID" inputmode="numeric" style="flex:1;min-width:130px">`,"Rol ekle"):`<p style="margin:8px 0 0">Önce yukarıdan bir sunucu ekle.</p>`;
-  b.innerHTML=`
-  <div class="card"><h3>Sunucular</h3><p>Botun bulunduğu ve rol verebileceği Discord sunucuları.</p>
-   ${c.servers.map(s=>`<div class="row sp line"><span>${esc(s.name)} · <code>${esc(s.guildId)}</code></span><button class="rm" data-del="/api/admin/servers/${esc(s.guildId)}" data-ask="Sunucu ve bu sunucudaki tüm rol tanımları silinsin mi?">Sil</button></div>`).join("")}
-   ${addForm("/api/admin/servers",{},`<input name="name" placeholder="Sunucu adı" style="flex:1;min-width:130px"><input name="guildId" placeholder="Sunucu ID" inputmode="numeric" style="flex:1;min-width:130px">`,"Sunucu ekle")}</div>
-  <div class="card"><h3>Yeni grup (branş veya birim)</h3>
-   ${addForm("/api/admin/groups",{},`<input name="label" placeholder="Ad (örn. BÖRÜ)" style="flex:1;min-width:130px"><input name="key" placeholder="Anahtar (örn. boru)" style="flex:1;min-width:130px"><input name="branch" placeholder="Branş (örn. Kara Kuvvetleri)" style="flex:1;min-width:130px"><input name="sort" placeholder="Sıra" inputmode="numeric" style="width:80px">`,"Grup ekle")}
-   <p style="margin:8px 0 0;font-size:14px">Aynı anahtarı tekrar girersen grubun adı, branşı ve sırası güncellenir.</p></div>
-  ${c.groups.map(g=>`<div class="card"><div class="row sp"><h3>${esc(g.label)}</h3><button class="rm" data-del="/api/admin/groups/${esc(g.key)}" data-ask="Grup, rolleri, rütbeleri ve üyelikleri silinsin mi?">Grubu sil</button></div>
-    <p>${esc(g.branch)} · anahtar: ${esc(g.key)}</p>
-    <b>Üye rolleri</b><p style="font-size:14px;margin:4px 0 0">Onaylanan kişiye /update ile verilir.</p>
-    ${g.roles.map(r=>roleRow(r,"/api/admin/group-roles")).join("")}
-    ${roleAdd("/api/admin/group-roles",{groupKey:g.key})}
-    <b style="display:block;margin-top:18px">Rütbeler</b>
-    ${g.ranks.map(r=>`<div class="line"><div class="row sp"><b>${esc(r.name)}</b><button class="rm" data-del="/api/admin/ranks/${r.id}" data-ask="Rütbe silinsin mi?">Rütbeyi sil</button></div>${r.roles.map(x=>roleRow(x,"/api/admin/rank-roles")).join("")}${roleAdd("/api/admin/rank-roles",{rankId:r.id})}</div>`).join("")}
-    ${addForm("/api/admin/ranks",{groupKey:g.key},`<input name="name" placeholder="Yeni rütbe adı" style="flex:1;min-width:130px"><input name="sort" placeholder="Sıra" inputmode="numeric" style="width:80px">`,"Rütbe ekle")}
-  </div>`).join("")}`;
-  bindAdmin(b);
+  const tabs=[["srv","1. Sunucular"],["grp","2. Gruplar"],["rk","3. Rütbeler"]];
+  b.innerHTML=`<div class="note">Sırayla ilerle: önce <b>sunucuları</b> ekle, sonra <b>grupları</b> (branş ve birimler), en son her grubun <b>rütbelerini</b>.</div>
+  <div class="tabs">${tabs.map(t=>`<button data-gt="${t[0]}" class="${t[0]===gtab?"on":""}">${t[1]}</button>`).join("")}</div><div id="gbody"></div>`;
+  b.querySelectorAll("[data-gt]").forEach(x=>x.onclick=()=>{gtab=x.dataset.gt;yGrup(b)});
+  const g=$("#gbody");
+  if(gtab==="srv")gSrv(g,c);else if(gtab==="grp")gGrp(g,c);else gRk(g,c);
+  bindAdmin(g);
 }
+function gSrv(g,c){
+  g.innerHTML=`<div class="card"><h3>Sunucular</h3><p>Botun bulunduğu ve rol verebileceği Discord sunucuları. Rol vereceğin her sunucu burada olmalı.</p>
+   ${c.servers.map(s=>`<div class="row sp line"><span><b>${esc(s.name)}</b> · <code>${esc(s.guildId)}</code></span><button class="rm" data-del="/api/admin/servers/${esc(s.guildId)}" data-ask="Bu sunucu ve bu sunucudaki tüm rol tanımları silinsin mi?">Sil</button></div>`).join("")||"<p style='margin:0'>Henüz sunucu yok.</p>"}
+   ${addForm("/api/admin/servers",{},`<input name="name" placeholder="Sunucu adı" style="flex:1;min-width:130px"><input name="guildId" placeholder="Sunucu ID" inputmode="numeric" style="flex:1;min-width:130px">`,"Sunucu ekle")}
+   <p style="margin:10px 0 0;font-size:14px">Sunucu ID: Discord’da sunucu adına sağ tıkla (telefonda uzun bas) → “Sunucu ID’sini kopyala”. Görünmüyorsa Ayarlar → Gelişmiş → Geliştirici Modu açık olmalı.</p></div>`;
+}
+function gGrp(g,c){
+  const br=[...new Set(c.groups.map(x=>x.branch))];
+  g.innerHTML=`<div class="card"><h3>Yeni grup</h3><p>Branş ya da birim. Örnek: Grup adı <b>BÖRÜ</b>, branş <b>Kara Kuvvetleri</b>.</p>
+   ${addForm("/api/admin/groups",{},`<input name="label" placeholder="Grup adı" style="flex:1;min-width:130px"><input name="branch" list="brl" placeholder="Bağlı olduğu branş" style="flex:1;min-width:130px"><datalist id="brl">${br.map(x=>`<option value="${esc(x)}">`).join("")}</datalist>`,"Grup ekle")}</div>
+  ${c.groups.map(x=>`<div class="card"><div class="row sp"><h3>${esc(x.label)}</h3><button class="rm" data-del="/api/admin/groups/${esc(x.key)}" data-ask="Grup, rütbeleri ve üyelikleri silinsin mi?">Grubu sil</button></div>
+   <p>${esc(x.branch)}</p>
+   <b>Üye rolü</b><p style="font-size:14px;margin:4px 0 0">Gruba onaylanan herkese /update ile verilir.</p>
+   ${x.roles.map(r=>roleRow(c,r,"/api/admin/group-roles")).join("")}
+   ${c.servers.length?addForm("/api/admin/group-roles",{groupKey:x.key},`<select name="guildId" style="flex:1;min-width:130px">${srvOpts(c)}</select><input name="roleId" placeholder="Rol ID" inputmode="numeric" style="flex:1;min-width:130px">`,"Rol ekle"):`<p style="margin:8px 0 0">Önce Sunucular sekmesinden sunucu ekle.</p>`}
+  </div>`).join("")}`;
+}
+function gRk(g,c){
+  if(!c.groups.length){g.innerHTML=`<div class="card"><p style="margin:0">Önce Gruplar sekmesinden grup ekle.</p></div>`;return}
+  if(!ggroup||!c.groups.some(x=>x.key===ggroup))ggroup=c.groups[0].key;
+  const gr=c.groups.find(x=>x.key===ggroup);
+  g.innerHTML=`<div class="card"><label style="margin-top:0">Hangi grubun rütbeleri?</label>
+   <select id="gsel">${c.groups.map(x=>`<option value="${esc(x.key)}" ${x.key===ggroup?"selected":""}>${esc(x.label)} (${esc(x.branch)})</option>`).join("")}</select></div>
+  <div class="card"><h3>Yeni rütbe ekle</h3><p>Rütbenin adını yaz, kişiye hangi sunucuda hangi rolün verileceğini seç. Rütbeleri düşükten yükseğe doğru ekle.</p>
+   ${c.servers.length?addForm("/api/admin/ranks",{groupKey:gr.key},`<input name="name" placeholder="Rütbe adı (örn. Onbaşı)" style="flex:1;min-width:150px"><select name="guildId" style="flex:1;min-width:130px">${srvOpts(c)}</select><input name="roleId" placeholder="Rol ID" inputmode="numeric" style="flex:1;min-width:130px">`,"Rütbe ekle"):`<p style="margin:0">Önce Sunucular sekmesinden sunucu ekle.</p>`}
+   <p style="margin:10px 0 0;font-size:14px">Rol ID: Discord’da Sunucu Ayarları → Roller’de role sağ tıkla (telefonda uzun bas) → “Rol ID’sini kopyala”. Aynı rütbe başka sunucuda da rol veriyorsa, rütbeyi ekledikten sonra altındaki “+ Rol ekle” ile ekle.</p></div>
+  <h3 style="margin:22px 0 10px;font-size:22px">${esc(gr.label)} rütbeleri</h3>
+  ${gr.ranks.map(r=>`<div class="card"><div class="row sp"><h3 style="margin:0">${esc(r.name)}</h3><button class="rm" data-del="/api/admin/ranks/${r.id}" data-ask="Rütbe silinsin mi?">Rütbeyi sil</button></div>
+   ${r.roles.length?r.roles.map(x=>roleRow(c,x,"/api/admin/rank-roles")).join(""):`<p style="margin:8px 0 0">Bu rütbeye henüz rol bağlı değil.</p>`}
+   ${c.servers.length?addForm("/api/admin/rank-roles",{rankId:r.id},`<select name="guildId" style="flex:1;min-width:130px">${srvOpts(c)}</select><input name="roleId" placeholder="Başka bir rol ID" inputmode="numeric" style="flex:1;min-width:130px">`,"+ Rol ekle"):""}
+  </div>`).join("")||`<div class="card"><p style="margin:0">Bu grupta henüz rütbe yok.</p></div>`}`;
+  $("#gsel").onchange=e=>{ggroup=e.target.value;yGrup($("#ybody"))};
+}
+
 async function yRutbe(b){
   const d=await api("/api/manage/overview");
   if(!d.groups.length){b.innerHTML=`<div class="card"><p style="margin:0">Yönetebileceğin bir grup yok.</p></div>`;return}
@@ -456,9 +502,9 @@ async function yYetki(b){
       er.style.color="var(--ok)";er.textContent="Yetki verildi.";list();
     }catch(e){er.style.color="";er.textContent=e.message}
   };
-    }
+}
 
-  /* ---- Başlangıç ---- */
+/* ---- Başlangıç ---- */
 authSlot();buildDrawer();render();
 api("/api/me").then(u=>{me=u;authSlot();buildDrawer();render();if(me&&!me.mcName)mcModal()}).catch(()=>{});
 </script>
